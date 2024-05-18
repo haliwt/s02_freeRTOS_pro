@@ -459,13 +459,13 @@ static void vTaskMsgPro(void *pvParameters)
        	 
         xResult = xQueueReceive(xQueue2,                   /* 消息队列句柄 */
 		                        (void *)&ptMsg,  		   /* 这里获取的是结构体的地址 */
-		                        xMaxBlockTime);/* 设置阻塞时间 */
+		                        portMAX_DELAY);/* 设置阻塞时间 */
 		
 		
 		if(xResult == pdPASS)
 		{
 			/* 成功接收，并通过串口将数据打印出来 */
-            if(ptMsg->ucMessageID == power_on){
+            if(ptMsg->ucMessageID == 1){
 
                gkey_t.key_power=power_on;
 
@@ -663,10 +663,31 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 
    case KEY_POWER_Pin:
 
-      
+        if(KEY_POWER_VALUE()==1){
+
+          if(gkey_t.key_power == power_off){
+	  	   gkey_t.key_sound_flag = key_sound;
+           gkey_t.key_power = power_on;
 
                   
             ptMsg->ucMessageID=1;
+        	ptMsg->ulData[0]++;
+        	ptMsg->usData[0]++;
+
+             /* 向消息队列发数据 */
+        	xQueueSendFromISR(xQueue2,
+        				      (void *)&ptMsg,
+        				       &xHigherPriorityTaskWoken);
+
+        	/* 如果xHigherPriorityTaskWoken = pdTRUE，那么退出中断后切到当前最高优先级任务执行 */
+        	portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+        }
+     
+	  else{
+	  	  gkey_t.key_sound_flag = key_sound;
+          gkey_t.key_power = power_off;
+	      gkey_t.gTimer_power_off = 0;
+           ptMsg->ucMessageID=power_off;
         	//ptMsg->ulData[0]++;
         	//ptMsg->usData[0]++;
 
@@ -678,8 +699,12 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
         	/* 如果xHigherPriorityTaskWoken = pdTRUE，那么退出中断后切到当前最高优先级任务执行 */
         	portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 
-     
+	    
 
+         
+       }
+     
+            }
    
    break;
 

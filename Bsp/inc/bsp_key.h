@@ -1,6 +1,8 @@
-#ifndef __KEY_H_
-#define __KEY_H_
+#ifndef __BSP_KEY_H_
+#define __BSP_KEY_H_
 #include "main.h"
+
+#define KEY_POWER_VALUE()    HAL_GPIO_ReadPin(KEY_POWER_GPIO_Port, KEY_POWER_Pin)
 
 
 typedef enum{
