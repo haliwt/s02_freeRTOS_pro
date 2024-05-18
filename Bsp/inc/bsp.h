@@ -13,8 +13,11 @@
 
 #include "interrupt_manager.h"
 #include "adc.h"
-#include "iwdg.h"
+
 #include "tim.h"
+#include "adc.h"
+#include "usart.h"
+#include "gpio.h"
 
 
 

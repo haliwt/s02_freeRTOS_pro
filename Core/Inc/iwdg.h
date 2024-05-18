@@ -29,6 +29,7 @@ extern "C" {
 #include "main.h"
 
 /* USER CODE BEGIN Includes */
+#include "stm32g0xx_hal_iwdg.h"
 
 /* USER CODE END Includes */
 

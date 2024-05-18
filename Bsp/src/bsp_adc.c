@@ -1,5 +1,6 @@
 #include "bsp_adc.h"
 #include "bsp.h"
+#include "adc.h"
 
 static uint16_t Get_Adc_Channel(uint32_t ch) ;
 

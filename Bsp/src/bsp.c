@@ -30,11 +30,11 @@ uint8_t step_process;
 void bsp_Idle(void)
 {
 	/* --- 喂狗 8s input reset */
-    if(gctl_t.gTimer_prcoess_iwdg > 5){
-		gctl_t.gTimer_prcoess_iwdg =0;
-    	iwdg_feed();
-
-    }
+//    if(gctl_t.gTimer_prcoess_iwdg > 5){
+//		gctl_t.gTimer_prcoess_iwdg =0;
+//    	iwdg_feed();
+//
+//    }
 
 	/* --- 让CPU进入休眠，由Systick定时中断唤醒或者其他中断唤醒 */
 

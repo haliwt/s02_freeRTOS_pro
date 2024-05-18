@@ -1,9 +1,13 @@
 #include "bsp.h"
 #include "queue.h"
 
-uint8_t gTimer_counter;
-uint8_t key_counter;
-uint8_t receive_key_conunter;
+
+
+uint8_t key_mode_change;
+uint8_t set_up_temperature_value ;
+int8_t set_timer_dispTime_minutes;
+int8_t set_timer_dispTime_hours;
+
 #if 0
 /*
 **********************************************************************************************************
@@ -461,31 +465,21 @@ static void vTaskMsgPro(void *pvParameters)
 		if(xResult == pdPASS)
 		{
 			/* 成功接收，并通过串口将数据打印出来 */
-		//	printf("接收到消息队列数据ptMsg->ucMessageID = %d\r\n", ptMsg->ucMessageID);
-		//	printf("接收到消息队列数据ptMsg->ulData[0] = %d\r\n", ptMsg->ulData[0]);
-		//	printf("接收到消息队列数据ptMsg->usData[0] = %d\r\n", ptMsg->usData[0]);
-		//    printf("receive_message_2 is success \n");
+            if(ptMsg->ucMessageID == power_on){
 
-//            ptMsg->ucMessageID++;
-//        xQueueSend(xQueue1,                  /* 消息队列句柄 */
-//                     (void *) &ptMsg,        /* 发送结构体指针变量ptMsg的地址 */
-//                            0);        /* 发送失败，即使等待了10个时钟节拍 */
-        receive_key_conunter++;
-       
-      LED_ON();
-			HAL_Delay(50);
-			LED_OFF();
-			HAL_Delay(50);
-            LED_ON();
-            HAL_Delay(50);
-            LED_OFF();
-			HAL_Delay(50);
-			LED_OFF();
-			HAL_Delay(50);
-            LED_ON();
+               gkey_t.key_power=power_on;
 
-            HAL_Delay(50);
-			LED_OFF();
+
+
+            }
+            else{
+
+
+               gkey_t.key_power=power_off;
+
+
+            }
+		
            
 		}
 //		else
@@ -521,12 +515,8 @@ static void vTaskStart(void *pvParameters)
 
     
         /* 超时 */
-			LED_ON();
-			HAL_Delay(300);
-			LED_OFF();
-			HAL_Delay(300);
-
-
+		
+        mainboard_process_handler();
         vTaskDelay(300);
 
        
@@ -603,42 +593,42 @@ static void AppObjCreate (void)
 #endif 
 
 
-void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
-{
-
-   MSG_T   *ptMsg;
-   BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-    __HAL_GPIO_EXTI_CLEAR_RISING_IT(GPIO_Pin);
-
-
-  if(GPIO_Pin==KEY1_Pin){
-
-
-    if(KEY1_VALUE()  ==1){
-
-  
-    key_counter++;
-    ptMsg->ucMessageID=1;
-	ptMsg->ulData[0]++;
-	ptMsg->usData[0]++;
-
-     /* 向消息队列发数据 */
-	xQueueSendFromISR(xQueue2,
-				      (void *)&ptMsg,
-				       &xHigherPriorityTaskWoken);
-
-	/* 如果xHigherPriorityTaskWoken = pdTRUE，那么退出中断后切到当前最高优先级任务执行 */
-	portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-
-    }
-
-  }
-    
-  
-    
-  
-
-}
+//void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
+//{
+//
+//   MSG_T   *ptMsg;
+//   BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+//    __HAL_GPIO_EXTI_CLEAR_RISING_IT(GPIO_Pin);
+//
+//
+//  if(GPIO_Pin==KEY1_Pin){
+//
+//
+//    if(KEY1_VALUE()  ==1){
+//
+//  
+//    key_counter++;
+//    ptMsg->ucMessageID=1;
+//	ptMsg->ulData[0]++;
+//	ptMsg->usData[0]++;
+//
+//     /* 向消息队列发数据 */
+//	xQueueSendFromISR(xQueue2,
+//				      (void *)&ptMsg,
+//				       &xHigherPriorityTaskWoken);
+//
+//	/* 如果xHigherPriorityTaskWoken = pdTRUE，那么退出中断后切到当前最高优先级任务执行 */
+//	portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+//
+//    }
+//
+//  }
+//    
+//  
+//    
+//  
+//
+//}
 
 
 //void HAL_GPIO_EXTI_IRQHandler(uint16_t GPIO_Pin)
@@ -656,5 +646,222 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 //    HAL_GPIO_EXTI_Falling_Callback(GPIO_Pin);
 //  }
 //}
+
+/*
+  * key interrupt call back function 
+
+*/
+
+void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
+{
+
+   MSG_T   *ptMsg;
+   BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+    __HAL_GPIO_EXTI_CLEAR_RISING_IT(GPIO_Pin);
+
+   switch(GPIO_Pin){
+
+   case KEY_POWER_Pin:
+
+      if(ptMsg->ucMessageID== power_off){
+	  	   gkey_t.key_sound_flag = key_sound;
+           gkey_t.key_power = power_on;
+
+                  
+            ptMsg->ucMessageID=power_on;
+        	//ptMsg->ulData[0]++;
+        	//ptMsg->usData[0]++;
+
+             /* 向消息队列发数据 */
+        	xQueueSendFromISR(xQueue2,
+        				      (void *)&ptMsg,
+        				       &xHigherPriorityTaskWoken);
+
+        	/* 如果xHigherPriorityTaskWoken = pdTRUE，那么退出中断后切到当前最高优先级任务执行 */
+        	portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+
+      }
+	  else{
+	  	  gkey_t.key_sound_flag = key_sound;
+          gkey_t.key_power = power_off;
+	      gkey_t.gTimer_power_off = 0;
+           ptMsg->ucMessageID=power_off;
+        	//ptMsg->ulData[0]++;
+        	//ptMsg->usData[0]++;
+
+             /* 向消息队列发数据 */
+        	xQueueSendFromISR(xQueue2,
+        				      (void *)&ptMsg,
+        				       &xHigherPriorityTaskWoken);
+
+        	/* 如果xHigherPriorityTaskWoken = pdTRUE，那么退出中断后切到当前最高优先级任务执行 */
+        	portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+
+	  }
+
+   
+   break;
+
+   case KEY_MODE_Pin:
+   if(gkey_t.key_power == power_on){
+   	  gkey_t.key_sound_flag = key_sound;
+      gkey_t.key_mode_times = gkey_t.key_mode_times ^ 0x01;
+      if(gkey_t.key_mode_times == 1){
+          gkey_t.key_mode = mode_set_timer;
+          key_mode_change = mode_set_timer;
+      }
+      else{
+
+         gkey_t.key_mode = mode_confirm; //如果我只按一次那？，经过一段时间推出，恢复 
+         key_mode_change = 0;
+      }
+   }
+   break;
+
+
+   case KEY_UP_Pin:
+       if(gkey_t.key_power == power_on){
+	   	
+          gkey_t.key_sound_flag = key_sound;
+		  switch(key_mode_change){
+
+		    case 0:  //set temperature value 
+		 
+		      gkey_t.key_select = mode_set_temp;
+            set_up_temperature_value ++;
+	         if(set_up_temperature_value < 20){
+				    set_up_temperature_value=20;
+				}
+				
+				if(set_up_temperature_value > 40)set_up_temperature_value= 20;
+				
+			   glcd_t.number3_low = set_up_temperature_value / 10 ;
+            glcd_t.number3_high = set_up_temperature_value / 10 ;
+			   glcd_t.number4_low  =set_up_temperature_value % 10; //
+            glcd_t.number4_high = set_up_temperature_value % 10; //
+
+            gkey_t.set_temp_value = set_up_temperature_value;
+            gkey_t.gTimer_key_temp_timing=0;
+			
+			break;
+
+			case mode_set_timer: //set timer timing value 
+			
+				 if(gProcess_t.set_timer_timing_hours!=24)
+				 		 gProcess_t.set_timer_timing_minutes=   gProcess_t.set_timer_timing_minutes + 30;
+				 else if(gProcess_t.set_timer_timing_hours ==24)
+				 	     gProcess_t.set_timer_timing_minutes =   gProcess_t.set_timer_timing_minutes + 60;
+
+			    if( gProcess_t.set_timer_timing_minutes >59){
+					     gProcess_t.set_timer_timing_hours++;
+		             if(gProcess_t.set_timer_timing_hours ==24){
+						     gProcess_t.set_timer_timing_minutes=0;
+					}
+					else if(gProcess_t.set_timer_timing_hours >24){
+
+					   gProcess_t.set_timer_timing_hours =0;
+					    gProcess_t.set_timer_timing_minutes=0;
+
+
+					}
+					else{
+
+					  // set_timer_dispTime_minutes=0;
+                 gProcess_t.set_timer_timing_minutes =0;
+
+
+					}
+						
+			     }
+                  //display hours
+                  glcd_t.number5_low =  gProcess_t.set_timer_timing_hours / 10 ;
+                  glcd_t.number5_high =  gProcess_t.set_timer_timing_hours / 10 ;
+
+                  glcd_t.number6_low  = gProcess_t.set_timer_timing_hours% 10; //
+                  glcd_t.number6_high =  gProcess_t.set_timer_timing_hours % 10; //
+                   //dispaly minutes 
+                  glcd_t.number7_low =   gProcess_t.set_timer_timing_minutes /10;
+                  glcd_t.number7_high =   gProcess_t.set_timer_timing_minutes /10;
+
+                  glcd_t.number8_low =   gProcess_t.set_timer_timing_minutes %10;
+                  glcd_t.number8_high =   gProcess_t.set_timer_timing_minutes %10;
+                 
+                 gkey_t.gTimer_set_timer_blink =0;
+            }
+         
+       }
+   break;
+
+   case KEY_DOWN_Pin:
+     if(gkey_t.key_power == power_on){
+
+	     gkey_t.key_sound_flag = key_sound;
+        
+         switch(key_mode_change){
+
+         case 0: //set temperature 
+       
+		 gkey_t.key_select = mode_set_temp;
+         set_up_temperature_value--;
+			if(set_up_temperature_value<20) set_up_temperature_value=40;
+	        else if(set_up_temperature_value >40)set_up_temperature_value=40;
+
+           if(set_up_temperature_value > 40)set_up_temperature_value= 20;
+				
+			   glcd_t.number3_low = set_up_temperature_value / 10 ;
+            glcd_t.number3_high = set_up_temperature_value / 10 ;
+			   glcd_t.number4_low  =set_up_temperature_value % 10; //
+            glcd_t.number4_high = set_up_temperature_value % 10; //
+
+            gkey_t.set_temp_value = set_up_temperature_value;
+            gkey_t.gTimer_key_temp_timing=0;
+
+         break;
+
+         case mode_set_timer: //set timer timing value 
+             gProcess_t.set_timer_timing_minutes =   gProcess_t.set_timer_timing_minutes-30;
+		        if( gProcess_t.set_timer_timing_minutes < 0){
+					 gProcess_t.set_timer_timing_hours--;
+                   if( gProcess_t.set_timer_timing_hours <0){
+                         
+				       gProcess_t.set_timer_timing_hours=24;
+					   gProcess_t.set_timer_timing_minutes=0;
+
+				   }
+				   else{
+
+				      gProcess_t.set_timer_timing_minutes =30;
+               }
+				  
+				}
+
+             //display hours
+                  glcd_t.number5_low =  gProcess_t.set_timer_timing_hours / 10 ;
+                  glcd_t.number5_high =  gProcess_t.set_timer_timing_hours / 10 ;
+
+                  glcd_t.number6_low  = gProcess_t.set_timer_timing_hours % 10; //
+                  glcd_t.number6_high =  gProcess_t.set_timer_timing_hours % 10; //
+                   //dispaly minutes 
+                  glcd_t.number7_low =   gProcess_t.set_timer_timing_minutes /10;
+                  glcd_t.number7_high =   gProcess_t.set_timer_timing_minutes /10;
+
+                  glcd_t.number8_low =  gProcess_t.set_timer_timing_minutes %10;
+                  glcd_t.number8_high =   gProcess_t.set_timer_timing_minutes %10;
+
+                 gkey_t.gTimer_set_timer_blink =0;
+
+         break;
+ 
+         }
+     }
+
+   break;
+
+
+   }
+
+
+
+}
 
 
