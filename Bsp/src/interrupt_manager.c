@@ -5,30 +5,36 @@
 	*
 	*Function Name:void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	*Function : timing 10ms interrupt call back function call back function
-	*
+	*timer 1ms 
 	*
 *******************************************************************************/
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-  static uint8_t tm0,tm1,tm2;
+  static uint8_t tm1,tm2,tm3;
+  static uint16_t tm0;
     
    if(htim->Instance==TIM17){
     
-    tm0++;  //10ms
+    tm0++;  //1ms
 	tm1++;
-    gProcess_t.gTimer_normal_display_lcd++;
-    glcd_t.gTimer_lcd_blink++;
-    
-	glcd_t.gTimer_fan_blink++;
-	gProcess_t.gTimer_set_timer_blink ++;
+    tm3++;
+
+    if(tm1>9){
+        tm1=0;
+        gProcess_t.gTimer_normal_display_lcd++;
+        glcd_t.gTimer_lcd_blink++;
+        
+    	glcd_t.gTimer_fan_blink++;
+    	gProcess_t.gTimer_set_timer_blink ++;
+    }
 	
-    if(tm1>9){ //10*10 = 100ms 
-       tm1=0;
+    if(tm3>99){ //10*10 = 100ms 
+       tm3=0;
        glcd_t.gTimer_colon_blink++ ;
 	  
     }
 
-    if(tm0>99){ //100 *10ms = 1000ms = 1s
+    if(tm0>999){ //100 *10ms = 1000ms = 1s
 		tm0=0;
 		tm2++;
 

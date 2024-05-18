@@ -91,7 +91,12 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_TIM17_Init();
+  MX_ADC1_Init();
+ // MX_IWDG_Init();
+  MX_TIM1_Init(); //ultrasonic
+  MX_TIM14_Init(); //beep pwm
+
+  MX_TIM17_Init(); //timer timing 
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
     HAL_TIM_Base_Start_IT(&htim17);

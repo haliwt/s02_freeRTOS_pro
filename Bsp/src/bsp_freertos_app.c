@@ -663,12 +663,10 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 
    case KEY_POWER_Pin:
 
-      if(ptMsg->ucMessageID== power_off){
-	  	   gkey_t.key_sound_flag = key_sound;
-           gkey_t.key_power = power_on;
+      
 
                   
-            ptMsg->ucMessageID=power_on;
+            ptMsg->ucMessageID=1;
         	//ptMsg->ulData[0]++;
         	//ptMsg->usData[0]++;
 
@@ -680,24 +678,7 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
         	/* 如果xHigherPriorityTaskWoken = pdTRUE，那么退出中断后切到当前最高优先级任务执行 */
         	portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 
-      }
-	  else{
-	  	  gkey_t.key_sound_flag = key_sound;
-          gkey_t.key_power = power_off;
-	      gkey_t.gTimer_power_off = 0;
-           ptMsg->ucMessageID=power_off;
-        	//ptMsg->ulData[0]++;
-        	//ptMsg->usData[0]++;
-
-             /* 向消息队列发数据 */
-        	xQueueSendFromISR(xQueue2,
-        				      (void *)&ptMsg,
-        				       &xHigherPriorityTaskWoken);
-
-        	/* 如果xHigherPriorityTaskWoken = pdTRUE，那么退出中断后切到当前最高优先级任务执行 */
-        	portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-
-	  }
+     
 
    
    break;
