@@ -527,16 +527,16 @@ static void LCD_Wind_Icon(void)
 *****************************************************************************/
 void LCD_Timer_Colon_Flicker(void)
 {
-   if(glcd_t.gTimer_colon_blink < 2){
+   if(glcd_t.gTimer_colon_blink < 3){
 
         Colon_Symbol = 0x01;
-        TM1723_Write_Display_Data(0xCC,(Colon_Symbol+lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
+        TM1723_Write_Display_Data(0xCB,(Colon_Symbol+lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
         
    }
-   else if(glcd_t.gTimer_colon_blink >1 && glcd_t.gTimer_colon_blink < 4){
+   else if(glcd_t.gTimer_colon_blink >2 && glcd_t.gTimer_colon_blink < 6){
 
       Colon_Symbol = 0x0;
-       TM1723_Write_Display_Data(0xCC,(Colon_Symbol+lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
+       TM1723_Write_Display_Data(0xCB,(Colon_Symbol+lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
 
    }
    else{
@@ -544,7 +544,8 @@ void LCD_Timer_Colon_Flicker(void)
       glcd_t.gTimer_colon_blink =0;
 
    }
-
+   
+    TIM1723_Write_Cmd(LUM_VALUE);//(0x9B);
 }
 
 /*************************************************************************************
