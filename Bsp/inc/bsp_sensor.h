@@ -40,7 +40,7 @@ typedef struct
   float    temperature;        //ʵ���¶�  
 } DHT11_Data_TypeDef;
 
-extern DHT11_Data_TypeDef DHT11;
+//extern DHT11_Data_TypeDef DHT11;
 
 
 /* ��չ���� ------------------------------------------------------------------*/
