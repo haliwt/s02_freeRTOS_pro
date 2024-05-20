@@ -9,7 +9,7 @@ uint8_t set_up_temperature_value ;
 int8_t set_timer_dispTime_minutes;
 int8_t set_timer_dispTime_hours;
 
-#if 0
+#if 1
 /*
 **********************************************************************************************************
 											宏定义
@@ -69,58 +69,58 @@ void freeRTOS_Handler(void)
 *   优 先 级: 1  (数值越小优先级越低，这个跟uCOS相反)
 *********************************************************************************************************
 */
-static void vTaskTaskUserIF(void *pvParameters)
-{
-	uint8_t ucKeyCode;
-	uint8_t pcWriteBuffer[500];
-	
-
-    while(1)
-    {
-		ucKeyCode = bsp_GetKey();
-		
-		if (ucKeyCode != 0)
-		{
-			switch (ucKeyCode)
-			{
-				/* K1键按下 打印任务执行情况 */
-				case 1:			 
-					//printf("=================================================\r\n");
-					//printf("任务名      任务状态 优先级   剩余栈 任务序号\r\n");
-					//vTaskList((char *)&pcWriteBuffer);
-					//printf("%s\r\n", pcWriteBuffer);
-				
-					printf("KEY1_down\n");
-					//vTaskGetRunTimeStats((char *)&pcWriteBuffer);
-					//printf("%s\r\n", pcWriteBuffer);
-					break;
-				
-				/* K2键按下，直接发送事件标志设置给任务vTaskMsgPro，置位bit0 */
-				case 2:
-					printf("K2bit0\r\n");
-					xTaskNotify(xHandleTaskMsgPro, /* 目标任务 */
-								BIT_0,             /* 设置目标任务事件标志位bit0  */
-								eSetBits);         /* 将目标任务的事件标志位与BIT_0进行或操作， 
-				                                      将结果赋值给事件标志位。*/
-					break;
-				
-				/*  K3键按下，直接发送事件标志设置给任务vTaskMsgPro，置位bit1 */
-				case 3:
-					printf("K3bit1\r\n");
-					xTaskNotify(xHandleTaskMsgPro, /* 目标任务 */
-								BIT_1,             /* 设置目标任务事件标志位bit0  */
-								eSetBits);         /* 将目标任务的事件标志位与BIT_0进行或操作， 
-				                                      将结果赋值给事件标志位。*/
-				
-				/* 其他的键值不处理 */
-				default:                     
-					break;
-			}
-		}
-		
-		vTaskDelay(20);
-	}
-}
+//static void vTaskTaskUserIF(void *pvParameters)
+//{
+//	uint8_t ucKeyCode;
+//	uint8_t pcWriteBuffer[500];
+//	
+//
+//    while(1)
+//    {
+//		ucKeyCode = bsp_GetKey();
+//		
+//		if (ucKeyCode != 0)
+//		{
+//			switch (ucKeyCode)
+//			{
+//				/* K1键按下 打印任务执行情况 */
+//				case 1:			 
+//					//printf("=================================================\r\n");
+//					//printf("任务名      任务状态 优先级   剩余栈 任务序号\r\n");
+//					//vTaskList((char *)&pcWriteBuffer);
+//					//printf("%s\r\n", pcWriteBuffer);
+//				
+//					printf("KEY1_down\n");
+//					//vTaskGetRunTimeStats((char *)&pcWriteBuffer);
+//					//printf("%s\r\n", pcWriteBuffer);
+//					break;
+//				
+//				/* K2键按下，直接发送事件标志设置给任务vTaskMsgPro，置位bit0 */
+//				case 2:
+//					printf("K2bit0\r\n");
+//					xTaskNotify(xHandleTaskMsgPro, /* 目标任务 */
+//								BIT_0,             /* 设置目标任务事件标志位bit0  */
+//								eSetBits);         /* 将目标任务的事件标志位与BIT_0进行或操作， 
+//				                                      将结果赋值给事件标志位。*/
+//					break;
+//				
+//				/*  K3键按下，直接发送事件标志设置给任务vTaskMsgPro，置位bit1 */
+//				case 3:
+//					printf("K3bit1\r\n");
+//					xTaskNotify(xHandleTaskMsgPro, /* 目标任务 */
+//								BIT_1,             /* 设置目标任务事件标志位bit0  */
+//								eSetBits);         /* 将目标任务的事件标志位与BIT_0进行或操作， 
+//				                                      将结果赋值给事件标志位。*/
+//				
+//				/* 其他的键值不处理 */
+//				default:                     
+//					break;
+//			}
+//		}
+//		
+//		vTaskDelay(20);
+//	}
+//}
 
 /*
 *********************************************************************************************************
@@ -131,29 +131,29 @@ static void vTaskTaskUserIF(void *pvParameters)
 *   优 先 级: 2  
 *********************************************************************************************************
 */
-static void vTaskLED(void *pvParameters)
-{
-	TickType_t xLastWakeTime;
-	const TickType_t xFrequency = 200;
-
-	/* 获取当前的系统时间 */
-    xLastWakeTime = xTaskGetTickCount();
-	
-    while(1)
-    {
-       //	bsp_LedToggle(2);
-		//bsp_LedToggle(3);
-		
-		/* vTaskDelayUntil是绝对延迟，vTaskDelay是相对延迟。*/
-      //  vTaskDelayUntil(&xLastWakeTime, xFrequency);
-         LED_ON();
-			HAL_Delay(500);
-			LED_OFF();
-			HAL_Delay(500);
-       vTaskDelay(300);
-    }
-    
-}
+//static void vTaskLED(void *pvParameters)
+//{
+//	TickType_t xLastWakeTime;
+//	const TickType_t xFrequency = 200;
+//
+//	/* 获取当前的系统时间 */
+//    xLastWakeTime = xTaskGetTickCount();
+//	
+//    while(1)
+//    {
+//       //	bsp_LedToggle(2);
+//		//bsp_LedToggle(3);
+//		
+//		/* vTaskDelayUntil是绝对延迟，vTaskDelay是相对延迟。*/
+//      //  vTaskDelayUntil(&xLastWakeTime, xFrequency);
+//         LED_ON();
+//			HAL_Delay(500);
+//			LED_OFF();
+//			HAL_Delay(500);
+//       vTaskDelay(300);
+//    }
+//    
+//}
 
 /*
 *********************************************************************************************************
@@ -167,8 +167,9 @@ static void vTaskLED(void *pvParameters)
 static void vTaskMsgPro(void *pvParameters)
 {
 	BaseType_t xResult;
-	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(500); /* 设置最大等待时间为500ms */
+	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(5); /* 设置最大等待时间为500ms */
 	uint32_t ulValue;
+   
 	
     while(1)
     {
@@ -200,26 +201,25 @@ static void vTaskMsgPro(void *pvParameters)
 			/* 接收到消息，检测那个位被按下 */
 			if((ulValue & BIT_0) != 0)
 			{
-				//printf("接收到K2按键按下消息, ulNotifiedValue = 0x%08x\r\n", ulValue);
-				printf("receive notice key1_bit0 \n");
+				receive_key_message++;
+                xTaskNotify(xHandleTaskStart, /* Ä¿±êÈÎÎñ */
+							BIT_1,             /* ÉèÖÃÄ¿±êÈÎÎñÊÂ¼þ±êÖ¾Î»bit0  */
+							eSetBits);         /* ½«Ä¿±êÈÎÎñµÄÊÂ¼þ±êÖ¾Î»ÓëBIT_0½øÐÐ»ò²Ù×÷£¬ 
+				                                      ½«½á¹û¸³Öµ¸øÊÂ¼þ±êÖ¾Î»¡£*/
 		
 			}
 
-			if((ulValue & BIT_1) != 0)
-			{
-				//printf("接收到K下消息ulNotifiedValue = 0x%08x\r\n", ulValue);
-				printf("receive notice key1_bit1 \n");
-			}
+		
 		}
-		else
-		{
-			/* 超时 */
-            LED_ON();
-			HAL_Delay(10);
-			LED_OFF();
-			HAL_Delay(10);
-			
-		}
+//		else
+//		{
+//			/* 超时 */
+//            LED_ON();
+//			HAL_Delay(10);
+//			LED_OFF();
+//			HAL_Delay(10);
+//			
+//		}
     }
 }
 
@@ -234,17 +234,49 @@ static void vTaskMsgPro(void *pvParameters)
 */
 static void vTaskStart(void *pvParameters)
 {
+   BaseType_t xResult;
+   const TickType_t xMaxBlockTime = pdMS_TO_TICKS(30); /* 设置最大等待时间为500ms */
+   static uint8_t sound_flag;
+   uint32_t ulValue;
+
     while(1)
     {
 		/* 按键扫描 */
 		//bsp_KeyScan();
-	   if(KEY1_VALUE()==0 || KEY_UP_VALUE() ==1){
-		   key1_pressed_counter++;
-			 if( key1_pressed_counter> 3)
-				  key1_pressed_counter=1;
+
+       xResult = xTaskNotifyWait(0x00000000,      
+						           0xFFFFFFFF,      
+						          &ulValue,        /* 保存ulNotifiedValue到变量ulValue中 */
+						          xMaxBlockTime);  /* 最大允许延迟时间 */
+        if( xResult == pdPASS )
+		{
+			/* 接收到消息，检测那个位被按下 */
+			if((ulValue & BIT_1) != 0)
+			{
+				//printf("接收到K2按键按下消息, ulNotifiedValue = 0x%08x\r\n", ulValue);
+				//printf("receive notice key1_bit0 \n");
 				
+                 sound_flag =1;
+              
+
+                if(sound_flag ==1){
+                   sound_flag++;
+                   gkey_t.key_power=power_on;
+                   Buzzer_KeySound();
+
+                   PowerOn_Init();
+                }
+		
+			}
+
+			
 		}
-        vTaskDelay(10);
+        else{
+	    receive_task_start++;
+        mainboard_process_handler();
+      //  vTaskDelay(10);
+
+         }
     }
 }
 				
@@ -258,26 +290,26 @@ static void vTaskStart(void *pvParameters)
 */
 static void AppTaskCreate (void)
 {
-    xTaskCreate( vTaskTaskUserIF,   	/* 任务函数  */
-                 "vTaskUserIF",     	/* 任务名    */
-                 256,               	/* 任务栈大小，单位word，也就是4字节 */
-                 NULL,              	/* 任务参数  */
-                 1,                 	/* 任务优先级*/
-                 &xHandleTaskUserIF );  /* 任务句柄  */
-	
-	
-	xTaskCreate( vTaskLED,    		/* 任务函数  */
-                 "vTaskLED",  		/* 任务名    */
-                 256,         		/* stack大小，单位word，也就是4字节 */
-                 NULL,        		/* 任务参数  */
-                 2,           		/* 任务优先级*/
-                 &xHandleTaskLED ); /* 任务句柄  */
+//    xTaskCreate( vTaskTaskUserIF,   	/* 任务函数  */
+//                 "vTaskUserIF",     	/* 任务名    */
+//                 256,               	/* 任务栈大小，单位word，也就是4字节 */
+//                 NULL,              	/* 任务参数  */
+//                 1,                 	/* 任务优先级*/
+//                 &xHandleTaskUserIF );  /* 任务句柄  */
+//	
+//	
+//	xTaskCreate( vTaskLED,    		/* 任务函数  */
+//                 "vTaskLED",  		/* 任务名    */
+//                 256,         		/* stack大小，单位word，也就是4字节 */
+//                 NULL,        		/* 任务参数  */
+//                 2,           		/* 任务优先级*/
+//                 &xHandleTaskLED ); /* 任务句柄  */
 	
 	xTaskCreate( vTaskMsgPro,     		/* 任务函数  */
                  "vTaskMsgPro",   		/* 任务名    */
                  256,             		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
-                 3,               		/* 任务优先级*/
+                 1,               		/* 任务优先级*/
                  &xHandleTaskMsgPro );  /* 任务句柄  */
 	
 	
@@ -285,7 +317,7 @@ static void AppTaskCreate (void)
                  "vTaskStart",   		/* 任务名    */
                  256,            		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
-                 4,              		/* 任务优先级*/
+                 2,              		/* 任务优先级*/
                  &xHandleTaskStart );   /* 任务句柄  */
 }
 
@@ -294,7 +326,7 @@ static void AppTaskCreate (void)
 
 #endif 
 
-#if 1
+#if 0
 /***********************************************************************************************************
 											函数声明
 **********************************************************************************************************/
@@ -571,15 +603,15 @@ static void AppTaskCreate (void)
                  "vTaskMsgPro",   		/* 任务名    */
                  256,             		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
-                 1,               		/* 任务优先级*/
+                 2,               		/* 任务优先级*/
                  &xHandleTaskMsgPro );  /* 任务句柄  */
 	
 	
 	xTaskCreate( vTaskStart,     		/* 任务函数  */
                  "vTaskStart",   		/* 任务名    */
-                 512,            		/* 任务栈大小，单位word，也就是4字节 */
+                 256,            		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
-                 2,              		/* 任务优先级*/
+                 1,              		/* 任务优先级*/
                  &xHandleTaskStart );   /* 任务句柄  */
 }
 
@@ -672,7 +704,7 @@ static void AppObjCreate (void)
 void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 {
 
-   MSG_T   *ptMsg;
+ //  MSG_T   *ptMsg;
    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
     __HAL_GPIO_EXTI_CLEAR_RISING_IT(GPIO_Pin);
    uint8_t tx_counter;
@@ -686,7 +718,7 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 	  	   gkey_t.key_sound_flag = key_sound;
          
 
-                  
+         #if 0     
             //ptMsg->ucMessageID=1;
             
         	//ptMsg->ulData[0]++;
@@ -701,9 +733,18 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
         	/* 如果xHigherPriorityTaskWoken = pdTRUE，那么退出中断后切到当前最高优先级任务执行 */
         	portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
         }
+        #endif 
+
+    xTaskNotifyFromISR(xHandleTaskMsgPro,  /* Ä¿±êÈÎÎñ */
+			           BIT_0,     /* ÉèÖÃÄ¿±êÈÎÎñÊÂ¼þ±êÖ¾Î»bit1  */
+			           eSetBits,  /* ½«Ä¿±êÈÎÎñµÄÊÂ¼þ±êÖ¾Î»ÓëBIT_1½øÐÐ»ò²Ù×÷£¬ ½«½á¹û¸³Öµ¸øÊÂ¼þ±êÖ¾Î» */
+	                   &xHigherPriorityTaskWoken);
+
+	/* Èç¹ûxHigherPriorityTaskWoken = pdTRUE£¬ÄÇÃ´ÍË³öÖÐ¶ÏºóÇÐµ½µ±Ç°×î¸ßÓÅÏÈ¼¶ÈÎÎñÖ´ÐÐ */
+	portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
      
 	 
-     
+ }
             
    
    break;

@@ -114,23 +114,23 @@ void mainboard_process_handler(void)
 		  case 0:
               //led on 
               first_power_up=1;
-		     gProcess_t.gTimer_display_works_minutes=0;
-		      gProcess_t.gTimer_display_works_hours =0;
-		      
-		      LED_Mode_On();
-		      LED_Power_On();
-		      Backlight_On();
-		  
-			  Update_DHT11_Value();
-		      Lcd_Display_Detials();
+//		     gProcess_t.gTimer_display_works_minutes=0;
+//		      gProcess_t.gTimer_display_works_hours =0;
+//		      
+//		      LED_Mode_On();
+//		      LED_Power_On();
+//		      Backlight_On();
+//		  
+//			  Update_DHT11_Value();
+//		      Lcd_Display_Detials();
+//
+//			  //fan on
+//			  Mainboard_Action_Fun();
+//		  
+//		    step_process = 1;
 
-			  //fan on
-			  Mainboard_Action_Fun();
-		  
-		    step_process = 1;
 
-
-		  break;
+		 // break;
 
 		   case 1: // normal all content display
           
