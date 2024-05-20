@@ -1,7 +1,7 @@
 #include "bsp.h"
 #include "queue.h"
 
-
+uint8_t recieve_flag;
 uint8_t receive_key_message;
 uint8_t receive_task_start;
 uint8_t key_mode_change;
@@ -167,7 +167,7 @@ void freeRTOS_Handler(void)
 static void vTaskMsgPro(void *pvParameters)
 {
 	BaseType_t xResult;
-	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(5); /* 设置最大等待时间为500ms */
+	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(200); /* 设置最大等待时间为500ms */
 	uint32_t ulValue;
    
 	
@@ -199,9 +199,12 @@ static void vTaskMsgPro(void *pvParameters)
 		if( xResult == pdPASS )
 		{
 			/* 接收到消息，检测那个位被按下 */
+             receive_key_message++;
 			if((ulValue & BIT_0) != 0)
 			{
-				receive_key_message++;
+
+          
+               
                 xTaskNotify(xHandleTaskStart, /* Ä¿±êÈÎÎñ */
 							BIT_1,             /* ÉèÖÃÄ¿±êÈÎÎñÊÂ¼þ±êÖ¾Î»bit0  */
 							eSetBits);         /* ½«Ä¿±êÈÎÎñµÄÊÂ¼þ±êÖ¾Î»ÓëBIT_0½øÐÐ»ò²Ù×÷£¬ 
@@ -236,8 +239,9 @@ static void vTaskStart(void *pvParameters)
 {
    BaseType_t xResult;
    const TickType_t xMaxBlockTime = pdMS_TO_TICKS(30); /* 设置最大等待时间为500ms */
-   static uint8_t sound_flag;
+   static uint8_t sound_flag,power_on_first;
    uint32_t ulValue;
+   
 
     while(1)
     {
@@ -257,14 +261,16 @@ static void vTaskStart(void *pvParameters)
 				//printf("receive notice key1_bit0 \n");
 				
                  sound_flag =1;
+                       recieve_flag++;
               
+                gkey_t.key_power=power_on;
 
                 if(sound_flag ==1){
                    sound_flag++;
                    gkey_t.key_power=power_on;
                    Buzzer_KeySound();
-
-                   PowerOn_Init();
+                   power_on_first=1; 
+                   
                 }
 		
 			}
@@ -273,7 +279,13 @@ static void vTaskStart(void *pvParameters)
 		}
         else{
 	    receive_task_start++;
-        mainboard_process_handler();
+
+        if(power_on_first == 1){
+           power_on_first++; 
+          PowerOn_Init();
+
+        }
+      //  mainboard_process_handler();
       //  vTaskDelay(10);
 
          }
@@ -307,7 +319,7 @@ static void AppTaskCreate (void)
 	
 	xTaskCreate( vTaskMsgPro,     		/* 任务函数  */
                  "vTaskMsgPro",   		/* 任务名    */
-                 256,             		/* 任务栈大小，单位word，也就是4字节 */
+                 128,             		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
                  1,               		/* 任务优先级*/
                  &xHandleTaskMsgPro );  /* 任务句柄  */
@@ -715,7 +727,7 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
         if(KEY_POWER_VALUE()==1){
 
          
-	  	   gkey_t.key_sound_flag = key_sound;
+	  ///	   gkey_t.key_sound_flag = key_sound;
          
 
          #if 0     

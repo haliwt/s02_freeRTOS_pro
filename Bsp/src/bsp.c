@@ -313,18 +313,18 @@ void PowerOn_Init(void)
 {
   
 
-    gProcess_t.gTimer_display_works_minutes=0;
-    gProcess_t.gTimer_display_works_hours =0;
+    //gProcess_t.gTimer_display_works_minutes=0;
+    ///gProcess_t.gTimer_display_works_hours =0;
 
     LED_Mode_On();
     LED_Power_On();
     Backlight_On();
 
-    Update_DHT11_Value();
-    Lcd_Display_Detials();
+   // Update_DHT11_Value();
+   /// Lcd_Display_Detials();
 
     //fan on
-    Mainboard_Action_Fun();
+   /// Mainboard_Action_Fun();
 
     
 
