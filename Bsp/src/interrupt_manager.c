@@ -44,6 +44,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		glcd_t.gTimer_error_times++;
 	    gctl_t.gTimer_prcoess_iwdg++;
         gkey_t.gTimer_power_off++;
+        gctl_t.gTimer_wifi_blink++;
 
         //process gtimer
 		gProcess_t.gTimer_run_adc++ ;

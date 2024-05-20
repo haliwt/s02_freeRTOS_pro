@@ -692,6 +692,7 @@ void Run_Main_Handler(void)
     	          
 
     }
+    Disip_Wifi_Icon_State(  );
 
    // Display_Works_Timing();
 
