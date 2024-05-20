@@ -78,6 +78,7 @@ void Error_Handler(void);
 #define BEEP_PWM_Pin 						GPIO_PIN_1
 #define BEEP_PWM_GPIO_Port 					GPIOB
 
+//sensor temperature detected GPIO
 #define TEMP_Pin 							    GPIO_PIN_13
 #define TEMP_GPIO_Port 						GPIOB
 

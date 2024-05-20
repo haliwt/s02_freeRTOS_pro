@@ -17,6 +17,8 @@ static void Display_Timer_Timing(int8_t hours,int8_t minutes);
 uint8_t  fan_continue_flag;
 uint8_t step_process;
 
+uint8_t flag_counter_test;
+
 
 /*
 *********************************************************************************************************
@@ -650,3 +652,39 @@ static void Display_Timer_Timing(int8_t hours,int8_t minutes)
 }
 
 
+void Run_Main_Handler(void)
+{
+
+if(gProcess_t.gTimer_normal_display_lcd > 6 && gProcess_t.gTimer_normal_display_lcd<10){ //30*10 =300ms flash
+                   
+                     
+                  //  Lcd_Display_Detials();
+                  flag_counter_test++;
+                    Update_DHT11_Value();
+      
+                  //  
+                    
+      
+ }
+ else if(gProcess_t.gTimer_normal_display_lcd >3 && gProcess_t.gTimer_normal_display_lcd<5){
+
+         Process_Dynamical_Action();
+
+
+ }
+ else if(gProcess_t.gTimer_normal_display_lcd  > 9){
+
+      gProcess_t.gTimer_normal_display_lcd=0;
+        // Update_DHT11_Value();
+
+          flag_counter_test++;
+          Update_DHT11_Value();
+			  	
+	     Disp_HumidityTemp_Value();
+
+	           
+      // Lcd_Display_Detials();
+
+}
+
+}

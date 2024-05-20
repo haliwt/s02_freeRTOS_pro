@@ -167,7 +167,7 @@ void freeRTOS_Handler(void)
 static void vTaskMsgPro(void *pvParameters)
 {
 	BaseType_t xResult;
-	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(200); /* 设置最大等待时间为500ms */
+	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(100); /* 设置最大等待时间为500ms */
 	uint32_t ulValue;
    
 	
@@ -199,7 +199,7 @@ static void vTaskMsgPro(void *pvParameters)
 		if( xResult == pdPASS )
 		{
 			/* 接收到消息，检测那个位被按下 */
-             receive_key_message++;
+             
 			if((ulValue & BIT_0) != 0)
 			{
 
@@ -214,15 +214,21 @@ static void vTaskMsgPro(void *pvParameters)
 
 		
 		}
-//		else
-//		{
-//			/* 超时 */
-//            LED_ON();
-//			HAL_Delay(10);
-//			LED_OFF();
-//			HAL_Delay(10);
-//			
-//		}
+		else
+		{
+			/* 超时 */
+        receive_key_message++;
+        
+         if(gkey_t.key_power==power_on){
+         
+                     LCD_Timer_Colon_Flicker();
+                     
+                     
+              
+            }
+        
+			
+		}
     }
 }
 
@@ -238,7 +244,7 @@ static void vTaskMsgPro(void *pvParameters)
 static void vTaskStart(void *pvParameters)
 {
    BaseType_t xResult;
-   const TickType_t xMaxBlockTime = pdMS_TO_TICKS(30); /* 设置最大等待时间为500ms */
+   const TickType_t xMaxBlockTime = pdMS_TO_TICKS(200); /* 设置最大等待时间为500ms */
    static uint8_t sound_flag,power_on_first;
    uint32_t ulValue;
    
@@ -284,7 +290,7 @@ static void vTaskStart(void *pvParameters)
 			
 		}
         else{
-    	    receive_task_start++;
+    	    
 
             if(power_on_first == 1 && gkey_t.key_power==power_on){
                power_on_first++; 
@@ -300,8 +306,12 @@ static void vTaskStart(void *pvParameters)
           //  vTaskDelay(10);
             if(power_on_first==2 && gkey_t.key_power==power_on){
 
-             LCD_Timer_Colon_Flicker();
+            // LCD_Timer_Colon_Flicker();
 
+             Run_Main_Handler();
+             
+             
+      
             }
 
          }
@@ -335,7 +345,7 @@ static void AppTaskCreate (void)
 	
 	xTaskCreate( vTaskMsgPro,     		/* 任务函数  */
                  "vTaskMsgPro",   		/* 任务名    */
-                 128,             		/* 任务栈大小，单位word，也就是4字节 */
+                 256,             		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
                  1,               		/* 任务优先级*/
                  &xHandleTaskMsgPro );  /* 任务句柄  */

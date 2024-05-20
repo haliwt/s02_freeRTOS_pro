@@ -23,6 +23,8 @@ typedef struct _bsp_ctl{
     uint8_t ptc_flag;
 	uint8_t plasma_flag;
 	uint8_t ultrasoinc_flag;
+    uint8_t  ai_flag;
+    uint8_t  wifi_flag;
 
 	uint8_t ptc_warning;
 	uint8_t fan_warning;

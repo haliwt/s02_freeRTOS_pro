@@ -115,7 +115,7 @@ static uint8_t DHT11_ReadByte ( void )
   *           SUCCESS锟斤拷锟斤拷取锟缴癸拷
   * 说    锟斤拷锟斤拷8bit 湿锟斤拷锟斤拷锟斤拷 + 8bit 湿锟斤拷小锟斤拷 + 8bit 锟铰讹拷锟斤拷锟斤拷 + 8bit 锟铰讹拷小锟斤拷 + 8bit 校锟斤拷锟� 
   */
-uint8_t DHT11_Read_TempAndHumidity(DHT11_Data_TypeDef *DHT11_Data)
+static uint8_t DHT11_Read_TempAndHumidity(DHT11_Data_TypeDef *DHT11_Data)
 {  
   uint8_t temp;
   uint16_t humi_temp;
@@ -182,9 +182,9 @@ static void  Dht11_Read_TempHumidity_Handler(DHT11_Data_TypeDef * pdth11)
 {
 	if(DHT11_Read_TempAndHumidity(pdth11) == 0){
 		   
-		 //  run_t.gDht11_humidity = pdth11->humi_high8bit;
+		   gProcess_t.gDht11_humidity = 56; //pdth11->humi_high8bit;
 		   
-		   gProcess_t.gdht11_temperature = pdth11->temp_high8bit;
+		   gProcess_t.gdht11_temperature = 30; //pdth11->temp_high8bit;
 
       //humidity data
 		   glcd_t.number1_high = pdth11->humi_high8bit /10;
@@ -201,6 +201,11 @@ static void  Dht11_Read_TempHumidity_Handler(DHT11_Data_TypeDef * pdth11)
 		   
 	   
 	 }
+     else{
+
+     gProcess_t.gdht11_temperature= 100;
+
+     }
 
 }
 

@@ -118,6 +118,7 @@ void LCD_Display_Wind_Icon_Handler(void);
 void Lcd_Display_Off(void);
 void LCD_Timer_Colon_Flicker(void);
 
+void Disp_HumidityTemp_Value(void);
 
 
 

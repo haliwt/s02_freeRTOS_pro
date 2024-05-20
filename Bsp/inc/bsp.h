@@ -44,6 +44,7 @@ typedef struct {
 
    uint8_t set_temp_confirm ;
    uint8_t gdht11_temperature;
+   uint8_t gDht11_humidity;
 
    int8_t set_timer_timing_hours;
    int8_t set_timer_timing_minutes;
@@ -77,6 +78,9 @@ void mainboard_process_handler(void);
 
 
 void PowerOff_freeFun(void);
+
+void Run_Main_Handler(void);
+
 
 #endif 
 

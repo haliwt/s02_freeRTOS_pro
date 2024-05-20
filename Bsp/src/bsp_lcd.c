@@ -294,11 +294,27 @@ void Lcd_Display_Detials(void)
 ******************************************************/
 void LCD_Number_OneTwo_Humidity(void)
 {
-   //number '1'
-  TM1723_Write_Display_Data(0xC4,(lcdNumber1_High[glcd_t.number1_high] + lcdNumber1_Low[glcd_t.number1_low]) & 0xff); //numbers : '1' addr: 0xC4
 
+  if(gctl_t.ai_flag == 1){
+  //number '1'
+     TM1723_Write_Display_Data(0xC4,(0x01+lcdNumber1_High[glcd_t.number1_high] + lcdNumber1_Low[glcd_t.number1_low]) & 0xffff); //numbers : '1' addr: 0xC4
+  }
+  else{
+        //number '1'
+     TM1723_Write_Display_Data(0xC4,(0x00+lcdNumber1_High[glcd_t.number1_high] + lcdNumber1_Low[glcd_t.number1_low]) & 0xffff); //numbers : '1' addr: 0xC4
+
+  }
+
+  if(gctl_t.wifi_flag ==1){
   //number '2'
-  TM1723_Write_Display_Data(0xC5,(lcdNumber2_High[glcd_t.number2_high] + lcdNumber2_Low[glcd_t.number2_low]) & 0xff); //numbers : '2' addr: 0xC5
+  TM1723_Write_Display_Data(0xC5,(0x01+lcdNumber2_High[glcd_t.number2_high] + lcdNumber2_Low[glcd_t.number2_low]) & 0xffff); //numbers : '2' addr: 0xC5
+
+    }
+    else{
+
+      TM1723_Write_Display_Data(0xC5,(0x00+lcdNumber2_High[glcd_t.number2_high] + lcdNumber2_Low[glcd_t.number2_low]) & 0xffff); //numbers : '2' addr: 0xC5
+
+    }
 }
 /*****************************************************************************
  * 
@@ -311,10 +327,10 @@ void LCD_Number_OneTwo_Humidity(void)
 void LCD_Number_ThreeFour_Temperature(void)
 {
   //number '3' 
-  TM1723_Write_Display_Data(0xC2,(lcdNumber3_High[glcd_t.number3_high] + lcdNumber3_Low[glcd_t.number3_low] + TEMP_Symbol ) & 0xff); //numbers : '3' addr: 0xC2
+  TM1723_Write_Display_Data(0xC2,(0x01+lcdNumber3_High[glcd_t.number3_high] + lcdNumber3_Low[glcd_t.number3_low]  ) & 0xffff); //numbers : '3' addr: 0xC2
 
  //number '4' 
- TM1723_Write_Display_Data(0xC3,(lcdNumber4_High[glcd_t.number4_high] + lcdNumber4_Low[glcd_t.number4_low] + HUMI_Symbol) & 0xff); //numbers : '4' addr: 0xC3
+ TM1723_Write_Display_Data(0xC3,(0x01+lcdNumber4_High[glcd_t.number4_high] + lcdNumber4_Low[glcd_t.number4_low]) & 0xffff); //numbers : '4' addr: 0xC3
 
 
 }
@@ -638,5 +654,25 @@ void Lcd_Display_Off(void)
 	 TIM1723_Write_Cmd(CloseDispTM1723);//(0x80);
 
 }
+
+/*************************************************************************************
+	*
+	*Function Name: void Lcd_Display_Off(void)
+	*Function : don't display any one
+	*Input Ref:NO
+	*Return Ref:NO
+	*
+*************************************************************************************/
+void Disp_HumidityTemp_Value(void)
+{
+//   TIM1723_Write_Cmd(0x00);
+//   TIM1723_Write_Cmd(0x40);
+//   TIM1723_Write_Cmd(0x44);
+     
+   LCD_Number_OneTwo_Humidity();
+   LCD_Number_ThreeFour_Temperature();
+}
+
+
 
 
