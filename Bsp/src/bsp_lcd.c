@@ -550,20 +550,20 @@ void LCD_Wind_Run_Icon(uint8_t wind_speed)
 
     case 1: //middle 
 
-         if(glcd_t.gTimer_fan_blink < 6){ //open 
+         if(glcd_t.gTimer_fan_blink < 15){ //open 
         		
         	   TM1723_Write_Display_Data(0xCE,T16_WIND_SPEED_LOW+T17_WIND_SPEED_MID+T15+T9+T13);//display  wind icon
         	   TM1723_Write_Display_Data(0xCF,T11);//display  wind icon	
         	}
-            else if(glcd_t.gTimer_fan_blink > 5 && glcd_t.gTimer_fan_blink   < 12){ //close
+            else if(glcd_t.gTimer_fan_blink > 14 && glcd_t.gTimer_fan_blink   < 30){ //close
         		
         	   TM1723_Write_Display_Data(0xCE,T16_WIND_SPEED_LOW+T17_WIND_SPEED_MID+T15 +T10+T12+T14 );//display  wind icon
-        	   TM1723_Write_Display_Data(0xCF,  T11);//display  wind icon	
+        	 //  TM1723_Write_Display_Data(0xCF,  T11);//display  wind icon	
 
         	}
-        	else {
+        	else if(glcd_t.gTimer_fan_blink > 29){
         		glcd_t.gTimer_fan_blink=0;
-           }
+        	}
 
 
     break;
@@ -571,20 +571,20 @@ void LCD_Wind_Run_Icon(uint8_t wind_speed)
 
     case 2: //lowd 
 
-        if(glcd_t.gTimer_fan_blink < 9){ //open 
+        if(glcd_t.gTimer_fan_blink < 15){ //open 
         		
         	   TM1723_Write_Display_Data(0xCE,T16_WIND_SPEED_LOW+T15+T9+T13);//display  wind icon
         	   TM1723_Write_Display_Data(0xCF,T11);//display  wind icon	
         	}
-            else if(glcd_t.gTimer_fan_blink > 8 && glcd_t.gTimer_fan_blink   < 19){ //close
+            else if(glcd_t.gTimer_fan_blink > 14 && glcd_t.gTimer_fan_blink   < 30){ //close
         		
         	   TM1723_Write_Display_Data(0xCE,T16_WIND_SPEED_LOW+T15 +T10+T12+T14 );//display  wind icon
-        	   TM1723_Write_Display_Data(0xCF,  T11);//display  wind icon	
+        	  // TM1723_Write_Display_Data(0xCF,  T11);//display  wind icon	
 
         	}
-        	else {
+        	else if(glcd_t.gTimer_fan_blink > 29){
         		glcd_t.gTimer_fan_blink=0;
-           }
+        	}
 
        
 
