@@ -270,7 +270,7 @@ static void vTaskStart(void *pvParameters)
                    if(gkey_t.key_power==power_off)
                       gkey_t.key_power=power_on;
                    else{
-                      gkey_t.key_power=power_off
+                      gkey_t.key_power=power_off;
 
                    }
                    Buzzer_KeySound();
@@ -284,20 +284,25 @@ static void vTaskStart(void *pvParameters)
 			
 		}
         else{
-	    receive_task_start++;
+    	    receive_task_start++;
 
-        if(power_on_first == 1 && gkey_t.key_power=power_on){
-           power_on_first++; 
-           PowerOn_Init();
+            if(power_on_first == 1 && gkey_t.key_power==power_on){
+               power_on_first++; 
+               PowerOn_Init();
 
-        }
-        else if( gkey_t.key_power==power_off){
-          PowerOff_freeFun();
+            }
+            else if( gkey_t.key_power==power_off){
+              PowerOff_freeFun();
 
 
-        }
-      //  mainboard_process_handler();
-      //  vTaskDelay(10);
+            }
+          //  mainboard_process_handler();
+          //  vTaskDelay(10);
+            if(power_on_first==2 && gkey_t.key_power==power_on){
+
+             LCD_Timer_Colon_Flicker();
+
+            }
 
          }
     }
