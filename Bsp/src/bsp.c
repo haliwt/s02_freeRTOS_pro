@@ -64,11 +64,11 @@ void mainboard_process_handler(void)
 	static uint8_t  timer_timing_flag,set_timer_hours,set_timer_minutes;
 	
 
-	if( gkey_t.key_sound_flag == key_sound){
-		gkey_t.key_sound_flag =0;
-		Buzzer_KeySound();
-
-    }
+//	if( gkey_t.key_sound_flag == key_sound){
+//		gkey_t.key_sound_flag =0;
+//		Buzzer_KeySound();
+//
+//    }
 
 	switch(gkey_t.key_power){
 
@@ -308,6 +308,27 @@ void mainboard_process_handler(void)
 
 }
 
+
+void PowerOn_Init(void)
+{
+  
+
+    gProcess_t.gTimer_display_works_minutes=0;
+    gProcess_t.gTimer_display_works_hours =0;
+
+    LED_Mode_On();
+    LED_Power_On();
+    Backlight_On();
+
+    Update_DHT11_Value();
+    Lcd_Display_Detials();
+
+    //fan on
+    Mainboard_Action_Fun();
+
+    
+
+}
 
 /*
 *********************************************************************************************************

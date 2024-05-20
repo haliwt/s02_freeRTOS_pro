@@ -2,7 +2,7 @@
 #include "queue.h"
 
 
-
+uint8_t receive_key_message;
 uint8_t key_mode_change;
 uint8_t set_up_temperature_value ;
 int8_t set_timer_dispTime_minutes;
@@ -451,6 +451,7 @@ static void vTaskMsgPro(void *pvParameters)
 	BaseType_t xResult;
 	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(200); /* 设置最大等待时间为200ms */
 	MSG_T *ptMsg;
+     static uint8_t test_flag;
     while(1)
     {
          /* 按键扫描 */
@@ -458,15 +459,28 @@ static void vTaskMsgPro(void *pvParameters)
      
        	 
         xResult = xQueueReceive(xQueue2,                   /* 消息队列句柄 */
-		                        (void *)&ptMsg,  		   /* 这里获取的是结构体的地址 */
-		                        portMAX_DELAY);/* 设置阻塞时间 */
+		                        (void *)&ucQueueMsgValue,  		   /* 这里获取的是结构体的地址 */
+		                       xMaxBlockTime);/* 设置阻塞时间 */
 		
 		
 		if(xResult == pdPASS)
 		{
-			/* 成功接收，并通过串口将数据打印出来 */
-            if(ptMsg->ucMessageID == 1){
+            
+            
+          receive_key_message++;
 
+
+
+         if(receive_key_message > 0){
+		     gkey_t.key_sound_flag =0;
+		    Buzzer_KeySound();
+           }
+          /* 成功接收，并通过串口将数据打印出来 */
+            if(ucQueueMsgValue == 1){
+
+               
+               
+               
                gkey_t.key_power=power_on;
 
 
@@ -482,15 +496,16 @@ static void vTaskMsgPro(void *pvParameters)
 		
            
 		}
-//		else
-//		{
-//			/* 超时 */
-//			LED_ON();
-//			HAL_Delay(10);
-//			LED_OFF();
-//			HAL_Delay(10);
-//			
-//		}
+		else
+		{
+			/* 超时 */
+//		if(test_flag ==0){
+//        test_flag++;
+//		PowerOn_Init();
+//
+//        }
+			
+		}
     }
         
 }
@@ -510,12 +525,13 @@ static void vTaskStart(void *pvParameters)
     BaseType_t xResult;
 	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(500); /* 设置最大等待时间为200ms */
     uint8_t key_value;
+   
     while(1)
      {
 
     
         /* 超时 */
-		
+       
         mainboard_process_handler();
         vTaskDelay(300);
 
@@ -552,7 +568,7 @@ static void AppTaskCreate (void)
 	
 	xTaskCreate( vTaskMsgPro,     		/* 任务函数  */
                  "vTaskMsgPro",   		/* 任务名    */
-                 256,             		/* 任务栈大小，单位word，也就是4字节 */
+                 512,             		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
                  1,               		/* 任务优先级*/
                  &xHandleTaskMsgPro );  /* 任务句柄  */
@@ -560,7 +576,7 @@ static void AppTaskCreate (void)
 	
 	xTaskCreate( vTaskStart,     		/* 任务函数  */
                  "vTaskStart",   		/* 任务名    */
-                 256,            		/* 任务栈大小，单位word，也就是4字节 */
+                 512,            		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
                  2,              		/* 任务优先级*/
                  &xHandleTaskStart );   /* 任务句柄  */
@@ -584,7 +600,7 @@ static void AppObjCreate (void)
     }
 	
 	/* 创建10个存储指针变量的消息队列，由于CM3/CM4内核是32位机，一个指针变量占用4个字节 */
-	xQueue2 = xQueueCreate(3, sizeof(struct Msg *));
+	xQueue2 = xQueueCreate(1, sizeof(uint8_t));//xQueue2 = xQueueCreate(1, sizeof(struct Msg *));
     if( xQueue2 == 0 )
     {
         /* 没有创建成功，用户可以在这里加入创建失败的处理机制 */
@@ -658,53 +674,36 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
    MSG_T   *ptMsg;
    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
     __HAL_GPIO_EXTI_CLEAR_RISING_IT(GPIO_Pin);
-
+   uint8_t tx_counter;
    switch(GPIO_Pin){
 
    case KEY_POWER_Pin:
 
         if(KEY_POWER_VALUE()==1){
 
-          if(gkey_t.key_power == power_off){
+         
 	  	   gkey_t.key_sound_flag = key_sound;
-           gkey_t.key_power = power_on;
+         
 
                   
-            ptMsg->ucMessageID=1;
-        	ptMsg->ulData[0]++;
-        	ptMsg->usData[0]++;
+            //ptMsg->ucMessageID=1;
+            
+        	//ptMsg->ulData[0]++;
+        	//ptMsg->usData[0]++;
+        	 tx_counter =1;
 
              /* 向消息队列发数据 */
         	xQueueSendFromISR(xQueue2,
-        				      (void *)&ptMsg,
+        				      (void *)&tx_counter,
         				       &xHigherPriorityTaskWoken);
 
         	/* 如果xHigherPriorityTaskWoken = pdTRUE，那么退出中断后切到当前最高优先级任务执行 */
         	portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
         }
      
-	  else{
-	  	  gkey_t.key_sound_flag = key_sound;
-          gkey_t.key_power = power_off;
-	      gkey_t.gTimer_power_off = 0;
-           ptMsg->ucMessageID=power_off;
-        	//ptMsg->ulData[0]++;
-        	//ptMsg->usData[0]++;
-
-             /* 向消息队列发数据 */
-        	xQueueSendFromISR(xQueue2,
-        				      (void *)&ptMsg,
-        				       &xHigherPriorityTaskWoken);
-
-        	/* 如果xHigherPriorityTaskWoken = pdTRUE，那么退出中断后切到当前最高优先级任务执行 */
-        	portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-
-	    
-
-         
-       }
+	 
      
-            }
+            
    
    break;
 
