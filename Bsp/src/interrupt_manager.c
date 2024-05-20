@@ -37,6 +37,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     if(tm0>999){ //100 *10ms = 1000ms = 1s
 		tm0=0;
 		tm2++;
+      
 
 		
 		gkey_t.gTimer_key_temp_timing++;

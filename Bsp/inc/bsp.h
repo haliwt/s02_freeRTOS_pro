@@ -81,6 +81,7 @@ void PowerOff_freeFun(void);
 
 void Run_Main_Handler(void);
 
+void Display_Works_Timing(void);
 
 #endif 
 

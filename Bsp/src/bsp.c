@@ -6,13 +6,14 @@ static uint8_t Works_Time_Out(void);
 static void Mainboard_Action_Fun(void);
 static void Mainboard_Fun_Stop(void);
 static void Process_Dynamical_Action(void);
-static void Display_Works_Timing(void);
+
 static void Set_Timer_Timing_Lcd_Blink(void );
 
 static void Display_Timer_Timing(int8_t hours,int8_t minutes);
 
+static void Display_LCD_Works_Timing(void);
 
-
+//static void Display_Works_Timing(void);
 
 uint8_t  fan_continue_flag;
 uint8_t step_process;
@@ -481,7 +482,7 @@ static void Process_Dynamical_Action(void)
 *
 *********************************************************************************************************
 */
-static void Display_Works_Timing(void)
+void Display_Works_Timing(void)
 {
 
     if(gProcess_t.gTimer_works_counter > 59 ){
@@ -533,10 +534,19 @@ static void Display_Works_Timing(void)
 	  
     }
 	 
-
-	
+    Display_LCD_Works_Timing();
+    
 
    }
+
+   
+
+}
+
+static void Display_LCD_Works_Timing(void)
+{
+    LCD_Number_FiveSix_Hours();
+   // LCD_Number_SevenEight_Minutes();
 
 
 }
@@ -651,40 +661,39 @@ static void Display_Timer_Timing(int8_t hours,int8_t minutes)
 
 }
 
-
+/**********************************************************************************************************
+*
+*	函 数 名: void Dissplay_Timer_Timing(uint8_t hours,uint8_t minutes)
+*	功能说明: 到记时功能
+*	形    参: 无
+*	返 回 值: 无
+*
+*********************************************************************************************************/ 
 void Run_Main_Handler(void)
 {
 
-if(gProcess_t.gTimer_normal_display_lcd > 6 && gProcess_t.gTimer_normal_display_lcd<10){ //30*10 =300ms flash
-                   
-                     
-                  //  Lcd_Display_Detials();
-                  flag_counter_test++;
-                    Update_DHT11_Value();
-      
-                  //  
-                    
-      
- }
- else if(gProcess_t.gTimer_normal_display_lcd >3 && gProcess_t.gTimer_normal_display_lcd<5){
 
-         Process_Dynamical_Action();
+    if(gProcess_t.gTimer_normal_display_lcd >3 && gProcess_t.gTimer_normal_display_lcd<5){
+
+             Process_Dynamical_Action();
 
 
- }
- else if(gProcess_t.gTimer_normal_display_lcd  > 9){
+     }
+     else if(gProcess_t.gTimer_normal_display_lcd  > 9){
 
-      gProcess_t.gTimer_normal_display_lcd=0;
-        // Update_DHT11_Value();
+          gProcess_t.gTimer_normal_display_lcd=0;
+            // Update_DHT11_Value();
 
-          flag_counter_test++;
-          Update_DHT11_Value();
-			  	
-	     Disp_HumidityTemp_Value();
+              flag_counter_test++;
+              Update_DHT11_Value();
+    			  	
+    	     Disp_HumidityTemp_Value();
 
-	           
-      // Lcd_Display_Detials();
+    	           
+          // Lcd_Display_Detials();
 
-}
+    }
+
+   // Display_Works_Timing();
 
 }

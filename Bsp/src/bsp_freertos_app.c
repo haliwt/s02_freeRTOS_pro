@@ -56,7 +56,7 @@ void freeRTOS_Handler(void)
 //	AppObjCreate();
 	
     /* 启动调度，开始执行任务 */
-   // vTaskStartScheduler();
+    vTaskStartScheduler();
 }
 
 
@@ -221,7 +221,8 @@ static void vTaskMsgPro(void *pvParameters)
         
          if(gkey_t.key_power==power_on){
          
-                     LCD_Timer_Colon_Flicker();
+                 LCD_Timer_Colon_Flicker();
+                 Display_Works_Timing();
                      
                      
               

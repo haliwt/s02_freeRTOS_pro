@@ -122,5 +122,8 @@ void Disp_HumidityTemp_Value(void);
 
 
 
+void LCD_Number_FiveSix_Hours(void);
+void LCD_Number_SevenEight_Minutes(void);
+
 #endif 
 

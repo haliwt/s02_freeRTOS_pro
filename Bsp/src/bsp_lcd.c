@@ -143,13 +143,19 @@ static void TM1723_Write_Display_Data(uint8_t addr,uint8_t dat);
 
 static void LCD_Number_OneTwo_Humidity(void);
 static void LCD_Number_ThreeFour_Temperature(void);
-static void LCD_Number_FiveSix_Hours(void);
-static void LCD_Number_SevenEight_Minutes(void);
+
+
 static void LCD_Wind_Icon(void);
 static uint8_t Detecting_Fault_Code(void);
 static void LCD_Fault_Numbers_Code(void);
 
 static void Lcd_Display_Temp_Digital_Blink(void);
+
+//static void LCD_Number_FiveSix_Hours(void);
+//static void LCD_Number_SevenEight_Minutes(void);
+
+
+
 
 
 
@@ -344,34 +350,31 @@ void LCD_Number_ThreeFour_Temperature(void)
 *****************************************************************************/
 void LCD_Number_FiveSix_Hours(void)
 {
+   static uint8_t ptc_state_flag =1,plasma_state_flag =1;
 
-  //judge icon 'dry' is on or off 
-   static uint8_t ptc_symbol,plasma_symbol;
-   if(ptc_state()==open){
+   if(ptc_state_flag == 1){
 
-      ptc_symbol = 1;
-     
+        //number '5' and 'ptc' icon
+        TM1723_Write_Display_Data(0xC9,(0x01+lcdNumber5_High[glcd_t.number5_high] + lcdNumber5_Low[glcd_t.number5_low]  ) & 0xffff); 
    }
    else{
-     ptc_symbol = 0;
+       //number '5' and 'ptc' icon
+        TM1723_Write_Display_Data(0xC9,(lcdNumber5_High[glcd_t.number5_high] + lcdNumber5_Low[glcd_t.number5_low]  ) & 0xffff); 
+
    }
 
-   if(plasma_state() == open){
-      plasma_symbol =1;
-   }
-   else{
-	  plasma_symbol = 0;
-   }
-  
 
+   if(plasma_state_flag ==1){
 
+   //number '6' 
+    TM1723_Write_Display_Data(0xCA,(0x01+lcdNumber6_High[glcd_t.number6_high] + lcdNumber6_Low[glcd_t.number6_low] ) & 0xffff); 
 
-  //number '5' and 'ptc' icon
-  TM1723_Write_Display_Data(0xC9,(lcdNumber5_High[glcd_t.number5_high] + lcdNumber5_Low[glcd_t.number5_low] + ptc_symbol ) & 0xff); 
+  }
+  else{
+      //number '6' 
+    TM1723_Write_Display_Data(0xCA,(lcdNumber6_High[glcd_t.number6_high] + lcdNumber6_Low[glcd_t.number6_low] ) & 0xffff); 
 
- //number '6' 
- TM1723_Write_Display_Data(0xCA,(lcdNumber6_High[glcd_t.number6_high] + lcdNumber6_Low[glcd_t.number6_low] + plasma_symbol) & 0xff); 
-
+  }
 }
 
 /*****************************************************************************
@@ -382,7 +385,7 @@ void LCD_Number_FiveSix_Hours(void)
  * Return Ref:
  * 
 *****************************************************************************/
-static void LCD_Number_SevenEight_Minutes(void)
+void LCD_Number_SevenEight_Minutes(void)
 {
 
   static uint8_t ultrasonic_symbol;
@@ -399,10 +402,10 @@ static void LCD_Number_SevenEight_Minutes(void)
 	  }
 
 	   //number '7' ":"
-	  TM1723_Write_Display_Data(0xCB,(lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] + Colon_Symbol ) & 0xff); //numbers : '1' addr: 0xC4
+	//  TM1723_Write_Display_Data(0xCB,(0x01+lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] + Colon_Symbol ) & 0xffff); //numbers : '1' addr: 0xC4
 
 	  //number '8'
-	  TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[glcd_t.number8_high] + lcdNumber8_Low[glcd_t.number8_low] + ultrasonic_symbol) & 0xff); //numbers : '2' addr: 0xC
+	  TM1723_Write_Display_Data(0xCC,(ultrasonic_symbol+lcdNumber8_High[glcd_t.number8_high] + lcdNumber8_Low[glcd_t.number8_low] ) & 0xffff); //numbers : '2' addr: 0xC
 
 }
 
