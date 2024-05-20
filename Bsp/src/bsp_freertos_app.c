@@ -3,6 +3,7 @@
 
 
 uint8_t receive_key_message;
+uint8_t receive_task_start;
 uint8_t key_mode_change;
 uint8_t set_up_temperature_value ;
 int8_t set_timer_dispTime_minutes;
@@ -531,9 +532,9 @@ static void vTaskStart(void *pvParameters)
 
     
         /* 超时 */
-       
+       receive_task_start++;
         mainboard_process_handler();
-        vTaskDelay(300);
+        vTaskDelay(100);
 
        
         
@@ -568,7 +569,7 @@ static void AppTaskCreate (void)
 	
 	xTaskCreate( vTaskMsgPro,     		/* 任务函数  */
                  "vTaskMsgPro",   		/* 任务名    */
-                 512,             		/* 任务栈大小，单位word，也就是4字节 */
+                 256,             		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
                  1,               		/* 任务优先级*/
                  &xHandleTaskMsgPro );  /* 任务句柄  */
