@@ -131,6 +131,9 @@ void Display_Wind_Icon_Inint(void);
 
 void Disip_Wifi_Icon_State(void  );
 
+void LCD_Numbers1234_Init(void);
+
+
 
 #endif 
 

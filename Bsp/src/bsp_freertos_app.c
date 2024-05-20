@@ -300,6 +300,7 @@ static void vTaskStart(void *pvParameters)
             if(power_on_first == 1 && gkey_t.key_power==power_on){
                power_on_first++; 
                PowerOn_Init();
+                LCD_Numbers1234_Init();
                Display_Wind_Icon_Inint();
 
             }
