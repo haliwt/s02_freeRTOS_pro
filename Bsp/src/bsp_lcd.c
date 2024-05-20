@@ -388,25 +388,26 @@ void LCD_Number_FiveSix_Hours(void)
 void LCD_Number_SevenEight_Minutes(void)
 {
 
-  static uint8_t ultrasonic_symbol;
+  static uint8_t ultrasonic_state_flag=1;
 
-     if(ultrasonic_state() == open){
 
-	     ultrasonic_symbol =1;
 
-	  }
-	  else{
+     if(ultrasonic_state_flag == 1){
 
-	    ultrasonic_symbol =0;
-
-	  }
+	
 
 	   //number '7' ":"
 	//  TM1723_Write_Display_Data(0xCB,(0x01+lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] + Colon_Symbol ) & 0xffff); //numbers : '1' addr: 0xC4
 
 	  //number '8'
-	  TM1723_Write_Display_Data(0xCC,(ultrasonic_symbol+lcdNumber8_High[glcd_t.number8_high] + lcdNumber8_Low[glcd_t.number8_low] ) & 0xffff); //numbers : '2' addr: 0xC
+	  TM1723_Write_Display_Data(0xCC,(0x01+lcdNumber8_High[glcd_t.number8_high] + lcdNumber8_Low[glcd_t.number8_low] ) & 0xffff); //numbers : '2' addr: 0xC
 
+      }
+      else{
+
+         TM1723_Write_Display_Data(0xCC,(0x01+lcdNumber8_High[glcd_t.number8_high] + lcdNumber8_Low[glcd_t.number8_low] ) & 0xffff); //numbers
+
+      }
 }
 
 /*****************************************************************************

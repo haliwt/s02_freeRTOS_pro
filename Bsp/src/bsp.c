@@ -546,7 +546,7 @@ void Display_Works_Timing(void)
 static void Display_LCD_Works_Timing(void)
 {
     LCD_Number_FiveSix_Hours();
-   // LCD_Number_SevenEight_Minutes();
+    LCD_Number_SevenEight_Minutes();
 
 
 }
