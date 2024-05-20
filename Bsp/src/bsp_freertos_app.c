@@ -261,15 +261,21 @@ static void vTaskStart(void *pvParameters)
 				//printf("receive notice key1_bit0 \n");
 				
                  sound_flag =1;
-                       recieve_flag++;
+                  recieve_flag++;
               
-                gkey_t.key_power=power_on;
+               
 
                 if(sound_flag ==1){
                    sound_flag++;
-                   gkey_t.key_power=power_on;
+                   if(gkey_t.key_power==power_off)
+                      gkey_t.key_power=power_on;
+                   else{
+                      gkey_t.key_power=power_off
+
+                   }
                    Buzzer_KeySound();
                    power_on_first=1; 
+                   
                    
                 }
 		
@@ -280,9 +286,14 @@ static void vTaskStart(void *pvParameters)
         else{
 	    receive_task_start++;
 
-        if(power_on_first == 1){
+        if(power_on_first == 1 && gkey_t.key_power=power_on){
            power_on_first++; 
-          PowerOn_Init();
+           PowerOn_Init();
+
+        }
+        else if( gkey_t.key_power==power_off){
+          PowerOff_freeFun();
+
 
         }
       //  mainboard_process_handler();

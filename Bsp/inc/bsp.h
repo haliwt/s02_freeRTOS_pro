@@ -76,6 +76,7 @@ void PowerOn_Init(void);
 void mainboard_process_handler(void);
 
 
+void PowerOff_freeFun(void);
 
 #endif 
 

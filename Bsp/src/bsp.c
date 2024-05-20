@@ -330,6 +330,21 @@ void PowerOn_Init(void)
 
 }
 
+
+void PowerOff_freeFun(void)
+{
+      LED_Mode_Off();
+	   
+	   
+        Ptc_Off();
+		Ultrasonic_Pwm_Stop();
+		Plasma_Off();
+
+        Fan_Stop();
+		Backlight_Off();
+		Lcd_Display_Off();
+}
+
 /*
 *********************************************************************************************************
 *	函 数 名: static uint8_t Works_Time_Out(void)
