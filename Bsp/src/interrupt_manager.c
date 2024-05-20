@@ -38,16 +38,19 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		tm0=0;
 		tm2++;
       
-
+         glcd_t.gTimer_fan_blink++;
 		
 		gkey_t.gTimer_key_temp_timing++;
 		glcd_t.gTimer_error_times++;
 	    gctl_t.gTimer_prcoess_iwdg++;
+        gkey_t.gTimer_power_off++;
+
+        //process gtimer
 		gProcess_t.gTimer_run_adc++ ;
 		gProcess_t.gTimer_run_dht11++;
         gProcess_t.gTimer_normal_display_lcd ++;
 		gProcess_t.gTimer_run_one_mintue ++;
-		gkey_t.gTimer_power_off++;
+		
 		gProcess_t.gTimer_works_counter++;
 		gProcess_t.gTimer_set_timer_blink++;
 		

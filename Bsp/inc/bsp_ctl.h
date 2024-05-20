@@ -41,6 +41,9 @@ extern uint8_t (*ptc_state)(void); //adjust of ptc is open or close
 extern uint8_t (*plasma_state)(void); //adjust of plasma is open or close
 extern uint8_t (*ultrasonic_state)(void); //adjust of ultrasoic is open or close
 
+extern uint8_t (*ai_mode_state)(void);
+extern uint8_t (*wifi_link_net_state)(void);
+
 
 extern uint8_t (*ptc_error_state)(void);
 extern uint8_t (*fan_error_state)(void);
@@ -53,6 +56,9 @@ void Ptc_State_Handler( uint8_t (*ptc_handler)(void));
 void  Plasma_State_Handler(uint8_t(*plasma_handler)(void));
 void  Ultrasonic_state_Handler(uint8_t(*ultrasonic_handler)(void));
 void  Fan_state_Handler(uint8_t(*fan_handler)(void));
+void  Ai_Mode_Handler(uint8_t(*ai_handler)(void));
+void  Wifi_Link_Net_Handler(uint8_t(*wifi_handler)(void));
+
 
 void  Ptc_error_state_Handler(uint8_t(*error_handler)(void));
 void  Fan_error_state_Handler(uint8_t(*fan_error_handler)(void));

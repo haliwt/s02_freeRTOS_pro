@@ -9,9 +9,17 @@ uint8_t (*ptc_state)(void); //adjust of ptc is open or close
 uint8_t (*plasma_state)(void); //adjust of plasma is open or close
 uint8_t (*ultrasonic_state)(void); //adjust of ultrasoic is open or close
 
+uint8_t (*ai_mode_state)(void);
+uint8_t (*wifi_link_net_state)(void);
+
+
 
 uint8_t (*ptc_error_state)(void);
 uint8_t (*fan_error_state)(void);
+
+
+static uint8_t ai_mode_default(void);
+static uint8_t wifi_link_net_default(void);
 
 
 
@@ -23,12 +31,18 @@ void bsp_ctl_init(void)
    gctl_t.ptc_flag=1;
    gctl_t.plasma_flag =1;
    gctl_t.ultrasoinc_flag =1;
+   gctl_t.ai_flag =1;
+   
    UartVarInit();
    Ptc_State_Handler(Ptc_Default_Handler);
    Plasma_State_Handler(Plasma_Default_Handler);
    Ultrasonic_state_Handler(Ultrasonic_Default_Handler);
    Ptc_error_state_Handler(Ptc_Error_Default_Handler);
    Fan_error_state_Handler(Fan_Error_Default_Handler);
+
+   
+   Ai_Mode_Handler(ai_mode_default);
+   Wifi_Link_Net_Handler(wifi_link_net_default);
 
 }
 
@@ -162,6 +176,58 @@ uint8_t Fan_Error_Default_Handler(void)
 	   return 0;
 	}
     
+}
+
+
+/*****************************************************************************
+ * 
+ * Function Name: void  Ai_Mode_Handler(uint8_t(*ai_handler)(void))
+ * Function:
+ * Input Ref: idata is ptc is open "1" or "0"  close 
+ * Return Ref: close or open 
+ * 
+*****************************************************************************/
+static uint8_t ai_mode_default(void)
+{
+     if(gctl_t.ai_flag == 1)return 1;
+     else return 0;
+
+}
+
+
+
+
+void  Ai_Mode_Handler(uint8_t(*ai_handler)(void))
+{
+
+      ai_mode_state = ai_handler;
+
+}
+
+
+/*****************************************************************************
+ * 
+ * Function Name:  Wifi_Link_Net_Handler(uint8_t(*wifi_handler)(void))
+ * Function:
+ * Input Ref: idata is ptc is open "1" or "0"  close 
+ * Return Ref: close or open 
+ * 
+*****************************************************************************/
+static uint8_t wifi_link_net_default(void)
+{
+
+    if(gctl_t.wifi_flag ==1)return 1;
+    else return 0;
+   
+
+
+}
+
+void  Wifi_Link_Net_Handler(uint8_t(*wifi_handler)(void))
+{
+
+    wifi_link_net_state = wifi_handler;
+
 }
 
 

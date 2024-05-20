@@ -223,6 +223,8 @@ static void vTaskMsgPro(void *pvParameters)
          
                  LCD_Timer_Colon_Flicker();
                  Display_Works_Timing();
+
+               
                      
                      
               
@@ -296,6 +298,7 @@ static void vTaskStart(void *pvParameters)
             if(power_on_first == 1 && gkey_t.key_power==power_on){
                power_on_first++; 
                PowerOn_Init();
+               Display_Wind_Icon_Inint();
 
             }
             else if( gkey_t.key_power==power_off){
@@ -310,6 +313,10 @@ static void vTaskStart(void *pvParameters)
             // LCD_Timer_Colon_Flicker();
 
              Run_Main_Handler();
+
+             LCD_Wind_Run_Icon(0);
+
+           
              
              
       

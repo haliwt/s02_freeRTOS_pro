@@ -24,22 +24,24 @@ lcd_ref glcd_t;
 #define HUMI_Symbol              0x01     //addr  0xC3 ->T6  high word
 
 //wind symbol 0xCE
-//low word 
+/****run wind 1******/
 #define T9                       0x01      //addr 0xCE --> high word
-#define T14                      0x02     // addr 0xCE -> high word
-#define T13                      0x04     //addr 0xCE -->high word
-#define T16_WIND_SPEED_ONE       0x08     // high word
+#define T11                      0x01    //address:0xCF
+#define T13                      0X04     //address: 0xCE
+/**run wind 2*******/
+#define T10                      0x10     // addr 0xCE -> high word
+#define T12                      0x40     //addr 0xCE -->high word
+#define T14                      0x02     //address: 0xCE
+/****************/
+#define T15                      0x20      //address: 0xCE
 
-//high word
-#define T10                      0x10      //addr 0xCE  --> low word
-#define T15  					 0x20     // addr 0xCE -> low word  -> circle
-#define T12                      0x40      //addr 0xCE -->low word
-#define T17_WIND_SPEED_TWO       0x80//addr 0xCE
 
+//display wid stronger icon
+#define T16_WIND_SPEED_LOW       0x08     // high LOW
+//high middle
 
+#define T17_WIND_SPEED_MID       0x80//addr 0xCE
 //wind symbol 0xCF
-//low word
-#define T11                      0x01      //addr 0xCF
 #define T18_WIND_SPEED_FULL      0x02   //addr 0xCF
 
 
@@ -145,7 +147,6 @@ static void LCD_Number_OneTwo_Humidity(void);
 static void LCD_Number_ThreeFour_Temperature(void);
 
 
-static void LCD_Wind_Icon(void);
 static uint8_t Detecting_Fault_Code(void);
 static void LCD_Fault_Numbers_Code(void);
 
@@ -161,6 +162,9 @@ static void Lcd_Display_Temp_Digital_Blink(void);
 
 static uint8_t	ptc_error_flag ,fan_error_flag;
 uint8_t Colon_Symbol   ;
+
+uint8_t flag_counter_test;
+
 
 
 /*****************************************************
@@ -281,7 +285,7 @@ void Lcd_Display_Detials(void)
  }
 
    /* fan of degree numbers*/
-   LCD_Wind_Icon();
+ //  LCD_Wind_Icon();
 
 
    //open display
@@ -459,9 +463,6 @@ static uint8_t Detecting_Fault_Code(void)
 *************************************************************************************/
 static void LCD_Fault_Numbers_Code(void)
 {
-
- 
- 
  // display "E"
  TM1723_Write_Display_Data(0xC9,(lcdNumber5_Low_E[0]  + lcdNumber5_High_E[0] + DRY_Symbol ) & 0xff); //numbers : '3' addr: 0xC2
 
@@ -511,30 +512,100 @@ static void LCD_Fault_Numbers_Code(void)
 }
 /*****************************************************************************
  * 
- * Function Name:  static void LCD_Fan_Icon(void)
- * Function:
- * Input Ref:
+ * Function Name:  void LCD_Wind_Icon(uint8_t wind_sppeed)
+ * Function: run wind speed value 
+ * Input Ref:  wind_speed =0, is max ,wind_speed= 1, middle, wind_speed =2 is low
  * Return Ref:
  * 
 *****************************************************************************/
-static void LCD_Wind_Icon(void)
+void LCD_Wind_Run_Icon(uint8_t wind_speed)
 {
 
-   if(glcd_t.gTimer_fan_blink >9 && glcd_t.gTimer_fan_blink<20){ //open 
-		
-	   TM1723_Write_Display_Data(0xCE,T16_WIND_SPEED_ONE+T17_WIND_SPEED_TWO+T15+T9+T13);//display  wind icon
-	   TM1723_Write_Display_Data(0xCF,T18_WIND_SPEED_FULL+T11);//display  wind icon	
-	}
-    else if(glcd_t.gTimer_fan_blink <10){ //close
-		
-	   TM1723_Write_Display_Data(0xCE,T16_WIND_SPEED_ONE+T17_WIND_SPEED_TWO+T15 +T10+T12+T14 );//display  wind icon
-	   TM1723_Write_Display_Data(0xCF,T18_WIND_SPEED_FULL);//display  wind icon	
+   //wind run icon
 
-	}
-	else if(glcd_t.gTimer_fan_blink > 19){
-		glcd_t.gTimer_fan_blink=0;
-	}
+
+   switch(wind_speed){
+
+
+    case 0: //max wind speed.
+
+        flag_counter_test ++;
+
+           if(glcd_t.gTimer_fan_blink < 10){ //open 
+        		
+        	   TM1723_Write_Display_Data(0xCE,((T16_WIND_SPEED_LOW+T17_WIND_SPEED_MID+T15+T9+T13) & 0xffff));//display  wind icon
+        	   TM1723_Write_Display_Data(0xCF,((T18_WIND_SPEED_FULL+ T11)& 0xffff));//display  wind icon	
+        	}
+            else if(glcd_t.gTimer_fan_blink > 9 && glcd_t.gTimer_fan_blink   < 20){ //close
+        		
+        	   TM1723_Write_Display_Data(0xCE,((T16_WIND_SPEED_LOW+T17_WIND_SPEED_MID+T15 +T10+T12+T14)& 0xffff));//display  wind icon
+        	   TM1723_Write_Display_Data(0xCF,((T18_WIND_SPEED_FULL+  T11)& 0xffff));//display  wind icon	
+
+        	}
+        	else {
+        		glcd_t.gTimer_fan_blink=0;
+        	}
+
+    break;
+
+    case 1: //middle 
+
+         if(glcd_t.gTimer_fan_blink < 6){ //open 
+        		
+        	   TM1723_Write_Display_Data(0xCE,T16_WIND_SPEED_LOW+T17_WIND_SPEED_MID+T15+T9+T13);//display  wind icon
+        	   TM1723_Write_Display_Data(0xCF,T11);//display  wind icon	
+        	}
+            else if(glcd_t.gTimer_fan_blink > 5 && glcd_t.gTimer_fan_blink   < 12){ //close
+        		
+        	   TM1723_Write_Display_Data(0xCE,T16_WIND_SPEED_LOW+T17_WIND_SPEED_MID+T15 +T10+T12+T14 );//display  wind icon
+        	   TM1723_Write_Display_Data(0xCF,  T11);//display  wind icon	
+
+        	}
+        	else {
+        		glcd_t.gTimer_fan_blink=0;
+           }
+
+
+    break;
+
+
+    case 2: //lowd 
+
+        if(glcd_t.gTimer_fan_blink < 9){ //open 
+        		
+        	   TM1723_Write_Display_Data(0xCE,T16_WIND_SPEED_LOW+T15+T9+T13);//display  wind icon
+        	   TM1723_Write_Display_Data(0xCF,T11);//display  wind icon	
+        	}
+            else if(glcd_t.gTimer_fan_blink > 8 && glcd_t.gTimer_fan_blink   < 19){ //close
+        		
+        	   TM1723_Write_Display_Data(0xCE,T16_WIND_SPEED_LOW+T15 +T10+T12+T14 );//display  wind icon
+        	   TM1723_Write_Display_Data(0xCF,  T11);//display  wind icon	
+
+        	}
+        	else {
+        		glcd_t.gTimer_fan_blink=0;
+           }
+
+       
+
+
+    break;
+
+   }
 	  
+}
+
+void Display_Wind_Icon_Inint(void)
+{
+
+   TIM1723_Write_Cmd(0x00); // 0x00 -> display setup model
+   TIM1723_Write_Cmd(0x40); // 0x40 ->write data to display of register
+	TIM1723_Write_Cmd(0x44); // 0x44 -> write fix of address model
+
+   TM1723_Write_Display_Data(0xCE,((T16_WIND_SPEED_LOW+T17_WIND_SPEED_MID+T15+T9+T13) & 0xffff));//display  wind icon
+    TM1723_Write_Display_Data(0xCF,((T18_WIND_SPEED_FULL+ T11)& 0xffff));//display  wind icon	
+
+     TIM1723_Write_Cmd(LUM_VALUE);//(0x97);//(0x94);//(0x9B);
 }
 
 /*****************************************************************************
@@ -616,34 +687,7 @@ static void Lcd_Display_Temp_Digital_Blink(void)
 
 
 }
-/*************************************************************************************
-	*
-	*Function Name: static void LCD_DisplayNumber_OneTwo_Icon_Handler(void)
-	*Function : display wind icon
-	*Input Ref:NO
-	*Return Ref:NO
-	*
-*************************************************************************************/
-void LCD_Display_Wind_Icon_Handler(void)
-{
-		TIM1723_Write_Cmd(0x00);
-		TIM1723_Write_Cmd(0x40);
-		TIM1723_Write_Cmd(0x44);
 
-		TM1723_Write_Display_Data(0xC2,0x0);
-		TM1723_Write_Display_Data(0xC3,0x0);
-		TM1723_Write_Display_Data(0xC4,0x0);
-		TM1723_Write_Display_Data(0xC5,0x0);
-		TM1723_Write_Display_Data(0xC9,0x0);
-		TM1723_Write_Display_Data(0xCA,0x0);
-		TM1723_Write_Display_Data(0xCB,0x0);
-		TM1723_Write_Display_Data(0xCC,0x0);
-
-
-	//open display
-	 TIM1723_Write_Cmd(LUM_VALUE);//(0x9B);
-
-}
 /*************************************************************************************
 	*
 	*Function Name: void Lcd_Display_Off(void)
@@ -669,9 +713,7 @@ void Lcd_Display_Off(void)
 *************************************************************************************/
 void Disp_HumidityTemp_Value(void)
 {
-//   TIM1723_Write_Cmd(0x00);
-//   TIM1723_Write_Cmd(0x40);
-//   TIM1723_Write_Cmd(0x44);
+
      
    LCD_Number_OneTwo_Humidity();
    LCD_Number_ThreeFour_Temperature();

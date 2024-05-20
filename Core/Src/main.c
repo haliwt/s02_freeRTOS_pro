@@ -100,6 +100,7 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
   delay_init(24); 
+  bsp_ctl_init();
     HAL_TIM_Base_Start_IT(&htim17);
    UART_Start_Receive_IT(&huart2,inputBuf,1);
     freeRTOS_Handler();

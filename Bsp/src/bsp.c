@@ -18,7 +18,7 @@ static void Display_LCD_Works_Timing(void);
 uint8_t  fan_continue_flag;
 uint8_t step_process;
 
-uint8_t flag_counter_test;
+
 
 
 /*
@@ -90,7 +90,7 @@ void mainboard_process_handler(void)
         if(first_power_up==1){
            if(gkey_t.gTimer_power_off < 61){
                 Fan_Run();
-				LCD_Display_Wind_Icon_Handler();
+				//LCD_Display_Wind_Icon_Handler();
 
 		   }
 		   else{
@@ -684,7 +684,7 @@ void Run_Main_Handler(void)
           gProcess_t.gTimer_normal_display_lcd=0;
             // Update_DHT11_Value();
 
-              flag_counter_test++;
+           
               Update_DHT11_Value();
     			  	
     	     Disp_HumidityTemp_Value();
