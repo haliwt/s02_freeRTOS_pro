@@ -531,18 +531,18 @@ void LCD_Wind_Run_Icon(uint8_t wind_speed)
 
         flag_counter_test ++;
 
-           if(glcd_t.gTimer_fan_blink < 10){ //open 
+           if(glcd_t.gTimer_fan_blink < 15){ //open 
         		
         	   TM1723_Write_Display_Data(0xCE,((T16_WIND_SPEED_LOW+T17_WIND_SPEED_MID+T15+T9+T13) & 0xffff));//display  wind icon
-        	   TM1723_Write_Display_Data(0xCF,((T18_WIND_SPEED_FULL+ T11)& 0xffff));//display  wind icon	
+        	   TM1723_Write_Display_Data(0xCF,((T18_WIND_SPEED_FULL+ T11)& 0xff));//display  wind icon	
         	}
-            else if(glcd_t.gTimer_fan_blink > 9 && glcd_t.gTimer_fan_blink   < 20){ //close
+            else if(glcd_t.gTimer_fan_blink > 14 && glcd_t.gTimer_fan_blink   < 30){ //close
         		
         	   TM1723_Write_Display_Data(0xCE,((T16_WIND_SPEED_LOW+T17_WIND_SPEED_MID+T15 +T10+T12+T14)& 0xffff));//display  wind icon
-        	   TM1723_Write_Display_Data(0xCF,((T18_WIND_SPEED_FULL+  T11)& 0xffff));//display  wind icon	
+        	   TM1723_Write_Display_Data(0xCF,((T18_WIND_SPEED_FULL)& 0xff));//display  wind icon	
 
         	}
-        	else {
+        	else if(glcd_t.gTimer_fan_blink > 29){
         		glcd_t.gTimer_fan_blink=0;
         	}
 

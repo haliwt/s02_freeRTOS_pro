@@ -689,8 +689,7 @@ void Run_Main_Handler(void)
     			  	
     	     Disp_HumidityTemp_Value();
 
-    	           
-          // Lcd_Display_Detials();
+    	          
 
     }
 

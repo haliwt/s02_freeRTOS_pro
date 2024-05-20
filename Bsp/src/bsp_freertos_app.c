@@ -224,6 +224,8 @@ static void vTaskMsgPro(void *pvParameters)
                  LCD_Timer_Colon_Flicker();
                  Display_Works_Timing();
 
+                 LCD_Wind_Run_Icon(0);
+
                
                      
                      
@@ -314,7 +316,7 @@ static void vTaskStart(void *pvParameters)
 
              Run_Main_Handler();
 
-             LCD_Wind_Run_Icon(0);
+           
 
            
              
