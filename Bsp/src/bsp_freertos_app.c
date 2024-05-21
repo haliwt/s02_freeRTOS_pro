@@ -431,14 +431,14 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 *********************************************************************************/
 static void mode_long_short_key_fun(void)
 {
-    if(KEY_MODE_VALUE() == 1 && key_long_counter < 15){
+    if(KEY_MODE_VALUE() == 1 && key_long_counter < 20){
 
 
         key_long_counter++;
         if(key_long_counter > 15){
-
+            key_long_counter = 30;
             g_tMsg.key_mode = mode_set_timer;
-            g_tMsg.key_add_dec_mode = set_temp_value_item;
+            g_tMsg.key_add_dec_mode = mode_set_timer;
             gctl_t.ai_flag = 0; //timer tiiming model
             gkey_t.gTimer_disp_set_timer = 0;       //counter exit timing this "mode_set_timer"
             Buzzer_KeySound();
@@ -524,7 +524,8 @@ static void display_works_timer_timing_fun(uint8_t sel_item)
 
             LCD_Disp_Timer_Timing_Init();
 
-            sel_item = disp_works_timing;
+            
+            g_tMsg.key_mode = disp_works_timing;
            
 
         }
