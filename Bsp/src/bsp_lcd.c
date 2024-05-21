@@ -666,7 +666,7 @@ void LCD_Timer_Colon_Flicker(void)
        TM1723_Write_Display_Data(0xCB,(Colon_Symbol+lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
 
    }
-   else{
+   else if(glcd_t.gTimer_colon_blink > 5){
 
       glcd_t.gTimer_colon_blink =0;
 
