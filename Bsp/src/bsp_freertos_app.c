@@ -43,6 +43,8 @@ static TaskHandle_t xHandleTaskMsgPro = NULL;
 static TaskHandle_t xHandleTaskStart = NULL;
 
 
+static void display_works_timer_timing_fun(uint8_t sel_item);
+
 static void mode_long_short_key_fun(void);
 
 
@@ -198,55 +200,8 @@ static void vTaskMsgPro(void *pvParameters)
          
                  LCD_Timer_Colon_Flicker();
 
-                 if(g_tMsg.key_mode  == disp_works_timing ){
-                 
-                     Display_Works_Timing();
-                 }
-                 else if(g_tMsg.key_mode  == disp_timer_timing){
-
-                    Display_Timer_Timing(gProcess_t.set_timer_timing_hours,gProcess_t.set_timer_timing_minutes);
-
-                
-                    if( g_tMsg.set_timer_timing_success == 0 && gkey_t.gTimer_disp_switch_disp_mode > 3){
-
-                          g_tMsg.key_mode  = disp_works_timing;
-
-                    }
-
-
-                 }
-                 else if(g_tMsg.key_mode  == mode_set_timer){
-                    
-                    Set_Timer_Timing_Lcd_Blink(gProcess_t.set_timer_timing_hours,gProcess_t.set_timer_timing_minutes);
-                     if(gkey_t.gTimer_disp_set_timer > 3){
-
-                          
-
-                         if(gProcess_t.set_timer_timing_hours == 0 && gProcess_t.set_timer_timing_minutes==0){
-
-                               g_tMsg.set_timer_timing_success = 0;
-                               
-                                gctl_t.ai_flag = 1;
-                                g_tMsg.key_mode =disp_works_timing;
-                               
-
-                         }
-                         else{
-                             g_tMsg.set_timer_timing_success = 1;
-                              gProcess_t.gTimer_timer_Counter =0; //start recoder timer timing is "0",from "0" start
-
-                             gctl_t.ai_flag = 0;
-                             g_tMsg.key_mode = disp_timer_timing;
-
-                         }
-                        
-
-
-                     }
-
-                 }
-                 
                  LCD_Wind_Run_Icon(0);
+                 display_works_timer_timing_fun(g_tMsg.key_mode);
                  
                  mode_long_short_key_fun();
 
@@ -518,19 +473,96 @@ static void mode_long_short_key_fun(void)
         Buzzer_KeySound();
         g_tMsg.ucMessageID=0;
         if(g_tMsg.key_mode  == disp_works_timing){
-        g_tMsg.key_mode  = disp_timer_timing;
-        gctl_t.ai_flag = 0; //timer tiiming model
-        gkey_t.gTimer_disp_switch_disp_mode = 0;       //counter exit timing this "mode_set_timer"
+            g_tMsg.key_mode  = disp_timer_timing;
+            gctl_t.ai_flag = 0; //timer tiiming model
+            gkey_t.gTimer_disp_switch_disp_mode = 0;       //counter exit timing this "mode_set_timer"
 
         }
         else{
-        g_tMsg.key_mode  = disp_works_timing;
-        gctl_t.ai_flag = 1; //timer tiiming model
+            g_tMsg.key_mode  = disp_works_timing;
+            gctl_t.ai_flag = 1; //timer tiiming model
 
         }
 
     }
 
+
+}
+
+/*********************************************************************************
+*
+*	函 数 名:static void mode_long_short_key_fun(void)
+*	功能说明: 
+*	形    参: 
+*	返 回 值: 无
+*   
+
+*********************************************************************************/
+static void display_works_timer_timing_fun(uint8_t sel_item)
+{
+
+
+
+    switch(sel_item){
+
+    case disp_works_timing :
+   
+        gctl_t.ai_flag =1;
+
+        Display_Works_Timing();
+       
+    break;
+    
+    case disp_timer_timing:
+   
+
+        gctl_t.ai_flag =0;
+
+        Display_Timer_Timing(gProcess_t.set_timer_timing_hours,gProcess_t.set_timer_timing_minutes);
+
+
+        if( g_tMsg.set_timer_timing_success == 0 && gkey_t.gTimer_disp_switch_disp_mode > 3){
+
+         g_tMsg.key_mode  = disp_works_timing;
+
+        }
+
+
+    
+    break;
+
+
+    case mode_set_timer:
+    
+
+        Set_Timer_Timing_Lcd_Blink(gProcess_t.set_timer_timing_hours,gProcess_t.set_timer_timing_minutes);
+        if(gkey_t.gTimer_disp_set_timer > 3){
+
+            if(gProcess_t.set_timer_timing_hours == 0 && gProcess_t.set_timer_timing_minutes==0){
+
+                g_tMsg.set_timer_timing_success = 0;
+
+                gctl_t.ai_flag = 1;
+                g_tMsg.key_mode =disp_works_timing;
+
+
+                }
+                else{
+                g_tMsg.set_timer_timing_success = 1;
+                gProcess_t.gTimer_timer_Counter =0; //start recoder timer timing is "0",from "0" start
+
+                gctl_t.ai_flag = 0;
+                g_tMsg.key_mode = disp_timer_timing;
+
+            }
+
+
+
+        }
+
+         break;
+
+        }
 
 }
 

@@ -64,6 +64,7 @@ void bsp_Idle(void)
 *	返 回 值: 无
 *********************************************************************************************************
 */
+#if  0
 void mainboard_process_handler(void)
 {
     static uint8_t first_power_up, compare_temp_value, compare_temp_value_flag;
@@ -314,7 +315,7 @@ void mainboard_process_handler(void)
 
 }
 
-
+#endif 
 void PowerOn_Init(void)
 {
   
