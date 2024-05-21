@@ -86,6 +86,7 @@ void Display_Works_Timing(void);
 
 void Display_Timer_Timing(int8_t hours,int8_t minutes);
 
+void LCD_Disp_Timer_Timing(void);
 
 
 void Set_Timer_Timing_Lcd_Blink(uint8_t hours,uint8_t minutes);

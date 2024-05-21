@@ -18,7 +18,8 @@ void Dec_Key_Fun(uint8_t cmd)
     switch(cmd){
 
          case disp_works_timing: //set temperature 
-       
+
+           
             set_up_temperature_value--;
 			if(set_up_temperature_value<20) set_up_temperature_value=40;
 	        else if(set_up_temperature_value >40)set_up_temperature_value=40;
@@ -33,9 +34,13 @@ void Dec_Key_Fun(uint8_t cmd)
             gkey_t.set_temp_value = set_up_temperature_value;
             gkey_t.gTimer_key_temp_timing=0;
 
+          
+
          break;
 
          case mode_set_timer: //set timer timing value 
+
+              gkey_t.gTimer_disp_set_timer = 0; 
              gProcess_t.set_timer_timing_minutes =   gProcess_t.set_timer_timing_minutes-30;
 		        if( gProcess_t.set_timer_timing_minutes < 0){
 					 gProcess_t.set_timer_timing_hours--;
@@ -67,6 +72,8 @@ void Dec_Key_Fun(uint8_t cmd)
 
                  gkey_t.gTimer_disp_set_timer_blink =0;
 
+          LCD_Disp_Timer_Timing();
+
          break;
  
          }
@@ -90,7 +97,7 @@ void Add_Key_Fun(uint8_t cmd)
         
     case disp_works_timing:  //set temperature value 
 
- 
+        
         set_up_temperature_value ++;
         if(set_up_temperature_value < 20){
             set_up_temperature_value=20;
@@ -109,6 +116,8 @@ void Add_Key_Fun(uint8_t cmd)
     break;
 
     case mode_set_timer: //set timer timing value 
+
+         gkey_t.gTimer_disp_set_timer = 0; 
 
         if(gProcess_t.set_timer_timing_hours!=24)
         gProcess_t.set_timer_timing_minutes=   gProcess_t.set_timer_timing_minutes + 30;
@@ -151,7 +160,7 @@ void Add_Key_Fun(uint8_t cmd)
 
         gkey_t.gTimer_disp_set_timer_blink =0;
         
-    
+        LCD_Disp_Timer_Timing();
      break;
         
     }

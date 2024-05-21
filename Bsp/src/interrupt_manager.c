@@ -64,6 +64,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		gProcess_t.gTimer_works_counter++;
 
         gProcess_t.gTimer_normal_display_lcd++;
+        gProcess_t.gTimer_timer_Counter++;   //timer timing counter value 
+
+       
 		
 
      

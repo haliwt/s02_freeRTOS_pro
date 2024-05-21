@@ -48,22 +48,8 @@ static void display_works_timer_timing_fun(uint8_t sel_item);
 static void mode_long_short_key_fun(void);
 
 
-typedef struct Msg
-{
-   
-    uint8_t modekey_detect;
-    uint8_t set_timer_timing_success;
-    
-    uint8_t key_mode;
-    uint8_t disp_timer_works_switch_flag;
-	uint8_t usData[2];
-	uint8_t ulData[2];
+MSG_T   g_tMsg;
 
-    uint16_t ucMessageID;
- 
-}MSG_T;
-
-MSG_T   g_tMsg; /* ¶¨ÒåÒ»¸ö½á¹¹ÌåÓÃÓÚÏûÏ¢¶ÓÁÐ */
 
 
 
@@ -522,10 +508,12 @@ static void display_works_timer_timing_fun(uint8_t sel_item)
 
         }
 
-        Display_Timer_Timing(gProcess_t.set_timer_timing_hours,gProcess_t.set_timer_timing_minutes);
+        if(g_tMsg.set_timer_timing_success ==1){
 
+           Display_Timer_Timing(gProcess_t.set_timer_timing_hours,gProcess_t.set_timer_timing_minutes);
 
-        if( g_tMsg.set_timer_timing_success == 0 && gkey_t.gTimer_disp_switch_disp_mode > 3){
+        }
+        else if( g_tMsg.set_timer_timing_success == 0 && gkey_t.gTimer_disp_switch_disp_mode > 3){
 
             g_tMsg.key_mode  = disp_works_timing;
             g_tMsg.disp_timer_works_switch_flag++;
