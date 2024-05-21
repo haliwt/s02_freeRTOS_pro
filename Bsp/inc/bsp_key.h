@@ -41,14 +41,17 @@ typedef enum mode_key_t{
    uint8_t  key_sound_flag;
  
 
-   uint8_t  set_temp_value;
+  
    uint8_t   key_mode_times;
+   int8_t  set_temp_value;
 
    
    uint8_t  gTimer_set_temp_value;
    uint8_t  gTimer_disp_set_timer_blink;
    uint8_t  gTimer_power_off;
    uint8_t  gTimer_disp_set_timer;
+
+   
 	
 
 }key_fun_t;
