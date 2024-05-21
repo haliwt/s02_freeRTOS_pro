@@ -4,7 +4,7 @@
 uint8_t recieve_flag;
 uint8_t receive_key_message;
 uint8_t receive_task_start;
-
+uint16_t key_long_counter;
 /*
 **********************************************************************************************************
 											宏定义
@@ -48,10 +48,12 @@ typedef struct Msg
     uint8_t add_dec_key_input_flag;
     uint8_t modekey_detect;
     uint8_t set_timer_timing_success;
-    uint8_t ucMessageID;
+    
     uint8_t key_mode;
 	uint8_t usData[2];
 	uint8_t ulData[2];
+
+    uint16_t ucMessageID;
  
 }MSG_T;
 
@@ -136,23 +138,25 @@ static void vTaskMsgPro(void *pvParameters)
 
            if((ulValue & MODE_KEY_1) != 0){
 
-                // xTaskNotify(xHandleTaskStart, /* 目标任务 */
-							//RUN_MODE_5 ,            /* 设置目标任务事件标志位bit0  */
-							//eSetBits);          /* 将目标任务的事件标志位与BIT_0进行或操作，  将结果赋值给事件标志位。*/
-                 //switch timer and works timing of id
-
-                //switch timer timing and works timing 
+               //switch timer timing and works timing 
                if(gkey_t.key_power == power_on){
                 
 
                  if(KEY_MODE_VALUE() == 1){
 
-                    ptMsg->key_mode = mode_set_timer;
-                    gctl_t.ai_flag = 0; //timer tiiming model
-                    gkey_t.gTimer_disp_set_timer = 0;       //counter exit timing this "mode_set_timer"
+                    ptMsg->ucMessageID++;
+                    key_long_counter++;
+                    if(ptMsg->ucMessageID > 50000){
+                        ptMsg->key_mode = mode_set_timer;
+                        gctl_t.ai_flag = 0; //timer tiiming model
+                        gkey_t.gTimer_disp_set_timer = 0;       //counter exit timing this "mode_set_timer"
+
+                    }
+                    
                  }
                  else if(KEY_MODE_VALUE() == 0){ //short key of function
                
+                     ptMsg->ucMessageID=0;
                     if(ptMsg->key_mode  == disp_works_timing){
                         ptMsg->key_mode  = disp_timer_timing;
                         gctl_t.ai_flag = 0; //timer tiiming model
@@ -200,9 +204,7 @@ static void vTaskMsgPro(void *pvParameters)
 
                   Buzzer_KeySound();
 
-//                  xTaskNotify(xHandleTaskStart, /* 目标任务 */
-//							RUN_ADD_7 ,            /* 设置目标任务事件标志位bit0  */
-//							eSetBits);          /* 将目标任务的事件标志位与BIT_0进行或操作，  将结果赋值给事件标志位。*/
+
 
 
             }
