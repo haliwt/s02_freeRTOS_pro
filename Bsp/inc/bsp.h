@@ -73,6 +73,10 @@ void bsp_Idle(void);
 
 void PowerOn_Init(void);
 
+void LCD_Disp_Works_Timing_Init(void);
+
+void LCD_Disp_Timer_Timing_Init(void);
+
 
 
 

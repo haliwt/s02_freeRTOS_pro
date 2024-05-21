@@ -484,13 +484,11 @@ static void display_works_timer_timing_fun(uint8_t sel_item)
 
     case disp_works_timing :
    
-        gctl_t.ai_flag =1;
-        if(disp_works_ref !=  g_tMsg.disp_timer_works_switch_flag){
-
-           disp_works_ref =  g_tMsg.disp_timer_works_switch_flag;
-           LCD_Number_OneTwo_Humidity();
-
-        }
+         if(gctl_t.ai_flag ==0){
+             gctl_t.ai_flag =1;
+             LCD_Number_OneTwo_Humidity();
+             LCD_Disp_Works_Timing_Init();
+           }
 
         Display_Works_Timing();
        
@@ -498,14 +496,17 @@ static void display_works_timer_timing_fun(uint8_t sel_item)
     
     case disp_timer_timing:
    
+       if(gctl_t.ai_flag ==1){
+           gctl_t.ai_flag =0;
+        
+            LCD_Number_OneTwo_Humidity();
+             if(g_tMsg.set_timer_timing_success ==1){
+                
+              LCD_Disp_Timer_Timing_Init();
 
-        gctl_t.ai_flag =0;
-        if(disp_timer_ref != g_tMsg.disp_timer_works_switch_flag){
+             }
 
-             disp_timer_ref = g_tMsg.disp_timer_works_switch_flag;
-
-             LCD_Number_OneTwo_Humidity();
-
+        
         }
 
         if(g_tMsg.set_timer_timing_success ==1){
@@ -515,8 +516,8 @@ static void display_works_timer_timing_fun(uint8_t sel_item)
         }
         else if( g_tMsg.set_timer_timing_success == 0 && gkey_t.gTimer_disp_switch_disp_mode > 3){
 
-            g_tMsg.key_mode  = disp_works_timing;
-            g_tMsg.disp_timer_works_switch_flag++;
+            sel_item = disp_works_timing;
+           
 
         }
 
@@ -536,22 +537,19 @@ static void display_works_timer_timing_fun(uint8_t sel_item)
                 g_tMsg.set_timer_timing_success = 0;
 
                 gctl_t.ai_flag = 1;
-            
-
-                g_tMsg.disp_timer_works_switch_flag++;
-                g_tMsg.key_mode =disp_works_timing;
+                 g_tMsg.key_mode =disp_works_timing;
                 
-
-
-                }
+               }
                 else{
                 g_tMsg.set_timer_timing_success = 1;
                 gProcess_t.gTimer_timer_Counter =0; //start recoder timer timing is "0",from "0" start
 
                 gctl_t.ai_flag = 0;
-                g_tMsg.disp_timer_works_switch_flag++;
+              
                 g_tMsg.key_mode = disp_timer_timing;
-                 LCD_Disp_Timer_Timing();
+                LCD_Disp_Timer_Timing_Init();
+               
+                 
 
             }
 

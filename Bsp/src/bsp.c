@@ -283,7 +283,7 @@ void Display_Works_Timing(void)
 		  glcd_t.number8_low = gProcess_t.gTimer_display_works_minutes	% 10;
 		  glcd_t.number8_high = gProcess_t.gTimer_display_works_minutes % 10;
 
-	  
+	    
     }
 	 
     Display_LCD_Works_Timing();
@@ -297,8 +297,61 @@ void Display_Works_Timing(void)
 
 static void Display_LCD_Works_Timing(void)
 {
+
+
     LCD_Number_FiveSix_Hours();
     LCD_Number_SevenEight_Minutes();
+
+
+}
+
+void LCD_Disp_Works_Timing_Init(void)
+{
+
+    if(gProcess_t.gTimer_display_works_minutes > 59){ //1 hours
+		gProcess_t.gTimer_display_works_minutes=0;
+
+	     gProcess_t.gTimer_display_works_hours++;
+
+
+		glcd_t.number7_low = gProcess_t.gTimer_display_works_minutes / 10;
+		glcd_t.number7_high = gProcess_t.gTimer_display_works_minutes / 10;
+
+
+		glcd_t.number8_low = gProcess_t.gTimer_display_works_minutes  % 10;
+		glcd_t.number8_high = gProcess_t.gTimer_display_works_minutes % 10;
+
+		//display hours works
+
+
+        if(gProcess_t.gTimer_display_works_hours > 99){
+			gProcess_t.gTimer_display_works_hours=0;
+
+
+		}
+		
+		glcd_t.number5_low = gProcess_t.gTimer_display_works_hours / 10;
+		glcd_t.number5_high = gProcess_t.gTimer_display_works_hours / 10;
+
+
+		glcd_t.number6_low = gProcess_t.gTimer_display_works_hours  % 10;
+		glcd_t.number6_high = gProcess_t.gTimer_display_works_hours % 10;
+		
+
+	}
+    else{
+	 
+		  glcd_t.number7_low = gProcess_t.gTimer_display_works_minutes / 10;
+		  glcd_t.number7_high = gProcess_t.gTimer_display_works_minutes / 10;
+		
+						   
+		  glcd_t.number8_low = gProcess_t.gTimer_display_works_minutes	% 10;
+		  glcd_t.number8_high = gProcess_t.gTimer_display_works_minutes % 10;
+
+	    
+    }
+	 
+    Display_LCD_Works_Timing();
 
 
 }
@@ -427,6 +480,29 @@ void LCD_Disp_Timer_Timing(void)
 
    LCD_Number_FiveSix_Hours();
    LCD_Number_SevenEight_Minutes();
+
+}
+
+void LCD_Disp_Timer_Timing_Init(void)
+{
+
+    //display hours timing
+    glcd_t.number5_low = gProcess_t.set_timer_timing_hours / 10;
+    glcd_t.number5_high = gProcess_t.set_timer_timing_hours / 10;
+
+
+    glcd_t.number6_low = gProcess_t.set_timer_timing_hours   % 10;
+    glcd_t.number6_high = gProcess_t.set_timer_timing_hours % 10;
+
+    //display minutes 
+    glcd_t.number7_low = gProcess_t.set_timer_timing_minutes / 10;
+    glcd_t.number7_high = gProcess_t.set_timer_timing_minutes / 10;
+
+    				
+    glcd_t.number8_low = gProcess_t.set_timer_timing_minutes   % 10;
+    glcd_t.number8_high = gProcess_t.set_timer_timing_minutes % 10;
+
+    LCD_Disp_Timer_Timing();
 
 }
 
