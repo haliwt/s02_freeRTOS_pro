@@ -143,7 +143,7 @@ static void TIM1723_Write_Cmd(uint8_t cmd);
 static void TM1723_Write_Display_Data(uint8_t addr,uint8_t dat);
 
 
-static void LCD_Number_OneTwo_Humidity(void);
+
 static void LCD_Number_ThreeFour_Temperature(void);
 
 

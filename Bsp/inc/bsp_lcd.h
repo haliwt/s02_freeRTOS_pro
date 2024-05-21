@@ -133,6 +133,9 @@ void Disip_Wifi_Icon_State(void  );
 
 void LCD_Numbers1234_Init(void);
 
+void LCD_Number_OneTwo_Humidity(void);
+
+
 
 
 #endif 

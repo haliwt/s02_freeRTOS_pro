@@ -55,6 +55,7 @@ typedef struct Msg
     uint8_t set_timer_timing_success;
     
     uint8_t key_mode;
+    uint8_t disp_timer_works_switch_flag;
 	uint8_t usData[2];
 	uint8_t ulData[2];
 
@@ -63,6 +64,8 @@ typedef struct Msg
 }MSG_T;
 
 MSG_T   g_tMsg; /* ¶¨ÒåÒ»¸ö½á¹¹ÌåÓÃÓÚÏûÏ¢¶ÓÁÐ */
+
+
 
 
 
@@ -98,7 +101,7 @@ static void vTaskMsgPro(void *pvParameters)
 {
    // MSG_T *ptMsg;
     BaseType_t xResult;
-	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(100); /* 设置最大等待时间为500ms */
+	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置最大等待时间为500ms */
 	uint32_t ulValue;
     
 	
@@ -194,9 +197,11 @@ static void vTaskMsgPro(void *pvParameters)
 		else
 		{
 			/* 超时 */
-        receive_key_message++;
+       
         
          if(gkey_t.key_power==power_on){
+
+                 Run_Main_Handler();
          
                  LCD_Timer_Colon_Flicker();
 
@@ -228,7 +233,7 @@ static void vTaskMsgPro(void *pvParameters)
 static void vTaskStart(void *pvParameters)
 {
    BaseType_t xResult;
-   const TickType_t xMaxBlockTime = pdMS_TO_TICKS(200); /* 设置最大等待时间为500ms */
+   const TickType_t xMaxBlockTime = pdMS_TO_TICKS(300); /* 设置最大等待时间为500ms */
    static uint8_t sound_flag,power_on_first;
    uint32_t ulValue;
    
@@ -331,7 +336,7 @@ static void vTaskStart(void *pvParameters)
 
             // LCD_Timer_Colon_Flicker();
 
-             Run_Main_Handler();
+           //  Run_Main_Handler();
 
            }
 
@@ -502,12 +507,18 @@ static void display_works_timer_timing_fun(uint8_t sel_item)
 {
 
 
-
+   static uint8_t disp_timer_ref = 0xff ,disp_works_ref = 0xff;
     switch(sel_item){
 
     case disp_works_timing :
    
         gctl_t.ai_flag =1;
+        if(disp_works_ref !=  g_tMsg.disp_timer_works_switch_flag){
+
+           disp_works_ref =  g_tMsg.disp_timer_works_switch_flag;
+           LCD_Number_OneTwo_Humidity();
+
+        }
 
         Display_Works_Timing();
        
@@ -517,13 +528,21 @@ static void display_works_timer_timing_fun(uint8_t sel_item)
    
 
         gctl_t.ai_flag =0;
+        if(disp_timer_ref != g_tMsg.disp_timer_works_switch_flag){
+
+             disp_timer_ref = g_tMsg.disp_timer_works_switch_flag;
+
+             LCD_Number_OneTwo_Humidity();
+
+        }
 
         Display_Timer_Timing(gProcess_t.set_timer_timing_hours,gProcess_t.set_timer_timing_minutes);
 
 
         if( g_tMsg.set_timer_timing_success == 0 && gkey_t.gTimer_disp_switch_disp_mode > 3){
 
-         g_tMsg.key_mode  = disp_works_timing;
+            g_tMsg.key_mode  = disp_works_timing;
+            g_tMsg.disp_timer_works_switch_flag++;
 
         }
 
@@ -543,6 +562,8 @@ static void display_works_timer_timing_fun(uint8_t sel_item)
                 g_tMsg.set_timer_timing_success = 0;
 
                 gctl_t.ai_flag = 1;
+
+                g_tMsg.disp_timer_works_switch_flag++;
                 g_tMsg.key_mode =disp_works_timing;
 
 
@@ -552,6 +573,7 @@ static void display_works_timer_timing_fun(uint8_t sel_item)
                 gProcess_t.gTimer_timer_Counter =0; //start recoder timer timing is "0",from "0" start
 
                 gctl_t.ai_flag = 0;
+                g_tMsg.disp_timer_works_switch_flag++;
                 g_tMsg.key_mode = disp_timer_timing;
 
             }
