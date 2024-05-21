@@ -258,7 +258,7 @@ void Lcd_Display_Detials(void)
 
    /* display humidity number 1, 2 */
 
-   LCD_Number_OneTwo_Humidity();
+   LCD_Number_Wifi_OneTwo_Humidity();
 
   /* display temperature  number 3, 4 */
   if(gProcess_t.set_temp_confirm == 0){
@@ -296,13 +296,13 @@ void Lcd_Display_Detials(void)
 
 /*****************************************************
  * 
- * Function Name:  void LCD_Number_OneTwo_Humidity(void)
+ * Function Name:  void LCD_Number_Wifi_OneTwo_Humidity(void)
  * Function:
  * Input Ref:
  * Return Ref:
  * 
 ******************************************************/
-void LCD_Number_OneTwo_Humidity(void)
+void LCD_Number_Wifi_OneTwo_Humidity(void)
 {
 
   if(ai_mode_state()== 1){ //AI state 
@@ -768,7 +768,7 @@ void Disp_HumidityTemp_Value(void)
 {
 
      
-   LCD_Number_OneTwo_Humidity();
+   LCD_Number_Wifi_OneTwo_Humidity();
    LCD_Number_ThreeFour_Temperature();
 }
 

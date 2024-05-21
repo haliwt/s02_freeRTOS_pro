@@ -489,7 +489,7 @@ static void display_works_timer_timing_fun(uint8_t sel_item)
    
          if(gctl_t.ai_flag ==0){
              gctl_t.ai_flag =1;
-             LCD_Number_OneTwo_Humidity();
+             LCD_Number_Wifi_OneTwo_Humidity();
              LCD_Disp_Works_Timing_Init();
            }
 
@@ -502,7 +502,7 @@ static void display_works_timer_timing_fun(uint8_t sel_item)
        if(gctl_t.ai_flag ==1){
            gctl_t.ai_flag =0;
         
-            LCD_Number_OneTwo_Humidity();
+            LCD_Number_Wifi_OneTwo_Humidity();
              if(g_tMsg.set_timer_timing_success ==1){
                 
               LCD_Disp_Timer_Timing_Init();

@@ -308,7 +308,10 @@ static void Display_LCD_Works_Timing(void)
 void LCD_Disp_Works_Timing_Init(void)
 {
 
-   
+       gctl_t.ai_flag = 1;
+
+       LCD_Number_Wifi_OneTwo_Humidity();
+       
        glcd_t.number5_low = gProcess_t.gTimer_display_works_hours / 10;
 		glcd_t.number5_high = gProcess_t.gTimer_display_works_hours / 10;
 
@@ -464,7 +467,10 @@ void LCD_Disp_Timer_Timing(void)
 void LCD_Disp_Timer_Timing_Init(void)
 {
 
-    //display hours timing
+     gctl_t.ai_flag = 0;
+
+     LCD_Number_Wifi_OneTwo_Humidity();
+//display hours timing
     glcd_t.number5_low = gProcess_t.set_timer_timing_hours / 10;
     glcd_t.number5_high = gProcess_t.set_timer_timing_hours / 10;
 
