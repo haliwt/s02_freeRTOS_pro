@@ -32,6 +32,7 @@ void bsp_ctl_init(void)
    gctl_t.plasma_flag =1;
    gctl_t.ultrasoinc_flag =1;
    gctl_t.ai_flag =1;
+   g_tMsg.key_add_dec_mode = set_temp_value_item;
    
    UartVarInit();
    Ptc_State_Handler(Ptc_Default_Handler);

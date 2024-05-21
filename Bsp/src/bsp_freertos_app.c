@@ -148,7 +148,7 @@ static void vTaskMsgPro(void *pvParameters)
             if((ulValue & DEC_KEY_2) != 0){
 
                
-                Dec_Key_Fun(g_tMsg.key_mode);
+                Dec_Key_Fun(g_tMsg.key_add_dec_mode);
 
                 Buzzer_KeySound();
 
@@ -158,7 +158,7 @@ static void vTaskMsgPro(void *pvParameters)
            if((ulValue & ADD_KEY_3) != 0){
 
               
-                  Add_Key_Fun(g_tMsg.key_mode);
+                  Add_Key_Fun(g_tMsg.key_add_dec_mode);
 
                   Buzzer_KeySound();
 
@@ -431,13 +431,14 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 *********************************************************************************/
 static void mode_long_short_key_fun(void)
 {
-    if(KEY_MODE_VALUE() == 1 && key_long_counter < 10){
+    if(KEY_MODE_VALUE() == 1 && key_long_counter < 15){
 
 
         key_long_counter++;
-        if(key_long_counter > 9){
+        if(key_long_counter > 15){
 
             g_tMsg.key_mode = mode_set_timer;
+            g_tMsg.key_add_dec_mode = set_temp_value_item;
             gctl_t.ai_flag = 0; //timer tiiming model
             gkey_t.gTimer_disp_set_timer = 0;       //counter exit timing this "mode_set_timer"
             Buzzer_KeySound();
@@ -445,20 +446,22 @@ static void mode_long_short_key_fun(void)
         }
 
     }
-    else if(KEY_MODE_VALUE() == 0 && key_long_counter >0 && key_long_counter<8){ //short key of function
+    else if(KEY_MODE_VALUE() == 0 && key_long_counter >0 && key_long_counter<10){ //short key of function
 
         key_long_counter=0;
         Buzzer_KeySound();
         g_tMsg.ucMessageID=0;
         if(g_tMsg.key_mode  == disp_works_timing){
             g_tMsg.key_mode  = disp_timer_timing;
+           
             gctl_t.ai_flag = 0; //timer tiiming model
-            gkey_t.gTimer_disp_switch_disp_mode = 0;       //counter exit timing this "mode_set_timer"
+               //counter exit timing this "mode_set_timer"
             LCD_Disp_Timer_Timing_Init();
 
         }
         else{
             g_tMsg.key_mode  = disp_works_timing;
+         
             gctl_t.ai_flag = 1; //timer tiiming model
             LCD_Disp_Works_Timing_Init();
 
@@ -487,11 +490,11 @@ static void display_works_timer_timing_fun(uint8_t sel_item)
 
     case disp_works_timing :
    
-         if(gctl_t.ai_flag ==0){
-             gctl_t.ai_flag =1;
-             LCD_Number_Wifi_OneTwo_Humidity();
-             LCD_Disp_Works_Timing_Init();
-           }
+//         if(gctl_t.ai_flag ==0){
+//             gctl_t.ai_flag =1;
+//             LCD_Number_Wifi_OneTwo_Humidity();
+//             LCD_Disp_Works_Timing_Init();
+//           }
 
         Display_Works_Timing();
        
@@ -499,25 +502,27 @@ static void display_works_timer_timing_fun(uint8_t sel_item)
     
     case disp_timer_timing:
    
-       if(gctl_t.ai_flag ==1){
-           gctl_t.ai_flag =0;
-        
-            LCD_Number_Wifi_OneTwo_Humidity();
-             if(g_tMsg.set_timer_timing_success ==1){
-                
-              LCD_Disp_Timer_Timing_Init();
-
-             }
-
-        
-        }
+//       if(gctl_t.ai_flag ==1){
+//           gctl_t.ai_flag =0;
+//        
+//            LCD_Number_Wifi_OneTwo_Humidity();
+//             if(g_tMsg.set_timer_timing_success ==1){
+//                
+//              LCD_Disp_Timer_Timing_Init();
+//
+//             }
+//
+//        
+//        }
 
         if(g_tMsg.set_timer_timing_success ==1){
 
            Display_Timer_Timing();
 
         }
-        else if( g_tMsg.set_timer_timing_success == 0 && gkey_t.gTimer_disp_switch_disp_mode > 3){
+        else if( g_tMsg.set_timer_timing_success == 0 ){ //&& gkey_t.gTimer_disp_switch_disp_mode > 3){
+
+            LCD_Disp_Timer_Timing_Init();
 
             sel_item = disp_works_timing;
            
@@ -540,7 +545,9 @@ static void display_works_timer_timing_fun(uint8_t sel_item)
                 g_tMsg.set_timer_timing_success = 0;
 
                 gctl_t.ai_flag = 1;
-                 g_tMsg.key_mode =disp_works_timing;
+                g_tMsg.key_mode =disp_works_timing;
+                g_tMsg.key_add_dec_mode = set_temp_value_item;
+                 
                 
                }
                 else{
@@ -550,6 +557,7 @@ static void display_works_timer_timing_fun(uint8_t sel_item)
                 gctl_t.ai_flag = 0;
               
                 g_tMsg.key_mode = disp_timer_timing;
+                g_tMsg.key_add_dec_mode = set_temp_value_item;
                 LCD_Disp_Timer_Timing_Init();
                
                  

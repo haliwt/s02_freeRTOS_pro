@@ -51,8 +51,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         gkey_t.gTimer_disp_set_timer++;
         
         gkey_t.gTimer_power_off++;
-        gkey_t.gTimer_key_temp_timing++;
-        gkey_t.gTimer_disp_switch_disp_mode ++;
+        gkey_t.gTimer_set_temp_value++;         //add or dec key set temperature value counter
+  
 
       
 

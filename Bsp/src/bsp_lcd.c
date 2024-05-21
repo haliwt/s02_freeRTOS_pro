@@ -769,7 +769,28 @@ void Disp_HumidityTemp_Value(void)
 
      
    LCD_Number_Wifi_OneTwo_Humidity();
-   LCD_Number_ThreeFour_Temperature();
+   if(g_tMsg.key_add_dec_mode != set_temp_value_item){
+       LCD_Number_ThreeFour_Temperature();
+
+    }
+}
+
+
+void Disp_SetTemp_Value(uint8_t temp_value)
+{
+
+    glcd_t.number3_low  = temp_value /10;
+    glcd_t.number3_high = temp_value / 10;
+
+    glcd_t.number4_low =  temp_value % 10;
+    glcd_t.number4_high = temp_value % 10;
+
+    
+        
+
+    LCD_Number_ThreeFour_Temperature();
+
+
 }
 
 

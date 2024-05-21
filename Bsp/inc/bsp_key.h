@@ -21,6 +21,8 @@ typedef enum mode_key_t{
     
    disp_works_timing,
    disp_timer_timing,
+
+   set_temp_value_item,
    
    mode_set_timer,
    mode_confirm,
@@ -41,9 +43,9 @@ typedef enum mode_key_t{
 
    uint8_t  set_temp_value;
    uint8_t   key_mode_times;
-   uint8_t   gTimer_disp_switch_disp_mode ;
+
    
-   uint8_t  gTimer_key_temp_timing;
+   uint8_t  gTimer_set_temp_value;
    uint8_t  gTimer_disp_set_timer_blink;
    uint8_t  gTimer_power_off;
    uint8_t  gTimer_disp_set_timer;

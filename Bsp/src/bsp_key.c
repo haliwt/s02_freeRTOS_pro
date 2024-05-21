@@ -17,7 +17,7 @@ void Dec_Key_Fun(uint8_t cmd)
 {
     switch(cmd){
 
-         case disp_works_timing: //set temperature 
+         case set_temp_value_item: //set temperature 
 
            
             set_up_temperature_value--;
@@ -32,9 +32,9 @@ void Dec_Key_Fun(uint8_t cmd)
             glcd_t.number4_high = set_up_temperature_value % 10; //
 
             gkey_t.set_temp_value = set_up_temperature_value;
-            gkey_t.gTimer_key_temp_timing=0;
+            gkey_t.gTimer_set_temp_value=0;
 
-          
+            Disp_SetTemp_Value(gkey_t.set_temp_value);
 
          break;
 
@@ -95,7 +95,7 @@ void Add_Key_Fun(uint8_t cmd)
     
     switch(cmd){
         
-    case disp_works_timing:  //set temperature value 
+    case set_temp_value_item:  //set temperature value 
 
         
         set_up_temperature_value ++;
@@ -111,7 +111,9 @@ void Add_Key_Fun(uint8_t cmd)
         glcd_t.number4_high = set_up_temperature_value % 10; //
 
         gkey_t.set_temp_value = set_up_temperature_value;
-        gkey_t.gTimer_key_temp_timing=0;
+        gkey_t.gTimer_set_temp_value=0;
+
+        Disp_SetTemp_Value(gkey_t.set_temp_value);
 
     break;
 
