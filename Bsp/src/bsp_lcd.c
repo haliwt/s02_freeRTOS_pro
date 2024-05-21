@@ -432,7 +432,7 @@ void LCD_Number_SevenEight_Minutes(void)
 
 
 
-     if(ultrasonic_state_flag == 1){
+     if(ultrasonic_state() == 1){
 
 	
 

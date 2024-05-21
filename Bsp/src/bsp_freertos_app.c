@@ -50,7 +50,7 @@ static void mode_long_short_key_fun(void);
 
 typedef struct Msg
 {
-    uint8_t add_dec_key_input_flag;
+   
     uint8_t modekey_detect;
     uint8_t set_timer_timing_success;
     
@@ -159,29 +159,20 @@ static void vTaskMsgPro(void *pvParameters)
                   
                 }   
                //KEY DOWN FUNCTION   
-               if((ulValue & DEC_KEY_2) != 0){
+            if((ulValue & DEC_KEY_2) != 0){
 
-                g_tMsg.add_dec_key_input_flag++;
-                Dec_Key_Fun(gkey_t.key_mode);
+               
+                Dec_Key_Fun(g_tMsg.key_mode);
 
                 Buzzer_KeySound();
-
-//                
-//                 {
-
-//                     xTaskNotify(xHandleTaskStart, /* 目标任务 */
-//							RUN_DEC_6 ,            /* 设置目标任务事件标志位bit0  */
-//							eSetBits);          /* 将目标任务的事件标志位与BIT_0进行或操作，  将结果赋值给事件标志位。*/
-
-//                   }
 
 
             }
 
            if((ulValue & ADD_KEY_3) != 0){
 
-                  g_tMsg.add_dec_key_input_flag ++;
-                  Add_Key_Fun(gkey_t.key_mode);
+              
+                  Add_Key_Fun(g_tMsg.key_mode);
 
                   Buzzer_KeySound();
 
@@ -330,13 +321,9 @@ static void vTaskStart(void *pvParameters)
 
 
             }
-          //  mainboard_process_handler();
-          //  vTaskDelay(10);
             if(power_on_first==2 && gkey_t.key_power==power_on){
 
-            // LCD_Timer_Colon_Flicker();
-
-           //  Run_Main_Handler();
+         
 
            }
 
@@ -454,7 +441,6 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 *	形    参: 
 *	返 回 值: 无
 *   
-
 *********************************************************************************/
 static void mode_long_short_key_fun(void)
 {

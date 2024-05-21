@@ -663,10 +663,11 @@ void Display_Timer_Timing(int8_t hours,int8_t minutes)
 		 glcd_t.number8_low = minutes  % 10;
 		 glcd_t.number8_high = minutes % 10;
 
-         LCD_Disp_Timer_Timing();
+        
 		    
      }
      
+    LCD_Disp_Timer_Timing();
 
 }
 

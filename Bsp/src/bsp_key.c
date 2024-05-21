@@ -17,10 +17,9 @@ void Dec_Key_Fun(uint8_t cmd)
 {
     switch(cmd){
 
-         case 0: //set temperature 
+         case disp_works_timing: //set temperature 
        
-		 gkey_t.key_select = mode_set_temp;
-         set_up_temperature_value--;
+            set_up_temperature_value--;
 			if(set_up_temperature_value<20) set_up_temperature_value=40;
 	        else if(set_up_temperature_value >40)set_up_temperature_value=40;
 
@@ -89,9 +88,9 @@ void Add_Key_Fun(uint8_t cmd)
     
     switch(cmd){
         
-    case 0:  //set temperature value 
+    case disp_works_timing:  //set temperature value 
 
-     //   gkey_t.key_select = mode_set_temp;
+ 
         set_up_temperature_value ++;
         if(set_up_temperature_value < 20){
             set_up_temperature_value=20;
