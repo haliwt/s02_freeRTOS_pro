@@ -62,7 +62,7 @@ typedef struct {
    uint8_t gTimer_display_works_hours;
    uint8_t gTimer_display_works_minutes;
    uint8_t gTimer_timer_Counter;
-   uint8_t gTimer_set_timer_blink ;
+   uint8_t gTimer_disp_set_timer_blink ;
 
 
 }BSP_process_t;
@@ -82,6 +82,14 @@ void PowerOff_freeFun(void);
 void Run_Main_Handler(void);
 
 void Display_Works_Timing(void);
+
+
+void Display_Timer_Timing(int8_t hours,int8_t minutes);
+
+
+
+void Set_Timer_Timing_Lcd_Blink(uint8_t hours,uint8_t minutes);
+
 
 #endif 
 

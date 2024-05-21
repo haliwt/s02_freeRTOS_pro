@@ -4,12 +4,7 @@
 uint8_t recieve_flag;
 uint8_t receive_key_message;
 uint8_t receive_task_start;
-uint8_t key_mode_change;
-uint8_t set_up_temperature_value ;
-int8_t set_timer_dispTime_minutes;
-int8_t set_timer_dispTime_hours;
 
-#if 1
 /*
 **********************************************************************************************************
 											宏定义
@@ -48,6 +43,22 @@ static TaskHandle_t xHandleTaskMsgPro = NULL;
 static TaskHandle_t xHandleTaskStart = NULL;
 
 
+typedef struct Msg
+{
+    uint8_t add_dec_key_input_flag;
+    uint8_t modekey_detect;
+    uint8_t set_timer_timing_success;
+    uint8_t ucMessageID;
+    uint8_t key_mode;
+	uint8_t usData[2];
+	uint8_t ulData[2];
+ 
+}MSG_T;
+
+MSG_T   g_tMsg; /* ¶¨ÒåÒ»¸ö½á¹¹ÌåÓÃÓÚÏûÏ¢¶ÓÁÐ */
+
+
+
 /**********************************************************************************************************
 *	函 数 名: main
 *	功能说明: 标准c程序入口。
@@ -78,10 +89,11 @@ void freeRTOS_Handler(void)
 */
 static void vTaskMsgPro(void *pvParameters)
 {
-	BaseType_t xResult;
+    MSG_T *ptMsg;
+    BaseType_t xResult;
 	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(100); /* 设置最大等待时间为500ms */
 	uint32_t ulValue;
-   
+    
 	
     while(1)
     {
@@ -124,28 +136,73 @@ static void vTaskMsgPro(void *pvParameters)
 
            if((ulValue & MODE_KEY_1) != 0){
 
-                 xTaskNotify(xHandleTaskStart, /* 目标任务 */
-							RUN_MODE_5 ,            /* 设置目标任务事件标志位bit0  */
-							eSetBits);          /* 将目标任务的事件标志位与BIT_0进行或操作，  将结果赋值给事件标志位。*/
+                // xTaskNotify(xHandleTaskStart, /* 目标任务 */
+							//RUN_MODE_5 ,            /* 设置目标任务事件标志位bit0  */
+							//eSetBits);          /* 将目标任务的事件标志位与BIT_0进行或操作，  将结果赋值给事件标志位。*/
                  //switch timer and works timing of id
-                 
 
-            }
+                //switch timer timing and works timing 
+               if(gkey_t.key_power == power_on){
+                
 
-           if((ulValue & DEC_KEY_2) != 0){
+                 if(KEY_MODE_VALUE() == 1){
 
-                 xTaskNotify(xHandleTaskStart, /* 目标任务 */
-							RUN_DEC_6 ,            /* 设置目标任务事件标志位bit0  */
-							eSetBits);          /* 将目标任务的事件标志位与BIT_0进行或操作，  将结果赋值给事件标志位。*/
+                    ptMsg->key_mode = mode_set_timer;
+                    gctl_t.ai_flag = 0; //timer tiiming model
+                    gkey_t.gTimer_disp_set_timer = 0;       //counter exit timing this "mode_set_timer"
+                 }
+                 else if(KEY_MODE_VALUE() == 0){ //short key of function
+               
+                    if(ptMsg->key_mode  == disp_works_timing){
+                        ptMsg->key_mode  = disp_timer_timing;
+                        gctl_t.ai_flag = 0; //timer tiiming model
+                        gkey_t.gTimer_disp_switch_disp_mode = 0;       //counter exit timing this "mode_set_timer"
+
+                       }
+                      else{
+                          ptMsg->key_mode  = disp_works_timing;
+                          gctl_t.ai_flag = 1; //timer tiiming model
+                          
+                      }
+                      
+                  }
+
+                  Buzzer_KeySound();
+              
+                 }
+                  
+                  
+                }   
+               //KEY DOWN FUNCTION   
+               if((ulValue & DEC_KEY_2) != 0){
+
+                ptMsg->add_dec_key_input_flag++;
+                Dec_Key_Fun(gkey_t.key_mode);
+
+                Buzzer_KeySound();
+
+//                
+//                 {
+
+//                     xTaskNotify(xHandleTaskStart, /* 目标任务 */
+//							RUN_DEC_6 ,            /* 设置目标任务事件标志位bit0  */
+//							eSetBits);          /* 将目标任务的事件标志位与BIT_0进行或操作，  将结果赋值给事件标志位。*/
+
+//                   }
 
 
             }
 
            if((ulValue & ADD_KEY_3) != 0){
 
-                  xTaskNotify(xHandleTaskStart, /* 目标任务 */
-							RUN_ADD_7 ,            /* 设置目标任务事件标志位bit0  */
-							eSetBits);          /* 将目标任务的事件标志位与BIT_0进行或操作，  将结果赋值给事件标志位。*/
+                  ptMsg->add_dec_key_input_flag ++;
+                  Add_Key_Fun(gkey_t.key_mode);
+
+                  Buzzer_KeySound();
+
+//                  xTaskNotify(xHandleTaskStart, /* 目标任务 */
+//							RUN_ADD_7 ,            /* 设置目标任务事件标志位bit0  */
+//							eSetBits);          /* 将目标任务的事件标志位与BIT_0进行或操作，  将结果赋值给事件标志位。*/
 
 
             }
@@ -162,8 +219,55 @@ static void vTaskMsgPro(void *pvParameters)
          if(gkey_t.key_power==power_on){
          
                  LCD_Timer_Colon_Flicker();
-                 Display_Works_Timing();
 
+                 if(ptMsg->key_mode  == disp_works_timing ){
+                 
+                     Display_Works_Timing();
+                 }
+                 else if(ptMsg->key_mode  == disp_timer_timing){
+
+                    Display_Timer_Timing(gProcess_t.set_timer_timing_hours,gProcess_t.set_timer_timing_minutes);
+
+                
+                    if( ptMsg->set_timer_timing_success == 0 && gkey_t.gTimer_disp_switch_disp_mode > 3){
+
+                          ptMsg->key_mode  = disp_works_timing;
+
+                    }
+
+
+                 }
+                 else if(ptMsg->key_mode  == mode_set_timer){
+                    
+                    Set_Timer_Timing_Lcd_Blink(gProcess_t.set_timer_timing_hours,gProcess_t.set_timer_timing_minutes);
+                     if(gkey_t.gTimer_disp_set_timer > 3){
+
+                          
+
+                         if(gProcess_t.set_timer_timing_hours == 0 && gProcess_t.set_timer_timing_minutes==0){
+
+                                ptMsg->set_timer_timing_success = 0;
+                               
+                                gctl_t.ai_flag = 1;
+                                ptMsg->key_mode =disp_works_timing;
+                               
+
+                         }
+                         else{
+                             ptMsg->set_timer_timing_success = 1;
+                              gProcess_t.gTimer_timer_Counter =0; //start recoder timer timing is "0",from "0" start
+
+                             gctl_t.ai_flag = 0;
+                             ptMsg->key_mode = disp_timer_timing;
+
+                         }
+                        
+
+
+                     }
+
+                 }
+                 
                  LCD_Wind_Run_Icon(0);
 
                
@@ -294,13 +398,7 @@ static void vTaskStart(void *pvParameters)
 
              Run_Main_Handler();
 
-           
-
-           
-             
-             
-      
-            }
+           }
 
          }
     }
@@ -335,593 +433,71 @@ static void AppTaskCreate (void)
 }
 
 
-
-
-#endif 
-
-#if 0
-/***********************************************************************************************************
-											函数声明
-**********************************************************************************************************/
-//static void vTaskTaskUserIF(void *pvParameters);
-//static void vTaskLED(void *pvParameters);
-static void vTaskMsgPro(void *pvParameters);
-static void vTaskStart(void *pvParameters);
-static void AppTaskCreate (void);
-static void AppObjCreate (void);
-
-/*
-**********************************************************************************************************
-											变量声明
-**********************************************************************************************************
-*/
-//static TaskHandle_t xHandleTaskUserIF = NULL;
-//static TaskHandle_t xHandleTaskLED = NULL;
-static TaskHandle_t xHandleTaskMsgPro = NULL;
-static TaskHandle_t xHandleTaskStart = NULL;
-static QueueHandle_t xQueue1 = NULL;
-static QueueHandle_t xQueue2 = NULL;
-
-typedef struct Msg
-{
-	uint8_t  ucMessageID;
-	uint8_t usData[2];
-	uint8_t ulData[2];
-}MSG_T;
-
-MSG_T   g_tMsg; /* 定义一个结构体用于消息队列 */
-
-
-/**********************************************************************************************************
-*	函 数 名: main
-*	功能说明: 标准c程序入口。
-*	形    参：无
-*	返 回 值: 无
-**********************************************************************************************************/
-void freeRTOS_Handler(void)
-{
-	/* 创建任务 */
-	AppTaskCreate();
-
-	/* 创建任务通信机制 */
-	AppObjCreate();
-	
-    /* 启动调度，开始执行任务 */
-    //vTaskStartScheduler();
-}
-
-/*
-*********************************************************************************************************
-*	函 数 名: vTaskTaskUserIF
-*	功能说明: 接口消息处理。
-*	形    参: pvParameters 是在创建该任务时传递的形参
-*	返 回 值: 无
-*   优 先 级: 1  (数值越小优先级越低，这个跟uCOS相反)
-*********************************************************************************************************
-*/
-//static void vTaskTaskUserIF(void *pvParameters)
-//{
-//	
-//
-//    while(1)
-//    {
-//		 LED_ON();
-//			HAL_Delay(1000);
-//			LED_OFF();
-//			HAL_Delay(1000);
-//		
-//		vTaskDelay(300);
-//	}
-//}
-
-/*
-*********************************************************************************************************
-*	函 数 名: vTaskLED
-*	功能说明: 使用函数xQueueReceive接收任务vTaskTaskUserIF发送的消息队列数据(xQueue2)	
-*	形    参: pvParameters 是在创建该任务时传递的形参
-*	返 回 值: 无
-*   优 先 级: 2  
-*********************************************************************************************************
-*/
-//static void vTaskLED(void *pvParameters)
-//{
-//    uint8_t ucQueueMsgValue;
-//	BaseType_t xResult;
-//	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(200); /* 设置最大等待时间为200ms */
-//	MSG_T *ptMsg;
-//    while(1)
-//    {
-//         /* 按键扫描 */
-//	
-//     
-//       	 
-//        xResult = xQueueReceive(xQueue2,                   /* 消息队列句柄 */
-//		                        (void *)&ptMsg,  		   /* 这里获取的是结构体的地址 */
-//		                        xMaxBlockTime);/* 设置阻塞时间 */
-//		
-//		
-//		if(xResult == pdPASS)
-//		{
-//			/* 成功接收，并通过串口将数据打印出来 */
-//		//	printf("接收到消息队列数据ptMsg->ucMessageID = %d\r\n", ptMsg->ucMessageID);
-//		//	printf("接收到消息队列数据ptMsg->ulData[0] = %d\r\n", ptMsg->ulData[0]);
-//		//	printf("接收到消息队列数据ptMsg->usData[0] = %d\r\n", ptMsg->usData[0]);
-//		//    printf("receive_message_2 is success \n");
-//
-////            ptMsg->ucMessageID++;
-////        xQueueSend(xQueue1,                  /* 消息队列句柄 */
-////                     (void *) &ptMsg,        /* 发送结构体指针变量ptMsg的地址 */
-////                            0);        /* 发送失败，即使等待了10个时钟节拍 */
-//        receive_key_conunter++;
-//      //  HAL_UART_Receive(&huart1,&ptMsg->ucMessageID,1,0xffff);
-//      LED_ON();
-//			HAL_Delay(50);
-//			LED_OFF();
-//			HAL_Delay(50);
-//            LED_ON();
-//            HAL_Delay(50);
-//            LED_OFF();
-//			HAL_Delay(50);
-//			LED_OFF();
-//			HAL_Delay(50);
-//            LED_ON();
-//
-//            HAL_Delay(50);
-//			LED_OFF();
-//           
-//		}
-////		else
-////		{
-////			/* 超时 */
-////			LED_ON();
-////			HAL_Delay(10);
-////			LED_OFF();
-////			HAL_Delay(10);
-////			
-////		}
-//    }
-//}
-
-/*
-*********************************************************************************************************
-*	函 数 名: vTaskMsgPro
-*	功能说明: 使用函数xQueueReceive接收任务vTaskTaskUserIF发送的消息队列数据(xQueue1)
-*	形    参: pvParameters 是在创建该任务时传递的形参
-*	返 回 值: 无
-*   优 先 级: 3  
-*********************************************************************************************************
-*/
-static void vTaskMsgPro(void *pvParameters)
-{
-     uint8_t ucQueueMsgValue;
-	BaseType_t xResult;
-	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(200); /* 设置最大等待时间为200ms */
-	MSG_T *ptMsg;
-     static uint8_t test_flag;
-    while(1)
-    {
-         /* 按键扫描 */
-	
-     
-       	 
-        xResult = xQueueReceive(xQueue2,                   /* 消息队列句柄 */
-		                        (void *)&ucQueueMsgValue,  		   /* 这里获取的是结构体的地址 */
-		                       xMaxBlockTime);/* 设置阻塞时间 */
-		
-		
-		if(xResult == pdPASS)
-		{
-            
-            
-          receive_key_message++;
-
-
-
-         if(receive_key_message > 0){
-		     gkey_t.key_sound_flag =0;
-		    Buzzer_KeySound();
-           }
-          /* 成功接收，并通过串口将数据打印出来 */
-            if(ucQueueMsgValue == 1){
-
-               
-               
-               
-               gkey_t.key_power=power_on;
-
-
-
-            }
-            else{
-
-
-               gkey_t.key_power=power_off;
-
-
-            }
-		
-           
-		}
-		else
-		{
-			/* 超时 */
-//		if(test_flag ==0){
-//        test_flag++;
-//		PowerOn_Init();
-//
-//        }
-			
-		}
-    }
-        
-}
-
-/*
-*********************************************************************************************************
-*	函 数 名: vTaskStart
-*	功能说明: 启动任务，也就是最高优先级任务，这里用作按键扫描。
-*	形    参: pvParameters 是在创建该任务时传递的形参
-*	返 回 值: 无
-*   优 先 级: 4  
-*********************************************************************************************************
-*/
-static void vTaskStart(void *pvParameters)
-{
-    MSG_T *ptMsg;
-    BaseType_t xResult;
-	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(500); /* 设置最大等待时间为200ms */
-    uint8_t key_value;
-   
-    while(1)
-     {
-
-    
-        /* 超时 */
-       receive_task_start++;
-        mainboard_process_handler();
-        vTaskDelay(100);
-
-       
-        
-    }
-
-}
-
-/*
-*********************************************************************************************************
-*	函 数 名: AppTaskCreate
-*	功能说明: 创建应用任务
-*	形    参：无
-*	返 回 值: 无
-*********************************************************************************************************
-*/
-static void AppTaskCreate (void)
-{
-//    xTaskCreate( vTaskTaskUserIF,   	/* 任务函数  */
-//                 "vTaskUserIF",     	/* 任务名    */
-//                 512,               	/* 任务栈大小，单位word，也就是4字节 */
-//                 NULL,              	/* 任务参数  */
-//                 1,                 	/* 任务优先级*/
-//                 &xHandleTaskUserIF );  /* 任务句柄  */
-	
-//	
-//	xTaskCreate( vTaskLED,    		/* 任务函数  */
-//                 "vTaskLED",  		/* 任务名    */
-//                 256,         		/* stack大小，单位word，也就是4字节 */
-//                 NULL,        		/* 任务参数  */
-//                 1,           		/* 任务优先级*/
-//                 &xHandleTaskLED ); /* 任务句柄  */
-	
-	xTaskCreate( vTaskMsgPro,     		/* 任务函数  */
-                 "vTaskMsgPro",   		/* 任务名    */
-                 256,             		/* 任务栈大小，单位word，也就是4字节 */
-                 NULL,           		/* 任务参数  */
-                 2,               		/* 任务优先级*/
-                 &xHandleTaskMsgPro );  /* 任务句柄  */
-	
-	
-	xTaskCreate( vTaskStart,     		/* 任务函数  */
-                 "vTaskStart",   		/* 任务名    */
-                 256,            		/* 任务栈大小，单位word，也就是4字节 */
-                 NULL,           		/* 任务参数  */
-                 1,              		/* 任务优先级*/
-                 &xHandleTaskStart );   /* 任务句柄  */
-}
-
-/*
-*********************************************************************************************************
-*	函 数 名: AppObjCreate
-*	功能说明: 创建任务通信机制
-*	形    参: 无
-*	返 回 值: 无
-*********************************************************************************************************
-*/
-static void AppObjCreate (void)
-{
-	/* 创建10个uint8_t型消息队列 */
-	xQueue1 = xQueueCreate(1, sizeof(uint8_t));
-    if( xQueue1 == 0 )
-    {
-        /* 没有创建成功，用户可以在这里加入创建失败的处理机制 */
-    }
-	
-	/* 创建10个存储指针变量的消息队列，由于CM3/CM4内核是32位机，一个指针变量占用4个字节 */
-	xQueue2 = xQueueCreate(1, sizeof(uint8_t));//xQueue2 = xQueueCreate(1, sizeof(struct Msg *));
-    if( xQueue2 == 0 )
-    {
-        /* 没有创建成功，用户可以在这里加入创建失败的处理机制 */
-    }
-}
-#endif 
-
-
-//void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
-//{
-//
-//   MSG_T   *ptMsg;
-//   BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-//    __HAL_GPIO_EXTI_CLEAR_RISING_IT(GPIO_Pin);
-//
-//
-//  if(GPIO_Pin==KEY1_Pin){
-//
-//
-//    if(KEY1_VALUE()  ==1){
-//
-//  
-//    key_counter++;
-//    ptMsg->ucMessageID=1;
-//	ptMsg->ulData[0]++;
-//	ptMsg->usData[0]++;
-//
-//     /* 向消息队列发数据 */
-//	xQueueSendFromISR(xQueue2,
-//				      (void *)&ptMsg,
-//				       &xHigherPriorityTaskWoken);
-//
-//	/* 如果xHigherPriorityTaskWoken = pdTRUE，那么退出中断后切到当前最高优先级任务执行 */
-//	portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-//
-//    }
-//
-//  }
-//    
-//  
-//    
-//  
-//
-//}
-
-
-//void HAL_GPIO_EXTI_IRQHandler(uint16_t GPIO_Pin)
-//{
-//  /* EXTI line interrupt detected */
-//  if (__HAL_GPIO_EXTI_GET_RISING_IT(GPIO_Pin) != 0x00u)
-//  {
-//    __HAL_GPIO_EXTI_CLEAR_RISING_IT(GPIO_Pin);
-//    HAL_GPIO_EXTI_Rising_Callback(GPIO_Pin);
-//  }
-//
-//  if (__HAL_GPIO_EXTI_GET_FALLING_IT(GPIO_Pin) != 0x00u)
-//  {
-//    __HAL_GPIO_EXTI_CLEAR_FALLING_IT(GPIO_Pin);
-//    HAL_GPIO_EXTI_Falling_Callback(GPIO_Pin);
-//  }
-//}
-
-/*
-  * key interrupt call back function 
-
-*/
-
 void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 {
 
- //  MSG_T   *ptMsg;
+ 
    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
     __HAL_GPIO_EXTI_CLEAR_RISING_IT(GPIO_Pin);
-   uint8_t tx_counter;
+ 
    switch(GPIO_Pin){
 
    case KEY_POWER_Pin:
 
-        if(KEY_POWER_VALUE()==1){
+    if(KEY_POWER_VALUE()==1){
 
-         
-	  ///	   gkey_t.key_sound_flag = key_sound;
-         
+        xTaskNotifyFromISR(xHandleTaskMsgPro,  /* 目标任务 */
+        POWER_KEY_0,      /* 设置目标任务事件标志位bit0  */
+        eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志位 */
+        &xHigherPriorityTaskWoken);
 
-         #if 0     
-            //ptMsg->ucMessageID=1;
-            
-        	//ptMsg->ulData[0]++;
-        	//ptMsg->usData[0]++;
-        	 tx_counter =1;
+        /* Èç¹ûxHigherPriorityTaskWoken = pdTRUE£¬ÄÇÃ´ÍË³öÖÐ¶ÏºóÇÐµ½µ±Ç°×î¸ßÓÅÏÈ¼¶ÈÎÎñÖ´ÐÐ */
+        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 
-             /* 向消息队列发数据 */
-        	xQueueSendFromISR(xQueue2,
-        				      (void *)&tx_counter,
-        				       &xHigherPriorityTaskWoken);
 
-        	/* 如果xHigherPriorityTaskWoken = pdTRUE，那么退出中断后切到当前最高优先级任务执行 */
-        	portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-        }
-        #endif 
-
-    xTaskNotifyFromISR(xHandleTaskMsgPro,  /* 目标任务 */
-			           POWER_KEY_0,      /* 设置目标任务事件标志位bit0  */
-			           eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志位 */
-	                   &xHigherPriorityTaskWoken);
-
-	/* Èç¹ûxHigherPriorityTaskWoken = pdTRUE£¬ÄÇÃ´ÍË³öÖÐ¶ÏºóÇÐµ½µ±Ç°×î¸ßÓÅÏÈ¼¶ÈÎÎñÖ´ÐÐ */
-	portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-     
-	 
- }
+    }
             
    
    break;
 
    case KEY_MODE_Pin:
-//   if(gkey_t.key_power == power_on){
-//   	  gkey_t.key_sound_flag = key_sound;
-//      gkey_t.key_mode_times = gkey_t.key_mode_times ^ 0x01;
-//      if(gkey_t.key_mode_times == 1){
-//          gkey_t.key_mode = mode_set_timer;
-//          key_mode_change = mode_set_timer;
-//      }
-//      else{
-//
-//         gkey_t.key_mode = mode_confirm; //如果我只按一次那？，经过一段时间推出，恢复 
-//         key_mode_change = 0;
-//      }
+      if(KEY_MODE_VALUE() == 1){
+        xTaskNotifyFromISR(xHandleTaskMsgPro,  /* 目标任务 */
+               MODE_KEY_1,     /* 设置目标任务事件标志位bit0  */
+               eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志位 */
+               &xHigherPriorityTaskWoken);
 
-      xTaskNotifyFromISR(xHandleTaskMsgPro,  /* 目标任务 */
-			           MODE_KEY_1,     /* 设置目标任务事件标志位bit0  */
-			           eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志位 */
-	                   &xHigherPriorityTaskWoken);
+        /* 如果xHigherPriorityTaskWoken = pdTRUE，那么退出中断后切到当前最高优先级任务执行 */
+        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 
-	        /* 如果xHigherPriorityTaskWoken = pdTRUE，那么退出中断后切到当前最高优先级任务执行 */
-	    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+
+       }
    
    break;
 
 
    case KEY_UP_Pin:
-       if(gkey_t.key_power == power_on){
-	   	
-          gkey_t.key_sound_flag = key_sound;
-		  switch(key_mode_change){
-
-		    case 0:  //set temperature value 
-		 
-		      gkey_t.key_select = mode_set_temp;
-            set_up_temperature_value ++;
-	         if(set_up_temperature_value < 20){
-				    set_up_temperature_value=20;
-				}
-				
-				if(set_up_temperature_value > 40)set_up_temperature_value= 20;
-				
-			   glcd_t.number3_low = set_up_temperature_value / 10 ;
-            glcd_t.number3_high = set_up_temperature_value / 10 ;
-			   glcd_t.number4_low  =set_up_temperature_value % 10; //
-            glcd_t.number4_high = set_up_temperature_value % 10; //
-
-            gkey_t.set_temp_value = set_up_temperature_value;
-            gkey_t.gTimer_key_temp_timing=0;
-			
-			break;
-
-			case mode_set_timer: //set timer timing value 
-			
-				 if(gProcess_t.set_timer_timing_hours!=24)
-				 		 gProcess_t.set_timer_timing_minutes=   gProcess_t.set_timer_timing_minutes + 30;
-				 else if(gProcess_t.set_timer_timing_hours ==24)
-				 	     gProcess_t.set_timer_timing_minutes =   gProcess_t.set_timer_timing_minutes + 60;
-
-			    if( gProcess_t.set_timer_timing_minutes >59){
-					     gProcess_t.set_timer_timing_hours++;
-		             if(gProcess_t.set_timer_timing_hours ==24){
-						     gProcess_t.set_timer_timing_minutes=0;
-					}
-					else if(gProcess_t.set_timer_timing_hours >24){
-
-					   gProcess_t.set_timer_timing_hours =0;
-					    gProcess_t.set_timer_timing_minutes=0;
-
-
-					}
-					else{
-
-					  // set_timer_dispTime_minutes=0;
-                 gProcess_t.set_timer_timing_minutes =0;
-
-
-					}
-						
-			     }
-                  //display hours
-                  glcd_t.number5_low =  gProcess_t.set_timer_timing_hours / 10 ;
-                  glcd_t.number5_high =  gProcess_t.set_timer_timing_hours / 10 ;
-
-                  glcd_t.number6_low  = gProcess_t.set_timer_timing_hours% 10; //
-                  glcd_t.number6_high =  gProcess_t.set_timer_timing_hours % 10; //
-                   //dispaly minutes 
-                  glcd_t.number7_low =   gProcess_t.set_timer_timing_minutes /10;
-                  glcd_t.number7_high =   gProcess_t.set_timer_timing_minutes /10;
-
-                  glcd_t.number8_low =   gProcess_t.set_timer_timing_minutes %10;
-                  glcd_t.number8_high =   gProcess_t.set_timer_timing_minutes %10;
-                 
-                 gkey_t.gTimer_set_timer_blink =0;
-            }
-         
-       }
+    
+         xTaskNotifyFromISR(xHandleTaskMsgPro,  /* 目标任务 */
+                ADD_KEY_3,     /* 设置目标任务事件标志位bit0  */
+                eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志位 */
+                &xHigherPriorityTaskWoken);
+   
+         /* 如果xHigherPriorityTaskWoken = pdTRUE，那么退出中断后切到当前最高优先级任务执行 */
+         portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+       
    break;
 
    case KEY_DOWN_Pin:
-     if(gkey_t.key_power == power_on){
 
-	     gkey_t.key_sound_flag = key_sound;
-        
-         switch(key_mode_change){
-
-         case 0: //set temperature 
        
-		 gkey_t.key_select = mode_set_temp;
-         set_up_temperature_value--;
-			if(set_up_temperature_value<20) set_up_temperature_value=40;
-	        else if(set_up_temperature_value >40)set_up_temperature_value=40;
-
-           if(set_up_temperature_value > 40)set_up_temperature_value= 20;
-				
-			   glcd_t.number3_low = set_up_temperature_value / 10 ;
-            glcd_t.number3_high = set_up_temperature_value / 10 ;
-			   glcd_t.number4_low  =set_up_temperature_value % 10; //
-            glcd_t.number4_high = set_up_temperature_value % 10; //
-
-            gkey_t.set_temp_value = set_up_temperature_value;
-            gkey_t.gTimer_key_temp_timing=0;
-
-         break;
-
-         case mode_set_timer: //set timer timing value 
-             gProcess_t.set_timer_timing_minutes =   gProcess_t.set_timer_timing_minutes-30;
-		        if( gProcess_t.set_timer_timing_minutes < 0){
-					 gProcess_t.set_timer_timing_hours--;
-                   if( gProcess_t.set_timer_timing_hours <0){
-                         
-				       gProcess_t.set_timer_timing_hours=24;
-					   gProcess_t.set_timer_timing_minutes=0;
-
-				   }
-				   else{
-
-				      gProcess_t.set_timer_timing_minutes =30;
-               }
-				  
-				}
-
-             //display hours
-                  glcd_t.number5_low =  gProcess_t.set_timer_timing_hours / 10 ;
-                  glcd_t.number5_high =  gProcess_t.set_timer_timing_hours / 10 ;
-
-                  glcd_t.number6_low  = gProcess_t.set_timer_timing_hours % 10; //
-                  glcd_t.number6_high =  gProcess_t.set_timer_timing_hours % 10; //
-                   //dispaly minutes 
-                  glcd_t.number7_low =   gProcess_t.set_timer_timing_minutes /10;
-                  glcd_t.number7_high =   gProcess_t.set_timer_timing_minutes /10;
-
-                  glcd_t.number8_low =  gProcess_t.set_timer_timing_minutes %10;
-                  glcd_t.number8_high =   gProcess_t.set_timer_timing_minutes %10;
-
-                 gkey_t.gTimer_set_timer_blink =0;
-
-         break;
- 
-         }
-     }
+        xTaskNotifyFromISR(xHandleTaskMsgPro,  /* 目标任务 */
+                DEC_KEY_2,     /* 设置目标任务事件标志位bit0  */
+                eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志位 */
+                &xHigherPriorityTaskWoken);
+   
+         /* 如果xHigherPriorityTaskWoken = pdTRUE，那么退出中断后切到当前最高优先级任务执行 */
+         portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 
    break;
 

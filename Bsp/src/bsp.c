@@ -7,13 +7,16 @@ static void Mainboard_Action_Fun(void);
 static void Mainboard_Fun_Stop(void);
 static void Process_Dynamical_Action(void);
 
-static void Set_Timer_Timing_Lcd_Blink(void );
+//void Set_Timer_Timing_Lcd_Blink(void );
 
-static void Display_Timer_Timing(int8_t hours,int8_t minutes);
+//static void Display_Timer_Timing(int8_t hours,int8_t minutes);
 
 static void Display_LCD_Works_Timing(void);
 
-//static void Display_Works_Timing(void);
+static void LCD_Disp_Timer_Timing(void);
+
+
+
 
 uint8_t  fan_continue_flag;
 uint8_t step_process;
@@ -199,9 +202,9 @@ void mainboard_process_handler(void)
 		  case 3: //set timer timing value 
                if(gkey_t.key_mode == mode_set_timer){
 			   	
-                   Set_Timer_Timing_Lcd_Blink();
+                 //  Set_Timer_Timing_Lcd_Blink();
 
-				   if(gkey_t.gTimer_set_timer_blink > 3){
+				   if(gkey_t.gTimer_disp_set_timer_blink > 3){
 
                        gkey_t.key_mode=0;
 					   gkey_t.key_mode_times=0;
@@ -561,26 +564,26 @@ static void Display_LCD_Works_Timing(void)
 *
 *********************************************************************************************************
 */
-static void Set_Timer_Timing_Lcd_Blink(void )
+void Set_Timer_Timing_Lcd_Blink(uint8_t hours,uint8_t minutes)
 {
-    if(gProcess_t.gTimer_set_timer_blink < 30){//300ms
+    if(gProcess_t.gTimer_disp_set_timer_blink < 30){//300ms
 
-	  glcd_t.number5_low =  gProcess_t.set_timer_timing_hours / 10 ;
-      glcd_t.number5_high =  gProcess_t.set_timer_timing_hours / 10 ;
+	  glcd_t.number5_low =  hours / 10 ;
+      glcd_t.number5_high =  hours / 10 ;
 
-      glcd_t.number6_low  = gProcess_t.set_timer_timing_hours% 10; //
-      glcd_t.number6_high =  gProcess_t.set_timer_timing_hours % 10; //
+      glcd_t.number6_low  = minutes% 10; //
+      glcd_t.number6_high =  minutes % 10; //
       
        //dispaly minutes 
-      glcd_t.number7_low =   gProcess_t.set_timer_timing_minutes /10;
-      glcd_t.number7_high =   gProcess_t.set_timer_timing_minutes /10;
+      glcd_t.number7_low =  minutes /10;
+      glcd_t.number7_high =   minutes /10;
 
-      glcd_t.number8_low =   gProcess_t.set_timer_timing_minutes %10;
-      glcd_t.number8_high =   gProcess_t.set_timer_timing_minutes %10;
+      glcd_t.number8_low =  minutes %10;
+      glcd_t.number8_high =    minutes %10;
 
 
     }
-	else if(gProcess_t.gTimer_set_timer_blink > 29 && gProcess_t.gTimer_set_timer_blink > 61 ){
+	else if(gProcess_t.gTimer_disp_set_timer_blink > 29 && gProcess_t.gTimer_disp_set_timer_blink > 61 ){
 	  glcd_t.number5_low =  0x0A ;
       glcd_t.number5_high =  0x0A ;
 
@@ -597,9 +600,11 @@ static void Set_Timer_Timing_Lcd_Blink(void )
 
 	}
 	else{
-	 gProcess_t.gTimer_set_timer_blink =0;
+	 gProcess_t.gTimer_disp_set_timer_blink =0;
 
     }
+
+    LCD_Disp_Timer_Timing();
 
 }
 
@@ -613,7 +618,7 @@ static void Set_Timer_Timing_Lcd_Blink(void )
 *
 *********************************************************************************************************
 */
-static void Display_Timer_Timing(int8_t hours,int8_t minutes)
+void Display_Timer_Timing(int8_t hours,int8_t minutes)
 {
 	 if(gProcess_t.gTimer_timer_Counter > 59){
 	    gProcess_t.gTimer_timer_Counter =0;
@@ -656,8 +661,20 @@ static void Display_Timer_Timing(int8_t hours,int8_t minutes)
 							
 		 glcd_t.number8_low = minutes  % 10;
 		 glcd_t.number8_high = minutes % 10;
+
+         LCD_Disp_Timer_Timing();
 		    
      }
+     
+
+}
+
+
+static void LCD_Disp_Timer_Timing(void)
+{
+
+   LCD_Number_FiveSix_Hours();
+   LCD_Number_SevenEight_Minutes();
 
 }
 
@@ -694,6 +711,9 @@ void Run_Main_Handler(void)
     }
     Disip_Wifi_Icon_State(  );
 
-   // Display_Works_Timing();
+    
+     
+
+   
 
 }
