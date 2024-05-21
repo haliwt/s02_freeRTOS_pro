@@ -25,13 +25,14 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         glcd_t.gTimer_lcd_blink++;
         
     	glcd_t.gTimer_fan_blink++;
-    	gProcess_t.gTimer_disp_set_timer_blink ++;
+    	
     	
     }
 	
     if(tm3>99){ //10*10 = 100ms 
        tm3=0;
        glcd_t.gTimer_colon_blink++ ;
+       gProcess_t.gTimer_disp_set_timer_blink ++;
 	  
     }
 

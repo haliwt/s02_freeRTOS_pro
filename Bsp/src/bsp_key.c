@@ -70,7 +70,7 @@ void Dec_Key_Fun(uint8_t cmd)
                   glcd_t.number8_low =  gProcess_t.set_timer_timing_minutes %10;
                   glcd_t.number8_high =   gProcess_t.set_timer_timing_minutes %10;
 
-                 gkey_t.gTimer_disp_set_timer_blink =0;
+                
 
           LCD_Disp_Timer_Timing();
 
@@ -158,7 +158,7 @@ void Add_Key_Fun(uint8_t cmd)
         glcd_t.number8_low =   gProcess_t.set_timer_timing_minutes %10;
         glcd_t.number8_high =   gProcess_t.set_timer_timing_minutes %10;
 
-        gkey_t.gTimer_disp_set_timer_blink =0;
+       // gkey_t.gTimer_disp_set_timer_blink =0;
         
         LCD_Disp_Timer_Timing();
      break;

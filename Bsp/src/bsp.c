@@ -18,8 +18,6 @@ static void Display_LCD_Works_Timing(void);
 
 
 
-uint8_t  fan_continue_flag;
-uint8_t step_process;
 
 
 
@@ -110,6 +108,7 @@ void PowerOff_freeFun(void)
 *	返 回 值: 无
 *********************************************************************************************************
 */
+uint8_t fan_continue_flag;
 static uint8_t Works_Time_Out(void)
 {
 	if(gProcess_t.gTimer_run_time_out < 11){
@@ -334,19 +333,19 @@ void Set_Timer_Timing_Lcd_Blink(uint8_t hours,uint8_t minutes)
 
     }
 	else if(gProcess_t.gTimer_disp_set_timer_blink > 29 && gProcess_t.gTimer_disp_set_timer_blink > 61 ){
-	  glcd_t.number5_low =  0x0A ;
-      glcd_t.number5_high =  0x0A ;
-
-      glcd_t.number6_low  =  0x0A; //
-      glcd_t.number6_high =  0x0A; //
-      
-       //dispaly minutes 
-      glcd_t.number7_low =   0x0A;
-      glcd_t.number7_high =   0x0A;
-
-      glcd_t.number8_low =   0x0A;
-      glcd_t.number8_high =   0x0A;
-
+//	  glcd_t.number5_low =  0x0A ;
+//      glcd_t.number5_high =  0x0A ;
+//
+//      glcd_t.number6_low  =  0x0A; //
+//      glcd_t.number6_high =  0x0A; //
+//      
+//       //dispaly minutes 
+//      glcd_t.number7_low =   0x0A;
+//      glcd_t.number7_high =   0x0A;
+//
+//      glcd_t.number8_low =   0x0A;
+//      glcd_t.number8_high =   0x0A;
+//
 
 	}
 	else{
@@ -368,26 +367,28 @@ void Set_Timer_Timing_Lcd_Blink(uint8_t hours,uint8_t minutes)
 *
 *********************************************************************************************************
 */
-void Display_Timer_Timing(int8_t hours,int8_t minutes)
+void Display_Timer_Timing(void)
 {
-	 if(gProcess_t.gTimer_timer_Counter > 59){
+
+     if(gProcess_t.gTimer_timer_Counter > 59){
 	    gProcess_t.gTimer_timer_Counter =0;
 		
-		minutes -- ;
+		gProcess_t.set_timer_timing_minutes -- ;
+    
 	
-	    if(minutes <  0 ){
+	    if(gProcess_t.set_timer_timing_minutes <  0 ){
 			 
-		   hours -- ;
-		   minutes =59;
+		   gProcess_t.set_timer_timing_hours -- ;
+		   gProcess_t.set_timer_timing_minutes =59;
          }
 
 		
 		
-		 if(hours < 0 ){
+		 if(gProcess_t.set_timer_timing_hours < 0 ){
 		 
 			
-			hours=0;
-			minutes=0;
+			gProcess_t.set_timer_timing_hours=0;
+			gProcess_t.set_timer_timing_minutes=0;
 			gkey_t.key_power = power_off;
 			gkey_t.gTimer_power_off=0;
 			
@@ -397,26 +398,26 @@ void Display_Timer_Timing(int8_t hours,int8_t minutes)
 
 
 		 //display hours timing
-	     glcd_t.number5_low = hours / 10;
-		 glcd_t.number5_high = hours / 10;
+	     glcd_t.number5_low = gProcess_t.set_timer_timing_hours / 10;
+		 glcd_t.number5_high = gProcess_t.set_timer_timing_hours / 10;
 	 
 	 
-		 glcd_t.number6_low = hours  % 10;
-		 glcd_t.number6_high = hours % 10;
+		 glcd_t.number6_low = gProcess_t.set_timer_timing_hours   % 10;
+		 glcd_t.number6_high = gProcess_t.set_timer_timing_hours % 10;
 		 
 	      //display minutes 
-		 glcd_t.number7_low = minutes / 10;
-		 glcd_t.number7_high = minutes / 10;
+		 glcd_t.number7_low = gProcess_t.set_timer_timing_minutes / 10;
+		 glcd_t.number7_high = gProcess_t.set_timer_timing_minutes / 10;
 		 
 							
-		 glcd_t.number8_low = minutes  % 10;
-		 glcd_t.number8_high = minutes % 10;
+		 glcd_t.number8_low = gProcess_t.set_timer_timing_minutes   % 10;
+		 glcd_t.number8_high = gProcess_t.set_timer_timing_minutes % 10;
 
-        
+         LCD_Disp_Timer_Timing();
 		    
      }
      
-    LCD_Disp_Timer_Timing();
+    //LCD_Disp_Timer_Timing();
 
 }
 

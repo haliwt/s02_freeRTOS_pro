@@ -652,7 +652,7 @@ void Display_Wind_Icon_Inint(void)
 *****************************************************************************/
 void LCD_Timer_Colon_Flicker(void)
 {
-   if(glcd_t.gTimer_colon_blink < 3){
+   if(glcd_t.gTimer_colon_blink > 4 && glcd_t.gTimer_colon_blink < 6){
 
         Colon_Symbol = 0x01;
         if(g_tMsg.key_mode != mode_set_timer){
@@ -667,7 +667,7 @@ void LCD_Timer_Colon_Flicker(void)
           }
         
    }
-   else if(glcd_t.gTimer_colon_blink >2 && glcd_t.gTimer_colon_blink < 6){
+   else if(glcd_t.gTimer_colon_blink > 5  && glcd_t.gTimer_colon_blink < 7){
 
       Colon_Symbol = 0x0;
       if(g_tMsg.key_mode != mode_set_timer){
@@ -683,7 +683,7 @@ void LCD_Timer_Colon_Flicker(void)
 
       }
    }
-   else if(glcd_t.gTimer_colon_blink > 5){
+   else if(glcd_t.gTimer_colon_blink > 8){
 
       glcd_t.gTimer_colon_blink =0;
 

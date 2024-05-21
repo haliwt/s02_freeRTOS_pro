@@ -84,7 +84,7 @@ void Run_Main_Handler(void);
 void Display_Works_Timing(void);
 
 
-void Display_Timer_Timing(int8_t hours,int8_t minutes);
+void Display_Timer_Timing(void);
 
 void LCD_Disp_Timer_Timing(void);
 

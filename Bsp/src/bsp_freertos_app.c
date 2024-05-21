@@ -510,7 +510,7 @@ static void display_works_timer_timing_fun(uint8_t sel_item)
 
         if(g_tMsg.set_timer_timing_success ==1){
 
-           Display_Timer_Timing(gProcess_t.set_timer_timing_hours,gProcess_t.set_timer_timing_minutes);
+           Display_Timer_Timing();
 
         }
         else if( g_tMsg.set_timer_timing_success == 0 && gkey_t.gTimer_disp_switch_disp_mode > 3){
@@ -536,9 +536,11 @@ static void display_works_timer_timing_fun(uint8_t sel_item)
                 g_tMsg.set_timer_timing_success = 0;
 
                 gctl_t.ai_flag = 1;
+            
 
                 g_tMsg.disp_timer_works_switch_flag++;
                 g_tMsg.key_mode =disp_works_timing;
+                
 
 
                 }
@@ -549,6 +551,7 @@ static void display_works_timer_timing_fun(uint8_t sel_item)
                 gctl_t.ai_flag = 0;
                 g_tMsg.disp_timer_works_switch_flag++;
                 g_tMsg.key_mode = disp_timer_timing;
+                 LCD_Disp_Timer_Timing();
 
             }
 
