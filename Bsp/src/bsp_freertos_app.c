@@ -183,9 +183,10 @@ static void vTaskMsgPro(void *pvParameters)
                  LCD_Timer_Colon_Flicker();
 
                  LCD_Wind_Run_Icon(0);
+                 mode_long_short_key_fun();
                  display_works_timer_timing_fun(g_tMsg.key_mode);
                  
-                 mode_long_short_key_fun();
+                
 
                
                      
@@ -453,11 +454,13 @@ static void mode_long_short_key_fun(void)
             g_tMsg.key_mode  = disp_timer_timing;
             gctl_t.ai_flag = 0; //timer tiiming model
             gkey_t.gTimer_disp_switch_disp_mode = 0;       //counter exit timing this "mode_set_timer"
+            LCD_Disp_Timer_Timing_Init();
 
         }
         else{
             g_tMsg.key_mode  = disp_works_timing;
             gctl_t.ai_flag = 1; //timer tiiming model
+            LCD_Disp_Works_Timing_Init();
 
         }
 
@@ -557,9 +560,9 @@ static void display_works_timer_timing_fun(uint8_t sel_item)
 
         }
 
-         break;
+       break;
 
-        }
+      }
 
 }
 
