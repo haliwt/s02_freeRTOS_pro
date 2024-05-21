@@ -43,6 +43,9 @@ static TaskHandle_t xHandleTaskMsgPro = NULL;
 static TaskHandle_t xHandleTaskStart = NULL;
 
 
+static void mode_long_short_key_fun(void);
+
+
 typedef struct Msg
 {
     uint8_t add_dec_key_input_flag;
@@ -91,7 +94,7 @@ void freeRTOS_Handler(void)
 */
 static void vTaskMsgPro(void *pvParameters)
 {
-    MSG_T *ptMsg;
+   // MSG_T *ptMsg;
     BaseType_t xResult;
 	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(100); /* 设置最大等待时间为500ms */
 	uint32_t ulValue;
@@ -153,7 +156,7 @@ static void vTaskMsgPro(void *pvParameters)
                //KEY DOWN FUNCTION   
                if((ulValue & DEC_KEY_2) != 0){
 
-                ptMsg->add_dec_key_input_flag++;
+                g_tMsg.add_dec_key_input_flag++;
                 Dec_Key_Fun(gkey_t.key_mode);
 
                 Buzzer_KeySound();
@@ -172,7 +175,7 @@ static void vTaskMsgPro(void *pvParameters)
 
            if((ulValue & ADD_KEY_3) != 0){
 
-                  ptMsg->add_dec_key_input_flag ++;
+                  g_tMsg.add_dec_key_input_flag ++;
                   Add_Key_Fun(gkey_t.key_mode);
 
                   Buzzer_KeySound();
@@ -195,24 +198,24 @@ static void vTaskMsgPro(void *pvParameters)
          
                  LCD_Timer_Colon_Flicker();
 
-                 if(ptMsg->key_mode  == disp_works_timing ){
+                 if(g_tMsg.key_mode  == disp_works_timing ){
                  
                      Display_Works_Timing();
                  }
-                 else if(ptMsg->key_mode  == disp_timer_timing){
+                 else if(g_tMsg.key_mode  == disp_timer_timing){
 
                     Display_Timer_Timing(gProcess_t.set_timer_timing_hours,gProcess_t.set_timer_timing_minutes);
 
                 
-                    if( ptMsg->set_timer_timing_success == 0 && gkey_t.gTimer_disp_switch_disp_mode > 3){
+                    if( g_tMsg.set_timer_timing_success == 0 && gkey_t.gTimer_disp_switch_disp_mode > 3){
 
-                          ptMsg->key_mode  = disp_works_timing;
+                          g_tMsg.key_mode  = disp_works_timing;
 
                     }
 
 
                  }
-                 else if(ptMsg->key_mode  == mode_set_timer){
+                 else if(g_tMsg.key_mode  == mode_set_timer){
                     
                     Set_Timer_Timing_Lcd_Blink(gProcess_t.set_timer_timing_hours,gProcess_t.set_timer_timing_minutes);
                      if(gkey_t.gTimer_disp_set_timer > 3){
@@ -221,19 +224,19 @@ static void vTaskMsgPro(void *pvParameters)
 
                          if(gProcess_t.set_timer_timing_hours == 0 && gProcess_t.set_timer_timing_minutes==0){
 
-                                ptMsg->set_timer_timing_success = 0;
+                               g_tMsg.set_timer_timing_success = 0;
                                
                                 gctl_t.ai_flag = 1;
-                                ptMsg->key_mode =disp_works_timing;
+                                g_tMsg.key_mode =disp_works_timing;
                                
 
                          }
                          else{
-                             ptMsg->set_timer_timing_success = 1;
+                             g_tMsg.set_timer_timing_success = 1;
                               gProcess_t.gTimer_timer_Counter =0; //start recoder timer timing is "0",from "0" start
 
                              gctl_t.ai_flag = 0;
-                             ptMsg->key_mode = disp_timer_timing;
+                             g_tMsg.key_mode = disp_timer_timing;
 
                          }
                         
@@ -245,38 +248,7 @@ static void vTaskMsgPro(void *pvParameters)
                  
                  LCD_Wind_Run_Icon(0);
                  
-                  if(KEY_MODE_VALUE() == 1 && key_long_counter < 10){
-
-                   
-                    key_long_counter++;
-                    if(key_long_counter > 9){
-                        
-                        ptMsg->key_mode = mode_set_timer;
-                        gctl_t.ai_flag = 0; //timer tiiming model
-                        gkey_t.gTimer_disp_set_timer = 0;       //counter exit timing this "mode_set_timer"
-                         Buzzer_KeySound();
-
-                    }
-                    
-                   }
-                   else if(KEY_MODE_VALUE() == 0 && key_long_counter >0 && key_long_counter<8){ //short key of function
-                   
-                                key_long_counter=0;
-                                 Buzzer_KeySound();
-                                 ptMsg->ucMessageID=0;
-                                if(ptMsg->key_mode  == disp_works_timing){
-                                    ptMsg->key_mode  = disp_timer_timing;
-                                    gctl_t.ai_flag = 0; //timer tiiming model
-                                    gkey_t.gTimer_disp_switch_disp_mode = 0;       //counter exit timing this "mode_set_timer"
-
-                                   }
-                                  else{
-                                      ptMsg->key_mode  = disp_works_timing;
-                                      gctl_t.ai_flag = 1; //timer tiiming model
-                                      
-                                  }
-                                  
-                   }
+                 mode_long_short_key_fun();
 
                
                      
@@ -515,40 +487,49 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 
 
 }
+/*********************************************************************************
+*
+*	函 数 名:static void mode_long_short_key_fun(void)
+*	功能说明: 
+*	形    参: 
+*	返 回 值: 无
+*   
 
-
-
+*********************************************************************************/
 static void mode_long_short_key_fun(void)
 {
-      MSG_T *ptMsg;
-      if(KEY_MODE_VALUE() == 1){
+    if(KEY_MODE_VALUE() == 1 && key_long_counter < 10){
 
-                   
-                    key_long_counter++;
-                    if(key_long_counter > 9){
-                        ptMsg->key_mode = mode_set_timer;
-                        gctl_t.ai_flag = 0; //timer tiiming model
-                        gkey_t.gTimer_disp_set_timer = 0;       //counter exit timing this "mode_set_timer"
 
-                    }
-                    
-       }
-       else if(KEY_MODE_VALUE() == 0){ //short key of function
-               
-                     ptMsg->ucMessageID=0;
-                    if(ptMsg->key_mode  == disp_works_timing){
-                        ptMsg->key_mode  = disp_timer_timing;
-                        gctl_t.ai_flag = 0; //timer tiiming model
-                        gkey_t.gTimer_disp_switch_disp_mode = 0;       //counter exit timing this "mode_set_timer"
+        key_long_counter++;
+        if(key_long_counter > 9){
 
-                       }
-                      else{
-                          ptMsg->key_mode  = disp_works_timing;
-                          gctl_t.ai_flag = 1; //timer tiiming model
-                          
-                      }
-                      
-       }
+            g_tMsg.key_mode = mode_set_timer;
+            gctl_t.ai_flag = 0; //timer tiiming model
+            gkey_t.gTimer_disp_set_timer = 0;       //counter exit timing this "mode_set_timer"
+            Buzzer_KeySound();
+
+        }
+
+    }
+    else if(KEY_MODE_VALUE() == 0 && key_long_counter >0 && key_long_counter<8){ //short key of function
+
+        key_long_counter=0;
+        Buzzer_KeySound();
+        g_tMsg.ucMessageID=0;
+        if(g_tMsg.key_mode  == disp_works_timing){
+        g_tMsg.key_mode  = disp_timer_timing;
+        gctl_t.ai_flag = 0; //timer tiiming model
+        gkey_t.gTimer_disp_switch_disp_mode = 0;       //counter exit timing this "mode_set_timer"
+
+        }
+        else{
+        g_tMsg.key_mode  = disp_works_timing;
+        gctl_t.ai_flag = 1; //timer tiiming model
+
+        }
+
+    }
 
 
 }
