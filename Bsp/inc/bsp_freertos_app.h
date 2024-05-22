@@ -29,6 +29,7 @@ typedef struct Msg
     
     uint8_t key_mode;
     uint8_t key_add_dec_mode;
+    uint8_t key_mode_switch_flag;
 	//uint8_t usData[2];
 	//uint8_t ulData[2];
 

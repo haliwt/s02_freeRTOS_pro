@@ -443,10 +443,12 @@ static void mode_long_short_key_fun(void)
            
             gctl_t.ai_flag = 0; //timer tiiming model
                //counter exit timing this "mode_set_timer"
+            g_tMsg.key_mode_switch_flag = 1;
             LCD_Disp_Timer_Timing_Init();
 
         }
         else{
+            g_tMsg.key_mode_switch_flag = 1;
             g_tMsg.key_mode  = disp_works_timing;
          
             gctl_t.ai_flag = 1; //timer tiiming model

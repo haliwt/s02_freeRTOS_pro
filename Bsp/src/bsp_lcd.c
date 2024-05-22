@@ -429,11 +429,12 @@ void LCD_Number_SevenEight_Minutes(void)
 {
 
   
-     
      if(ultrasonic_state() == 1){
 
 
-      if(g_tMsg.key_mode == mode_set_timer){
+      if(g_tMsg.key_mode == mode_set_timer || g_tMsg.key_mode_switch_flag == 1){
+
+         g_tMsg.key_mode_switch_flag = 0;
 
         //timing ":" blank
         TM1723_Write_Display_Data(0xCB,(0x01+lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low]) & 0xffff); //numbers : '1' addr: 0xC4
@@ -444,7 +445,9 @@ void LCD_Number_SevenEight_Minutes(void)
       }
       else{
 
-         if(g_tMsg.key_mode == mode_set_timer){
+         if(g_tMsg.key_mode == mode_set_timer || g_tMsg.key_mode_switch_flag == 1){
+
+           g_tMsg.key_mode_switch_flag = 0;
 
            //timing ":" blank
            TM1723_Write_Display_Data(0xCB,(0x01+lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low]) & 0xffff); //numbers : '1' addr: 0xC4
