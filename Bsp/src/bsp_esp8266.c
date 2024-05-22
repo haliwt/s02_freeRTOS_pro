@@ -142,7 +142,7 @@ void ReConnect_Wifi_Net_ATReset_Hardware(void)
 		break;
       }
 		
-	  Wifi_Fast_Led_Blink();
+
 
 }
 
@@ -171,7 +171,7 @@ void Wifi_SoftAP_Config_Handler(void)
   {
 
     case wifi_set_restor:
-           Wifi_Fast_Led_Blink();
+         
            ReConnect_Wifi_Net_ATReset_Hardware();//InitWifiModule_Hardware()
 		   //HAL_Delay(1000);
 		   wifi_t.gTimer_login_tencent_times=0;
@@ -179,7 +179,7 @@ void Wifi_SoftAP_Config_Handler(void)
 			    wifi_t.wifi_config_net_lable =wifi_set_cwmode;
 		   }
 		  
-		      Wifi_Fast_Led_Blink();
+		  
 	break;
 
 
@@ -194,7 +194,7 @@ void Wifi_SoftAP_Config_Handler(void)
 			   wifi_t.randomName[0]=HAL_GetUIDw0();
 	        }
 
-	    Wifi_Fast_Led_Blink();
+	   
 
 	break;
 
@@ -209,7 +209,7 @@ void Wifi_SoftAP_Config_Handler(void)
 			}
 	       
 		   
-			Wifi_Fast_Led_Blink();
+
 
 	 break;
 
@@ -226,8 +226,7 @@ void Wifi_SoftAP_Config_Handler(void)
 			}
 			
 		
-		
-	       Wifi_Fast_Led_Blink();
+	
 
 
 	 case wifi_set_tcdevreg://dynamic register
@@ -240,7 +239,6 @@ void Wifi_SoftAP_Config_Handler(void)
 			  wifi_t.wifi_config_net_lable=wifi_set_tcsap;
          }
 
-	     Wifi_Fast_Led_Blink();
 
 	 break;
 
@@ -263,7 +261,7 @@ void Wifi_SoftAP_Config_Handler(void)
 			 wifi_t.wifi_uart_counter=0;
 			 wifi_t.wifi_config_net_lable=0xff;
 		  }
-		  Wifi_Fast_Led_Blink();
+		
 			
 	 break;
 
@@ -296,7 +294,7 @@ void SmartPhone_LinkTencent_Cloud(void)
 		HAL_Delay(1000);
 
 	}
-	Wifi_Fast_Led_Blink();
+	
 
 	   
     free(device_submassage);

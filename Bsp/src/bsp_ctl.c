@@ -3,6 +3,7 @@
 
 bsp_ctl gctl_t;
 
+uint8_t (*power_on_state)(void);
 
 
 uint8_t (*ptc_state)(void); //adjust of ptc is open or close
@@ -19,6 +20,7 @@ uint8_t (*fan_error_state)(void);
 
 
 static uint8_t ai_mode_default(void);
+static uint8_t power_on_off_default(void);
 
 
 
@@ -43,7 +45,11 @@ void bsp_ctl_init(void)
 
    
    Ai_Mode_Handler(ai_mode_default);
-   Wifi_Link_Net_Handler(wifi_link_net_default);
+
+   Power_On_Handler(power_on_off_default);
+
+
+   buzzer_sound_init();
 
 }
 
@@ -214,5 +220,19 @@ void  Ai_Mode_Handler(uint8_t(*ai_handler)(void))
  * Return Ref: close or open 
  * 
 *****************************************************************************/
+void Power_On_Handler(uint8_t(*poweron_handler)(void))
+{
+
+    power_on_state = poweron_handler;
+
+}
+
+static uint8_t power_on_off_default(void)
+{
+
+   if(gkey_t.key_power == power_on) return 1;
+   return 0;
+
+}
 
 

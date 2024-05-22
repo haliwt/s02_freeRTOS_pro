@@ -102,12 +102,12 @@ static void MainBoard_Self_Inspection_PowerOn_Fun(void)
 		wifi_t.gTimer_wifi_rx_error =0;
         WIFI_IC_DISABLE();
 		HAL_Delay(1000);
-		Key_Speical_Power_Fun_Handler();
+		//Key_Speical_Power_Fun_Handler();
 	    HAL_Delay(1000);
-		Key_Speical_Power_Fun_Handler();
+		///Key_Speical_Power_Fun_Handler();
 		WIFI_IC_ENABLE();
         HAL_Delay(1000);
-		Key_Speical_Power_Fun_Handler();
+		//Key_Speical_Power_Fun_Handler();
 
 		wifi_t.linking_tencent_cloud_doing =1; //enable usart2 receive wifi  data
 		wifi_t.wifi_uart_counter=0;
@@ -121,10 +121,10 @@ static void MainBoard_Self_Inspection_PowerOn_Fun(void)
 	   
 
 	   HAL_Delay(1000);
-	   Key_Speical_Power_Fun_Handler();
+	  // Key_Speical_Power_Fun_Handler();
 	  
 	   HAL_Delay(1000);
-	   Key_Speical_Power_Fun_Handler();
+	 //  Key_Speical_Power_Fun_Handler();
 	 
 	  
 	  wifi_t.rx_setup_hardware_counter++;
@@ -168,18 +168,18 @@ static void RunWifi_Command_Handler(void)
 
 	if(power_on_state() == power_on){
  
-		Wifi_Fast_Led_Blink(); 
+	
 		Wifi_SoftAP_Config_Handler();
-		Wifi_Fast_Led_Blink();
+	
 		SmartPhone_LinkTencent_Cloud();
-		Wifi_Fast_Led_Blink();
+	
 		//wifi_t.auto_linknet_flag =0;
 
 	}
 	
 	if(wifi_link_net_state()==0){
 		if(wifi_t.gTimer_linking_tencent_duration < 166 ){
-			Wifi_Fast_Led_Blink();
+		
 		   wifi_t.runCommand_order_lable = wifi_link_tencent_cloud;
 		}
 		else if(wifi_link_net_state()==0 && wifi_t.gTimer_linking_tencent_duration >166){
