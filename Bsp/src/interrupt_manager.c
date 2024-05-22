@@ -147,6 +147,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         gProcess_t.gTimer_display_dht11_value ++;
         gProcess_t.gTimer_timer_Counter++;   //timer timing counter value 
 
+		//wifi
+		wifi_t.gTimer_wifi_pub_power_off++;
+		wifi_t.gTimer_power_first_link_tencent++;
+		wifi_t.power_on_login_tencent_cloud_flag++;
+		wifi_t.gTimer_power_first_link_tencent++;
+
         
 
        

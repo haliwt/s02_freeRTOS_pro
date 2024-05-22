@@ -8,7 +8,7 @@ uint8_t beijing_step;
 uint8_t auto_det_flag;
 
 
-static void MainBoard_Self_Inspection_PowerOn_Fun(void);
+
 static void RunWifi_Command_Handler(void);
 static void auto_repeat_link_netware_fun(void);
 static void auto_repeat_init_link_net(void);
@@ -24,12 +24,14 @@ static void auto_repeat_tencnet_net(void);
 ********************************************************************************/
 void WIFI_Process_Handler(void)
 {
-  	MainBoard_Self_Inspection_PowerOn_Fun();
+  //	MainBoard_Self_Inspection_PowerOn_Fun();
+    #if 0
     RunWifi_Command_Handler();
     if(wifi_t.get_rx_beijing_time_enable==0){
      Tencent_Cloud_Rx_Handler();
 	 Json_Parse_Command_Fun();
     }
+    #endif 
 }
 /**********************************************************************
 	*
@@ -39,7 +41,7 @@ void WIFI_Process_Handler(void)
 	*Return Ref: NO
 	*
 **********************************************************************/
-static void MainBoard_Self_Inspection_PowerOn_Fun(void)
+void MainBoard_Self_Inspection_PowerOn_Fun(void)
 {
     static uint8_t counter;
 		if(wifi_t.power_on_linkwifi==0 && wifi_link_net_state()==0 && wifi_t.rx_error_codes_flag==0){
@@ -101,12 +103,12 @@ static void MainBoard_Self_Inspection_PowerOn_Fun(void)
 		wifi_t.gTimer_get_beijing_time =0;
 		wifi_t.gTimer_wifi_rx_error =0;
         WIFI_IC_DISABLE();
-		HAL_Delay(1000);
+		//HAL_Delay(1000);
 		//Key_Speical_Power_Fun_Handler();
-	    HAL_Delay(1000);
+	   // HAL_Delay(1000);
 		///Key_Speical_Power_Fun_Handler();
 		WIFI_IC_ENABLE();
-        HAL_Delay(1000);
+       // HAL_Delay(1000);
 		//Key_Speical_Power_Fun_Handler();
 
 		wifi_t.linking_tencent_cloud_doing =1; //enable usart2 receive wifi  data
@@ -120,10 +122,10 @@ static void MainBoard_Self_Inspection_PowerOn_Fun(void)
 	  
 	   
 
-	   HAL_Delay(1000);
+	 //  HAL_Delay(1000);
 	  // Key_Speical_Power_Fun_Handler();
 	  
-	   HAL_Delay(1000);
+	  // HAL_Delay(1000);
 	 //  Key_Speical_Power_Fun_Handler();
 	 
 	  
