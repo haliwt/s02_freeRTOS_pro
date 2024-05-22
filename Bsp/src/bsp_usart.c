@@ -395,9 +395,9 @@ static void UartSend(UART_T *_pUart, uint8_t *_ucaBuf, uint16_t _usLen)
 		{
 			__IO uint16_t usCount;
 
-			//DISABLE_INT();
+			DISABLE_INT();
 			usCount = _pUart->usTxCount;
-			//ENABLE_INT();
+			ENABLE_INT();
 
 			if (usCount < _pUart->usTxBufSize)
 			{
@@ -415,13 +415,13 @@ static void UartSend(UART_T *_pUart, uint8_t *_ucaBuf, uint16_t _usLen)
 		/* 将新数据填入发送缓冲区 */
 		_pUart->pTxBuf[_pUart->usTxWrite] = _ucaBuf[i];
 
-		//DISABLE_INT();
+		DISABLE_INT();
 		if (++_pUart->usTxWrite >= _pUart->usTxBufSize)
 		{
 			_pUart->usTxWrite = 0;
 		}
 		_pUart->usTxCount++;
-		//ENABLE_INT();
+		ENABLE_INT();
 	}
 
 	SET_BIT(_pUart->uart->CR1, USART_CR1_TXEIE_TXFNFIE );	/* 使能发送中断（缓冲区空） */ 
@@ -635,6 +635,7 @@ static void UartIRQ(UART_T *_pUart)
 *	返 回 值: 无
 *********************************************************************************************************
 */
+#if 0
 #if UART1_FIFO_EN == 1
 void USART1_IRQHandler(void)
 {
@@ -649,7 +650,7 @@ void USART2_IRQHandler(void)
 }
 #endif
 
-
+#endif 
 
 /*
 *********************************************************************************************************

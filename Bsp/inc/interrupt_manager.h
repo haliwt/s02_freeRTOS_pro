@@ -3,7 +3,7 @@
 #include "main.h"
 
 
-
+extern uint8_t inputBuf[1];
 
 #endif
 

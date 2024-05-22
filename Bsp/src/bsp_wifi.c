@@ -48,8 +48,8 @@ void MainBoard_Self_Inspection_PowerOn_Fun(void)
 		
 
 		
-		InitWifiModule_Hardware();//InitWifiModule();
-        SmartPhone_TryToLink_TencentCloud();
+	//	InitWifiModule_Hardware();//InitWifiModule();
+   //     SmartPhone_TryToLink_TencentCloud();
 		
 
 		if(counter ==0){
@@ -102,12 +102,12 @@ void MainBoard_Self_Inspection_PowerOn_Fun(void)
 		wifi_t.gTimer_auto_detected_net_state_times=0;
 		wifi_t.gTimer_get_beijing_time =0;
 		wifi_t.gTimer_wifi_rx_error =0;
-        WIFI_IC_DISABLE();
+     //   WIFI_IC_DISABLE();
 		//HAL_Delay(1000);
 		//Key_Speical_Power_Fun_Handler();
 	   // HAL_Delay(1000);
 		///Key_Speical_Power_Fun_Handler();
-		WIFI_IC_ENABLE();
+	//	WIFI_IC_ENABLE();
        // HAL_Delay(1000);
 		//Key_Speical_Power_Fun_Handler();
 
@@ -140,8 +140,8 @@ void MainBoard_Self_Inspection_PowerOn_Fun(void)
             wifi_t.rx_setup_hardware_counter=9;
 			wifi_t.rx_error_codes_flag=0;
 			wifi_t.power_on_thefirst_times =0;
-			gctl_t.gTimer_pro_action_publis=0;
-			gctl_t.gTimer_pro_pub_set_timer = 0;
+			//gctl_t.gTimer_pro_action_publis=0;
+			//gctl_t.gTimer_pro_pub_set_timer = 0;
 			wifi_t.runCommand_order_lable= wifi_publish_update_tencent_cloud_data;//04
 	   	 
 
@@ -168,16 +168,16 @@ static void RunWifi_Command_Handler(void)
 
    case wifi_link_tencent_cloud: //01
 
-	if(power_on_state() == power_on){
+	//if(power_on_state() == power_on){
  
 	
-		Wifi_SoftAP_Config_Handler();
+	//	Wifi_SoftAP_Config_Handler();
 	
-		SmartPhone_LinkTencent_Cloud();
+	//	SmartPhone_LinkTencent_Cloud();
 	
 		//wifi_t.auto_linknet_flag =0;
 
-	}
+	//}
 	
 	if(wifi_link_net_state()==0){
 		if(wifi_t.gTimer_linking_tencent_duration < 166 ){
@@ -223,7 +223,7 @@ static void RunWifi_Command_Handler(void)
 
        if(wifi_t.gTimer_publish_dht11 >0){
 	 
-	       MqttData_Publish_Update_Data();//Publish_Data_ToTencent_Initial_Data();
+	//       MqttData_Publish_Update_Data();//Publish_Data_ToTencent_Initial_Data();
 		   wifi_t.gTimer_publish_dht11=0;
 		   wifi_t.gTimer_get_beijing_time =0;
 	       wifi_t.runCommand_order_lable = wifi_subscriber_form_tencent_data;
@@ -238,7 +238,7 @@ static void RunWifi_Command_Handler(void)
 
 	   if( wifi_t.gTimer_publish_dht11 >4){
 
-	      Subscriber_Data_FromCloud_Handler();
+	  //    Subscriber_Data_FromCloud_Handler();
 		 wifi_t.gTimer_publish_dht11=0;
 	     wifi_t.gTimer_get_beijing_time =0;
 	     wifi_t.get_rx_auto_repeat_net_enable=0;
@@ -310,13 +310,13 @@ static void RunWifi_Command_Handler(void)
 
 	     }
 		else{
-			gctl_t.disp_works_hours   = wifi_t.real_hours;
+		//	gctl_t.disp_works_hours   = wifi_t.real_hours;
 
-			gctl_t.disp_works_minutes = wifi_t.real_minutes;
+		//	gctl_t.disp_works_minutes = wifi_t.real_minutes;
 
 			gProcess_t.gTimer_works_counter= wifi_t.real_seconds;
 
-			gctl_t.beijing_time_flag = 1; //WT.2024.04.25
+		//	gctl_t.beijing_time_flag = 1; //WT.2024.04.25
 
 			
 
@@ -337,7 +337,7 @@ static void RunWifi_Command_Handler(void)
 		wifi_t.wifi_uart_counter=0; //clear USART2 counter is zero
 		if(wifi_t.auto_link_login_tencent_cloud_flag==0){ //link net is OK
 			wifi_t.get_rx_auto_repeat_net_enable=1;
-			Wifi_Link_Tencent_Net_State();
+			//Wifi_Link_Tencent_Net_State();
 			wifi_t.gTimer_publish_dht11=0;
 
 		}
@@ -407,7 +407,7 @@ static void RunWifi_Command_Handler(void)
 		wifi_t.set_beijing_time_flag ++;
 		wifi_t.get_rx_beijing_time_enable=1; //enable beijing times
 		wifi_t.wifi_uart_counter=0;
-		Get_BeiJing_Time_Cmd();
+	//	Get_BeiJing_Time_Cmd();
 		HAL_Delay(100);
 		wifi_t.gTimer_read_beijing_time=0;
 		beijing_step =1;
@@ -419,7 +419,7 @@ static void RunWifi_Command_Handler(void)
 	if(wifi_t.gTimer_read_beijing_time > 0 && beijing_step ==1){//
 		beijing_step =2;
 		wifi_t.beijing_time_flag =0;
-		Get_Beijing_Time();
+	//	Get_Beijing_Time();
 		HAL_Delay(100);
 		wifi_t.gTimer_read_beijing_time=0;
 
@@ -576,7 +576,7 @@ static void auto_repeat_init_link_net(void)
 		//HAL_Delay(1000);
 		WIFI_IC_ENABLE();
 		//at_send_data("AT+RESTORE\r\n", strlen("AT+RESTORE\r\n"));
-		at_send_data("AT+RST\r\n", strlen("AT+RST\r\n"));
+	//	at_send_data("AT+RST\r\n", strlen("AT+RST\r\n"));
 		HAL_Delay(1000);
 }
 

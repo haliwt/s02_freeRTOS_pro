@@ -31,7 +31,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-uint8_t inputBuf[1];
+
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -102,8 +102,7 @@ int main(void)
   delay_init(24); 
   bsp_ctl_init();
     HAL_TIM_Base_Start_IT(&htim17);
-   UART_Start_Receive_IT(&huart2,wifi_t.usart1_dataBuf,1);
-   
+   UART_Start_Receive_IT(&huart2,inputBuf,1);
     freeRTOS_Handler();
   /* USER CODE END 2 */
 

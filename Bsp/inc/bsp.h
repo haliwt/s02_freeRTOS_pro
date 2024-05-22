@@ -21,7 +21,7 @@
 
 
 
-//maiboard
+//
 #include "bsp_adc.h"
 #include "bsp_led.h"
 #include "bsp_lcd.h"
@@ -36,14 +36,6 @@
 #include "bsp_ptc.h"
 #include "bsp_usart.h"
 #include "bsp_freertos_app.h"
-
-//wifi
-#include "bsp_wifi.h"
-#include "bsp_wifi_fun.h"
-#include "bsp_esp8266.h"
-#include "bsp_publish.h"
-#include "bsp_subscription.h"
-#include "bsp_mqtt_iot.h"
 
 #define ENABLE_INT()	__set_PRIMASK(0)	/* 使能全局中断 */
 #define DISABLE_INT()	__set_PRIMASK(1)	/* 禁止全局中断 */

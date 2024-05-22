@@ -63,7 +63,6 @@ void Error_Handler(void);
 #define ADC_NTC_Pin 						GPIO_PIN_1
 #define ADC_NTC_GPIO_Port 					GPIOA
 
-//
 #define PLASMA_Pin 							GPIO_PIN_5
 #define PLASMA_GPIO_Port 					GPIOA
 
@@ -126,8 +125,6 @@ void Error_Handler(void);
 #define TM1723_STB_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
-#define  WIFI_EN_Pin           GPIO_PIN_12  
-#define  WIFI_EN_GPIO_Port      GPIOA
 
 /* USER CODE END Private defines */
 

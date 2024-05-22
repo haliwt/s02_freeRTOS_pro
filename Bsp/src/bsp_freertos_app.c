@@ -43,7 +43,7 @@ static TaskHandle_t xHandleTaskMsgPro = NULL;
 static TaskHandle_t xHandleTaskStart = NULL;
 
 
-static void display_disp_works_timingr_timing_fun(uint8_t sel_item);
+static void display_works_timer_timing_fun(uint8_t sel_item);
 
 static void mode_long_short_key_fun(void);
 
@@ -175,15 +175,11 @@ static void vTaskMsgPro(void *pvParameters)
 
                  LCD_Wind_Run_Icon(0);
                  mode_long_short_key_fun();
-                 display_disp_works_timingr_timing_fun(g_tMsg.key_mode);
+                 display_works_timer_timing_fun(g_tMsg.key_mode);
                  Lcd_Display_Temp_Digital_Blink();
                  
                 
 
-         }
-         else{
-
-            MainBoard_Self_Inspection_PowerOn_Fun();
          }
         
 			
@@ -203,10 +199,10 @@ static void vTaskMsgPro(void *pvParameters)
 static void vTaskStart(void *pvParameters)
 {
    BaseType_t xResult;
-   const TickType_t xMaxBlockTime = pdMS_TO_TICKS(100); /* 设置最大等待时间为500ms */
-   static uint8_t sound_flag,power_on_first;
+   const TickType_t xMaxBlockTime = pdMS_TO_TICKS(300); /* 设置最大等待时间为500ms */
+   static uint8_t sound_flag,power_on_first,power_on_sound ;
    uint32_t ulValue;
-   static uint8_t power_sound_flag;
+   
 
     while(1)
     {
@@ -303,17 +299,15 @@ static void vTaskStart(void *pvParameters)
             if(power_on_first==2 && gkey_t.key_power==power_on){
 
                 MainBoard_Run_Feature_Handler();
-                WIFI_Process_Handler();
 
            }
            else{
-               if(power_sound_flag ==0){
-                   power_sound_flag++;
-                   buzzer_sound();
-
-
+               if(power_on_sound ==0){
+               power_on_sound ++;
+               Buzzer_KeySound();
+               
                }
-              
+           
            }
 
          }
@@ -485,7 +479,7 @@ static void mode_long_short_key_fun(void)
 *   
 
 *********************************************************************************/
-static void display_disp_works_timingr_timing_fun(uint8_t sel_item)
+static void display_works_timer_timing_fun(uint8_t sel_item)
 {
 
    static uint8_t counter_switch;
