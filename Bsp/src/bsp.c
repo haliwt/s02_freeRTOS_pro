@@ -349,7 +349,7 @@ void LCD_Disp_Works_Timing_Init(void)
 */
 void Set_Timer_Timing_Lcd_Blink(uint8_t hours,uint8_t minutes)
 {
-    if(gProcess_t.gTimer_disp_set_timer_blink < 4){//4* 100ms
+    if(gProcess_t.gTimer_disp_set_timer_blink < 6){//4* 100ms
 
 	  glcd_t.number5_low =  0x0A ;
       glcd_t.number5_high =  0x0A ;
@@ -368,7 +368,7 @@ void Set_Timer_Timing_Lcd_Blink(uint8_t hours,uint8_t minutes)
 
 
     }
-	else if(gProcess_t.gTimer_disp_set_timer_blink > 3 && gProcess_t.gTimer_disp_set_timer_blink < 8){
+	else if(gProcess_t.gTimer_disp_set_timer_blink > 5 && gProcess_t.gTimer_disp_set_timer_blink < 12){
 	
 
 
@@ -387,7 +387,7 @@ void Set_Timer_Timing_Lcd_Blink(uint8_t hours,uint8_t minutes)
 
        
 	}
-	else if(gProcess_t.gTimer_disp_set_timer_blink > 7){
+	else if(gProcess_t.gTimer_disp_set_timer_blink > 11){
 	  gProcess_t.gTimer_disp_set_timer_blink =0;
 
     }
