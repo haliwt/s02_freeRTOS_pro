@@ -538,10 +538,11 @@ static void display_works_timer_timing_fun(uint8_t sel_item)
                 gctl_t.ai_flag = 1;
                 g_tMsg.key_mode =disp_works_timing;
                 g_tMsg.key_add_dec_mode = set_temp_value_item;
+                LCD_Disp_Works_Timing_Init();
                  
                 
-               }
-                else{
+            }
+            else{
                 g_tMsg.set_timer_timing_success = 1;
                 gProcess_t.gTimer_timer_Counter =0; //start recoder timer timing is "0",from "0" start
 
