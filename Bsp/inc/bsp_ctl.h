@@ -22,16 +22,26 @@ typedef struct _bsp_ctl{
 
     uint8_t ptc_flag;
 	uint8_t plasma_flag;
-	uint8_t ultrasoinc_flag;
+	uint8_t ultrasonic_flag;
     uint8_t  ai_flag;
     uint8_t  wifi_flag;
+    uint8_t gSet_temperature_value ;
+    uint8_t run_process_step;
 
 	uint8_t ptc_warning;
 	uint8_t fan_warning;
 
+    //wifi fun
+    uint8_t disp_works_hours;
+    uint8_t disp_works_minutes;
+    uint8_t beijing_time_flag;
+    uint8_t gTimer_pro_mode_key_be_select;
+
     uint8_t gTimer_prcoess_iwdg;
 	uint8_t gTimer_process_display;
     uint8_t gTimer_wifi_blink;
+    uint8_t gTimer_pro_action_publis;
+    uint8_t gTimer_pro_pub_set_timer;
 	
 
 }bsp_ctl;
@@ -43,7 +53,7 @@ extern uint8_t (*plasma_state)(void); //adjust of plasma is open or close
 extern uint8_t (*ultrasonic_state)(void); //adjust of ultrasoic is open or close
 
 extern uint8_t (*ai_mode_state)(void);
-extern uint8_t (*wifi_link_net_state)(void);
+
 
 
 extern uint8_t (*ptc_error_state)(void);

@@ -10,7 +10,7 @@ uint8_t (*plasma_state)(void); //adjust of plasma is open or close
 uint8_t (*ultrasonic_state)(void); //adjust of ultrasoic is open or close
 
 uint8_t (*ai_mode_state)(void);
-uint8_t (*wifi_link_net_state)(void);
+
 
 
 
@@ -19,7 +19,7 @@ uint8_t (*fan_error_state)(void);
 
 
 static uint8_t ai_mode_default(void);
-static uint8_t wifi_link_net_default(void);
+
 
 
 
@@ -30,7 +30,7 @@ void bsp_ctl_init(void)
    gctl_t.ptc_warning = 0;
    gctl_t.ptc_flag=1;
    gctl_t.plasma_flag =1;
-   gctl_t.ultrasoinc_flag =1;
+   gctl_t.ultrasonic_flag =1;
    gctl_t.ai_flag =1;
    g_tMsg.key_add_dec_mode = set_temp_value_item;
    
@@ -117,7 +117,7 @@ void  Ultrasonic_state_Handler(uint8_t(*ultrasonic_handler)(void))
 uint8_t Ultrasonic_Default_Handler(void)
 {
 	
-	if(gctl_t.ultrasoinc_flag == 1){
+	if(gctl_t.ultrasonic_flag == 1){
         return 1;
 	}
 	else{
@@ -214,22 +214,5 @@ void  Ai_Mode_Handler(uint8_t(*ai_handler)(void))
  * Return Ref: close or open 
  * 
 *****************************************************************************/
-static uint8_t wifi_link_net_default(void)
-{
-
-    if(gctl_t.wifi_flag ==1)return 1;
-    else return 0;
-   
-
-
-}
-
-void  Wifi_Link_Net_Handler(uint8_t(*wifi_handler)(void))
-{
-
-    wifi_link_net_state = wifi_handler;
-
-}
-
 
 

@@ -43,7 +43,7 @@ static TaskHandle_t xHandleTaskMsgPro = NULL;
 static TaskHandle_t xHandleTaskStart = NULL;
 
 
-static void display_works_timer_timing_fun(uint8_t sel_item);
+static void display_disp_works_timingr_timing_fun(uint8_t sel_item);
 
 static void mode_long_short_key_fun(void);
 
@@ -175,7 +175,7 @@ static void vTaskMsgPro(void *pvParameters)
 
                  LCD_Wind_Run_Icon(0);
                  mode_long_short_key_fun();
-                 display_works_timer_timing_fun(g_tMsg.key_mode);
+                 display_disp_works_timingr_timing_fun(g_tMsg.key_mode);
                  Lcd_Display_Temp_Digital_Blink();
                  
                 
@@ -299,6 +299,7 @@ static void vTaskStart(void *pvParameters)
             if(power_on_first==2 && gkey_t.key_power==power_on){
 
                 MainBoard_Run_Feature_Handler();
+                WIFI_Process_Handler();
 
            }
 
@@ -471,7 +472,7 @@ static void mode_long_short_key_fun(void)
 *   
 
 *********************************************************************************/
-static void display_works_timer_timing_fun(uint8_t sel_item)
+static void display_disp_works_timingr_timing_fun(uint8_t sel_item)
 {
 
    static uint8_t counter_switch;

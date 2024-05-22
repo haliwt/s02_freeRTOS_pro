@@ -20,22 +20,22 @@ void Dec_Key_Fun(uint8_t cmd)
          case set_temp_value_item: //set temperature 
 
            
-             gkey_t.set_temp_value --;
-			if( gkey_t.set_temp_value <20)  gkey_t.set_temp_value =40;
-	        else if( gkey_t.set_temp_value  >40) gkey_t.set_temp_value =40;
+             gctl_t.gSet_temperature_value  --;
+			if( gctl_t.gSet_temperature_value  <20)  gctl_t.gSet_temperature_value  =40;
+	        else if( gctl_t.gSet_temperature_value   >40) gctl_t.gSet_temperature_value  =40;
 
-           if( gkey_t.set_temp_value  > 40) gkey_t.set_temp_value = 20;
+           if( gctl_t.gSet_temperature_value   > 40) gctl_t.gSet_temperature_value  = 20;
 				
-			   glcd_t.number3_low =  gkey_t.set_temp_value  / 10 ;
-            glcd_t.number3_high =  gkey_t.set_temp_value  / 10 ;
-			   glcd_t.number4_low  = gkey_t.set_temp_value  % 10; //
-            glcd_t.number4_high =  gkey_t.set_temp_value  % 10; //
+			   glcd_t.number3_low =  gctl_t.gSet_temperature_value   / 10 ;
+            glcd_t.number3_high =  gctl_t.gSet_temperature_value   / 10 ;
+			   glcd_t.number4_low  = gctl_t.gSet_temperature_value   % 10; //
+            glcd_t.number4_high =  gctl_t.gSet_temperature_value   % 10; //
 
             gkey_t.gTimer_set_temp_value=0;
             gProcess_t.set_temp_confirm = 0;
             g_tMsg.key_add_dec_pressed_flag = 1;
 
-            Disp_SetTemp_Value(gkey_t.set_temp_value);
+            Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
 
          break;
 
@@ -95,23 +95,23 @@ void Add_Key_Fun(uint8_t cmd)
     case set_temp_value_item:  //set temperature value 
 
         
-        gkey_t.set_temp_value  ++;
-        if(gkey_t.set_temp_value  < 20){
-            gkey_t.set_temp_value =20;
+        gctl_t.gSet_temperature_value   ++;
+        if(gctl_t.gSet_temperature_value   < 20){
+            gctl_t.gSet_temperature_value  =20;
         }
 
-        if(gkey_t.set_temp_value  > 40)gkey_t.set_temp_value = 20;
+        if(gctl_t.gSet_temperature_value   > 40)gctl_t.gSet_temperature_value  = 20;
 
-        glcd_t.number3_low = gkey_t.set_temp_value  / 10 ;
-        glcd_t.number3_high = gkey_t.set_temp_value  / 10 ;
-        glcd_t.number4_low  =gkey_t.set_temp_value  % 10; //
-        glcd_t.number4_high = gkey_t.set_temp_value % 10; //
+        glcd_t.number3_low = gctl_t.gSet_temperature_value   / 10 ;
+        glcd_t.number3_high = gctl_t.gSet_temperature_value   / 10 ;
+        glcd_t.number4_low  =gctl_t.gSet_temperature_value   % 10; //
+        glcd_t.number4_high = gctl_t.gSet_temperature_value  % 10; //
 
      
         gkey_t.gTimer_set_temp_value=0;
         gProcess_t.set_temp_confirm = 0;
          g_tMsg.key_add_dec_pressed_flag = 1;
-        Disp_SetTemp_Value(gkey_t.set_temp_value);
+        Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
 
     break;
 
