@@ -169,7 +169,7 @@ static void vTaskMsgPro(void *pvParameters)
         
          if(gkey_t.key_power==power_on){
 
-                 Run_Main_Handler();
+                 Display_MainBoard_Feature_Handler();
          
                  LCD_Timer_Colon_Flicker();
 
@@ -298,7 +298,7 @@ static void vTaskStart(void *pvParameters)
             }
             if(power_on_first==2 && gkey_t.key_power==power_on){
 
-         
+                MainBoard_Run_Feature_Handler();
 
            }
 

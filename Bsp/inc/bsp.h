@@ -78,12 +78,13 @@ void LCD_Disp_Works_Timing_Init(void);
 void LCD_Disp_Timer_Timing_Init(void);
 
 
+void MainBoard_Run_Feature_Handler(void);
 
 
 
 void PowerOff_freeFun(void);
 
-void Run_Main_Handler(void);
+void Display_MainBoard_Feature_Handler(void);
 
 void Display_Works_Timing(void);
 

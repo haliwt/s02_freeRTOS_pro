@@ -13,15 +13,6 @@ static void Process_Dynamical_Action(void);
 
 static void Display_LCD_Works_Timing(void);
 
-
-
-
-
-
-
-
-
-
 /*
 *********************************************************************************************************
 *	函 数 名: bsp_Idle
@@ -66,28 +57,17 @@ void bsp_Idle(void)
 void PowerOn_Init(void)
 {
   
-
-    //gProcess_t.gTimer_display_works_minutes=0;
-    ///gProcess_t.gTimer_display_works_hours =0;
-
     LED_Mode_On();
     LED_Power_On();
     Backlight_On();
-
-   // Update_DHT11_Value();
-   /// Lcd_Display_Detials();
-
-    //fan on
-   /// Mainboard_Action_Fun();
-
-    
+    Mainboard_Action_Fun();
 
 }
 
 
 void PowerOff_freeFun(void)
 {
-      LED_Mode_Off();
+        LED_Mode_Off();
 	   
 	   
         Ptc_Off();
@@ -221,6 +201,8 @@ static void Process_Dynamical_Action(void)
 	   Plasma_Off();
 
 	}
+
+    
 
 }
 
@@ -505,7 +487,7 @@ void LCD_Disp_Timer_Timing_Init(void)
 *	返 回 值: 无
 *
 *********************************************************************************************************/ 
-void Run_Main_Handler(void)
+void Display_MainBoard_Feature_Handler(void)
 {
 
 //
@@ -531,5 +513,13 @@ void Run_Main_Handler(void)
     }
     Disip_Wifi_Icon_State();
 
-    
 }
+
+void MainBoard_Run_Feature_Handler(void)
+{
+
+    Process_Dynamical_Action();
+
+
+}
+
