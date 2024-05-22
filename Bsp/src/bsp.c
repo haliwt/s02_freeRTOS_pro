@@ -508,14 +508,14 @@ void LCD_Disp_Timer_Timing_Init(void)
 void Run_Main_Handler(void)
 {
 
-
-    if(gProcess_t.gTimer_display_dht11_value  >3 && gProcess_t.gTimer_display_dht11_value <5){
-
-             Process_Dynamical_Action();
-
-
-     }
-     else if(gProcess_t.gTimer_display_dht11_value > 9){
+//
+//    if(gProcess_t.gTimer_display_dht11_value  >3 && gProcess_t.gTimer_display_dht11_value <5){
+//
+//             Process_Dynamical_Action();
+//
+//
+//     }
+     if(gProcess_t.gTimer_display_dht11_value > 9){
 
           gProcess_t.gTimer_display_dht11_value =0;
             // Update_DHT11_Value();

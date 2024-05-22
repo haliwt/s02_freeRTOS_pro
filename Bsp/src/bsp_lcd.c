@@ -413,6 +413,8 @@ void LCD_Numbers1234_Init(void)
      TM1723_Write_Display_Data(0xCA,(0x01+lcdNumber6_High[0] + lcdNumber6_Low[0] ) & 0xffff); 
      TM1723_Write_Display_Data(0xCB,(0x01+lcdNumber7_High[0] + lcdNumber7_Low[0]  ) & 0xffff);
      TM1723_Write_Display_Data(0xCC,(0x01+lcdNumber8_High[0] + lcdNumber8_Low[0] ) & 0xffff); //numbers :
+     //AI icon display
+     TM1723_Write_Display_Data(0xC4,(0x01+lcdNumber1_High[glcd_t.number1_high] + lcdNumber1_Low[glcd_t.number1_low]) & 0xffff);
      
 
 }

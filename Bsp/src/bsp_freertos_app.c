@@ -474,17 +474,18 @@ static void mode_long_short_key_fun(void)
 static void display_works_timer_timing_fun(uint8_t sel_item)
 {
 
-
+   static uint8_t counter_switch;
    static uint8_t disp_timer_ref = 0xff ,disp_works_ref = 0xff;
     switch(sel_item){
 
     case disp_works_timing :
    
-//         if(gctl_t.ai_flag ==0){
-//             gctl_t.ai_flag =1;
-//             LCD_Number_Wifi_OneTwo_Humidity();
-//             LCD_Disp_Works_Timing_Init();
-//           }
+         if(gctl_t.ai_flag ==0){
+             gctl_t.ai_flag =1;
+            
+             LCD_Disp_Works_Timing_Init();
+           }
+        counter_switch=0;
 
         Display_Works_Timing();
        
@@ -512,10 +513,15 @@ static void display_works_timer_timing_fun(uint8_t sel_item)
         }
         else if( g_tMsg.set_timer_timing_success == 0 ){ //&& gkey_t.gTimer_disp_switch_disp_mode > 3){
 
+            counter_switch ++;
+            gctl_t.ai_flag =0;
             LCD_Disp_Timer_Timing_Init();
 
-            
-            g_tMsg.key_mode = disp_works_timing;
+            if(counter_switch > 250){
+             
+               g_tMsg.key_mode = disp_works_timing;
+
+             }
            
 
         }
