@@ -32,6 +32,8 @@ void Dec_Key_Fun(uint8_t cmd)
             glcd_t.number4_high =  gkey_t.set_temp_value  % 10; //
 
             gkey_t.gTimer_set_temp_value=0;
+            gProcess_t.set_temp_confirm = 0;
+            g_tMsg.key_add_dec_pressed_flag = 1;
 
             Disp_SetTemp_Value(gkey_t.set_temp_value);
 
@@ -107,7 +109,8 @@ void Add_Key_Fun(uint8_t cmd)
 
      
         gkey_t.gTimer_set_temp_value=0;
-
+        gProcess_t.set_temp_confirm = 0;
+         g_tMsg.key_add_dec_pressed_flag = 1;
         Disp_SetTemp_Value(gkey_t.set_temp_value);
 
     break;

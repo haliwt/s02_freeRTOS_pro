@@ -22,10 +22,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     if(tm1>9){
         tm1=0;
         
-        glcd_t.gTimer_lcd_blink++;
         
-    	glcd_t.gTimer_fan_blink++;
-    	
+       glcd_t.gTimer_fan_blink++;
     	
     }
 	
@@ -33,6 +31,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
        tm3=0;
        glcd_t.gTimer_colon_blink++ ;
        gProcess_t.gTimer_disp_set_timer_blink ++; //set timer timing counter is digital blink.
+       glcd_t.gTimer_set_temp_blink++;   //set temperature value digital numbers blink .
 
        
 	  
@@ -66,7 +65,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		
 		gProcess_t.gTimer_works_counter++;
 
-        gProcess_t.gTimer_normal_display_lcd++;
+        gProcess_t.gTimer_display_dht11_value ++;
         gProcess_t.gTimer_timer_Counter++;   //timer timing counter value 
 
         

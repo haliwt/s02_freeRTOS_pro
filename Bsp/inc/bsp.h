@@ -52,7 +52,7 @@ typedef struct {
 
    uint8_t gTimer_run_adc;
    uint8_t gTimer_run_dht11;
-   uint8_t gTimer_normal_display_lcd;
+   uint8_t gTimer_display_dht11_value ;
    uint8_t gTimer_run_one_mintue ;
    
    uint16_t gTimer_run_total;
@@ -94,6 +94,9 @@ void LCD_Disp_Timer_Timing(void);
 
 
 void Set_Timer_Timing_Lcd_Blink(uint8_t hours,uint8_t minutes);
+
+
+
 
 
 #endif 

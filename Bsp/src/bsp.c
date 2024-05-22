@@ -349,7 +349,7 @@ void LCD_Disp_Works_Timing_Init(void)
 */
 void Set_Timer_Timing_Lcd_Blink(uint8_t hours,uint8_t minutes)
 {
-    if(gProcess_t.gTimer_disp_set_timer_blink < 6){//4* 100ms
+    if(gProcess_t.gTimer_disp_set_timer_blink < 7){//4* 100ms
 
 	  glcd_t.number5_low =  0x0A ;
       glcd_t.number5_high =  0x0A ;
@@ -368,7 +368,7 @@ void Set_Timer_Timing_Lcd_Blink(uint8_t hours,uint8_t minutes)
 
 
     }
-	else if(gProcess_t.gTimer_disp_set_timer_blink > 5 && gProcess_t.gTimer_disp_set_timer_blink < 12){
+	else if(gProcess_t.gTimer_disp_set_timer_blink > 6 && gProcess_t.gTimer_disp_set_timer_blink < 14){
 	
 
 
@@ -387,7 +387,7 @@ void Set_Timer_Timing_Lcd_Blink(uint8_t hours,uint8_t minutes)
 
        
 	}
-	else if(gProcess_t.gTimer_disp_set_timer_blink > 11){
+	else if(gProcess_t.gTimer_disp_set_timer_blink > 13){
 	  gProcess_t.gTimer_disp_set_timer_blink =0;
 
     }
@@ -495,6 +495,8 @@ void LCD_Disp_Timer_Timing_Init(void)
 
 }
 
+
+
 /**********************************************************************************************************
 *
 *	函 数 名: void Dissplay_Timer_Timing(uint8_t hours,uint8_t minutes)
@@ -507,30 +509,27 @@ void Run_Main_Handler(void)
 {
 
 
-    if(gProcess_t.gTimer_normal_display_lcd >3 && gProcess_t.gTimer_normal_display_lcd<5){
+    if(gProcess_t.gTimer_display_dht11_value  >3 && gProcess_t.gTimer_display_dht11_value <5){
 
              Process_Dynamical_Action();
 
 
      }
-     else if(gProcess_t.gTimer_normal_display_lcd  > 9){
+     else if(gProcess_t.gTimer_display_dht11_value > 9){
 
-          gProcess_t.gTimer_normal_display_lcd=0;
+          gProcess_t.gTimer_display_dht11_value =0;
             // Update_DHT11_Value();
 
-           
-              Update_DHT11_Value();
-    			  	
-    	     Disp_HumidityTemp_Value();
+           if(g_tMsg.key_add_dec_pressed_flag == 0){
+                  Update_DHT11_Value();
+                  Disp_HumidityTemp_Value();
+
+            }
 
     	          
 
     }
-    Disip_Wifi_Icon_State(  );
+    Disip_Wifi_Icon_State();
 
     
-     
-
-   
-
 }

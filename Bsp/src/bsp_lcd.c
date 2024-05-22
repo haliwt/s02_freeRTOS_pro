@@ -662,7 +662,7 @@ void Display_Wind_Icon_Inint(void)
 *****************************************************************************/
 void LCD_Timer_Colon_Flicker(void)
 {
-   if(glcd_t.gTimer_colon_blink > 4 && glcd_t.gTimer_colon_blink < 6){
+   if(glcd_t.gTimer_colon_blink > 4 && glcd_t.gTimer_colon_blink < 7){
 
         Colon_Symbol = 0x01;
         if(g_tMsg.key_mode != mode_set_timer){
@@ -671,7 +671,7 @@ void LCD_Timer_Colon_Flicker(void)
           
         
    }
-   else if(glcd_t.gTimer_colon_blink > 5  && glcd_t.gTimer_colon_blink < 7){
+   else if(glcd_t.gTimer_colon_blink > 6  && glcd_t.gTimer_colon_blink < 9){
 
       Colon_Symbol = 0x0;
       if(g_tMsg.key_mode != mode_set_timer){
@@ -689,54 +689,7 @@ void LCD_Timer_Colon_Flicker(void)
     TIM1723_Write_Cmd(LUM_VALUE);//(0x9B);
 }
 
-/*************************************************************************************
-	*
-	*Function Name: void Lcd_Display_Temp_Digital_Blink(void)
-	*Function : digital '3' '4' blink 3 times 
-	*Input Ref: temperature of value 
-	*Return Ref:NO
-	*
-*************************************************************************************/
-void Lcd_Display_Temp_Digital_Blink(void)
-{
-    static uint8_t times_blink;
-	if(glcd_t.gTimer_lcd_blink  < 100){ //200ms
 
-          //number '3' 
-		  TM1723_Write_Display_Data(0xC2,(lcdNumber3_High[glcd_t.number3_high] + lcdNumber3_Low[glcd_t.number3_low] + TEMP_Symbol ) & 0xff); //numbers : '3' addr: 0xC2
-
-		 //number '4' 
-		 TM1723_Write_Display_Data(0xC3,(lcdNumber4_High[glcd_t.number4_high] + lcdNumber4_Low[glcd_t.number4_low] + HUMI_Symbol) & 0xff); //numbers : '4' addr: 0xC3
-
-     }
-	 else if(glcd_t.gTimer_lcd_blink  > 99 && glcd_t.gTimer_lcd_blink  < 201){ //lef off
-
-		  //number '3' 
-		  TM1723_Write_Display_Data(0xC2,(lcdNumber3_High[0x0A] + lcdNumber3_Low[0x0A] + TEMP_Symbol ) & 0xff); //numbers : '3' addr: 0xC2
-
-		 //number '4' 
-		 TM1723_Write_Display_Data(0xC3,(lcdNumber4_High[0x0A] + lcdNumber4_Low[0x0A] + HUMI_Symbol) & 0xff); //numbers : '4' addr: 0xC3
-
-     }
-	 else{
-       times_blink ++ ;
-	   glcd_t.gTimer_lcd_blink =0;
-
-	 }
-
-
-	 if(times_blink > 3){
-
-	   times_blink =0 ;
-       gProcess_t.set_temp_confirm = 0; //设置温度的值，完成，清零，回到正常温湿度传感器显示值
-       gProcess_t.gTimer_run_dht11 = 70;
-
-	 }
-
-
-
-
-}
 
 /*************************************************************************************
 	*
@@ -764,9 +717,8 @@ void Lcd_Display_Off(void)
 void Disp_HumidityTemp_Value(void)
 {
 
-     
-   LCD_Number_Wifi_OneTwo_Humidity();
-   if(g_tMsg.key_add_dec_mode != set_temp_value_item){
+   if(g_tMsg.key_add_dec_mode != set_temp_value_item || gProcess_t.set_temp_confirm == 1){
+       LCD_Number_Wifi_OneTwo_Humidity();
        LCD_Number_ThreeFour_Temperature();
 
     }
@@ -791,5 +743,61 @@ void Disp_SetTemp_Value(uint8_t temp_value)
 }
 
 
+/*************************************************************************************
+	*
+	*Function Name: void Lcd_Display_Temp_Digital_Blink(void)
+	*Function : digital '3' '4' blink 3 times 
+	*Input Ref: temperature of value 
+	*Return Ref:NO
+	*
+*************************************************************************************/
+void Lcd_Display_Temp_Digital_Blink(void)
+{
+    static uint8_t times_blink;
+
+    if(gkey_t.gTimer_set_temp_value  > 2 && gProcess_t.set_temp_confirm==0 &&  g_tMsg.key_add_dec_pressed_flag == 1){
+	if(glcd_t.gTimer_set_temp_blink  < 4){ //4 *100ms
+
+       //number '3' 
+             TM1723_Write_Display_Data(0xC2,(lcdNumber3_High[0x0A] + lcdNumber3_Low[0x0A] + TEMP_Symbol ) & 0xff); //numbers : '3' addr: 0xC2
+     
+            //number '4' 
+            TM1723_Write_Display_Data(0xC3,(lcdNumber4_High[0x0A] + lcdNumber4_Low[0x0A] + HUMI_Symbol) & 0xff); //numbers : '4' addr: 0xC3
+
+     }
+	 else if(glcd_t.gTimer_set_temp_blink  > 3 && glcd_t.gTimer_set_temp_blink  < 8){ //lef off
+
+		   //number '3' 
+		  TM1723_Write_Display_Data(0xC2,(lcdNumber3_High[glcd_t.number3_high] + lcdNumber3_Low[glcd_t.number3_low] + TEMP_Symbol ) & 0xffff); //numbers : '3' addr: 0xC2
+
+		 //number '4' 
+		 TM1723_Write_Display_Data(0xC3,(lcdNumber4_High[glcd_t.number4_high] + lcdNumber4_Low[glcd_t.number4_low] + HUMI_Symbol) & 0xffff); //numbers : '4' addr: 0xC3
+
+     }
+	 else if(glcd_t.gTimer_set_temp_blink > 7){
+       times_blink ++ ;
+	   glcd_t.gTimer_set_temp_blink =0;
+
+	 }
+
+
+	 if(times_blink > 3){
+
+	   times_blink =0 ;
+       gProcess_t.gTimer_display_dht11_value  =0;
+       gProcess_t.set_temp_confirm = 1; //设置温度的值，完成，清零，回到正常温湿度传感器显示值
+       g_tMsg.key_add_dec_pressed_flag=0;
+       gProcess_t.gTimer_display_dht11_value  = 8;
+      // Disp_HumidityTemp_Value();
+       
+
+	 }
+
+    }
+
+
+
+
+}
 
 

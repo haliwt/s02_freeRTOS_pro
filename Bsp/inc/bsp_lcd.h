@@ -100,7 +100,7 @@ typedef struct _LCD_Ref{
 	 uint8_t gTimer_colon_blink;
 	 uint8_t gTimer_fan_blink;
 	 uint8_t gTimer_error_times;
-	 uint8_t gTimer_lcd_blink;
+	 uint8_t gTimer_set_temp_blink;
 	
 }lcd_ref;
 
@@ -138,6 +138,7 @@ void LCD_Number_Wifi_OneTwo_Humidity(void);
 void Disp_SetTemp_Value(uint8_t temp_value);
 
 void Lcd_Display_Temp_Digital_Blink(void);
+
 
 
 #endif 

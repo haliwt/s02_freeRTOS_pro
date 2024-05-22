@@ -176,6 +176,7 @@ static void vTaskMsgPro(void *pvParameters)
                  LCD_Wind_Run_Icon(0);
                  mode_long_short_key_fun();
                  display_works_timer_timing_fun(g_tMsg.key_mode);
+                 Lcd_Display_Temp_Digital_Blink();
                  
                 
 
@@ -551,17 +552,10 @@ static void display_works_timer_timing_fun(uint8_t sel_item)
                 
                 LCD_Disp_Timer_Timing_Init();
                
-                 
-
             }
-
-
-
         }
 
        break;
-
-      }
-
+    }
 }
 
