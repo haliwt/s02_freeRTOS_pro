@@ -32,7 +32,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     if(tm3>99){ //10*10 = 100ms 
        tm3=0;
        glcd_t.gTimer_colon_blink++ ;
-       gProcess_t.gTimer_disp_set_timer_blink ++;
+       gProcess_t.gTimer_disp_set_timer_blink ++; //set timer timing counter is digital blink.
+
+       
 	  
     }
 
@@ -66,6 +68,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
         gProcess_t.gTimer_normal_display_lcd++;
         gProcess_t.gTimer_timer_Counter++;   //timer timing counter value 
+
+        
 
        
 		

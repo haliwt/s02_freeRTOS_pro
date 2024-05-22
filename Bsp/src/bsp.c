@@ -349,45 +349,50 @@ void LCD_Disp_Works_Timing_Init(void)
 */
 void Set_Timer_Timing_Lcd_Blink(uint8_t hours,uint8_t minutes)
 {
-//    if(gProcess_t.gTimer_disp_set_timer_blink < 30){//300ms
-//
-//	  glcd_t.number5_low =  hours / 10 ;
-//      glcd_t.number5_high =  hours / 10 ;
-//
-//      glcd_t.number6_low  = minutes% 10; //
-//      glcd_t.number6_high =  minutes % 10; //
-//      
-//       //dispaly minutes 
-//      glcd_t.number7_low =  minutes /10;
-//      glcd_t.number7_high =   minutes /10;
-//
-//      glcd_t.number8_low =  minutes %10;
-//      glcd_t.number8_high =    minutes %10;
-//
-//
-//    }
-//	else if(gProcess_t.gTimer_disp_set_timer_blink > 29 && gProcess_t.gTimer_disp_set_timer_blink > 61 ){
-////	  glcd_t.number5_low =  0x0A ;
-////      glcd_t.number5_high =  0x0A ;
-////
-////      glcd_t.number6_low  =  0x0A; //
-////      glcd_t.number6_high =  0x0A; //
-////      
-////       //dispaly minutes 
-////      glcd_t.number7_low =   0x0A;
-////      glcd_t.number7_high =   0x0A;
-////
-////      glcd_t.number8_low =   0x0A;
-////      glcd_t.number8_high =   0x0A;
-////
-//
-//	}
-//	else{
-//	 gProcess_t.gTimer_disp_set_timer_blink =0;
-//
-//    }
-//
-//    LCD_Disp_Timer_Timing();
+    if(gProcess_t.gTimer_disp_set_timer_blink < 4){//4* 100ms
+
+	  glcd_t.number5_low =  0x0A ;
+      glcd_t.number5_high =  0x0A ;
+
+      glcd_t.number6_low  =  0x0A; //
+      glcd_t.number6_high =  0x0A; //
+      
+       //dispaly minutes 
+      glcd_t.number7_low =   0x0A;
+      glcd_t.number7_high =   0x0A;
+
+      glcd_t.number8_low =   0x0A;
+      glcd_t.number8_high =   0x0A;
+
+    
+
+
+    }
+	else if(gProcess_t.gTimer_disp_set_timer_blink > 3 && gProcess_t.gTimer_disp_set_timer_blink < 8){
+	
+
+
+      glcd_t.number5_low =  gProcess_t.set_timer_timing_hours / 10 ;
+      glcd_t.number5_high =  gProcess_t.set_timer_timing_hours / 10 ;
+
+      glcd_t.number6_low  = gProcess_t.set_timer_timing_hours% 10; //
+      glcd_t.number6_high = gProcess_t.set_timer_timing_hours % 10; //
+      
+       //dispaly minutes 
+      glcd_t.number7_low =  0;
+      glcd_t.number7_high =  0;
+
+      glcd_t.number8_low = 0;
+      glcd_t.number8_high =   0;
+
+       
+	}
+	else if(gProcess_t.gTimer_disp_set_timer_blink > 7){
+	  gProcess_t.gTimer_disp_set_timer_blink =0;
+
+    }
+
+  	 LCD_Disp_Timer_Timing();
 
 }
 

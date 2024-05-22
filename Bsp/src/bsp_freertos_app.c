@@ -129,8 +129,7 @@ static void vTaskMsgPro(void *pvParameters)
 							eSetBits);          /* 将目标任务的事件标志位与BIT_0进行或操作，  将结果赋值给事件标志位。*/
 				                                    
 			}
-
-           if((ulValue & MODE_KEY_1) != 0){
+            else if((ulValue & MODE_KEY_1) != 0){
 
                //switch timer timing and works timing 
                if(gkey_t.key_power == power_on){
@@ -141,11 +140,8 @@ static void vTaskMsgPro(void *pvParameters)
                  // Buzzer_KeySound();
               
                  }
-                  
-                  
-                }   
-               //KEY DOWN FUNCTION   
-            if((ulValue & DEC_KEY_2) != 0){
+            }   
+            else if((ulValue & DEC_KEY_2) != 0){
 
                
                 Dec_Key_Fun(g_tMsg.key_add_dec_mode);
@@ -154,17 +150,12 @@ static void vTaskMsgPro(void *pvParameters)
 
 
             }
-
-           if((ulValue & ADD_KEY_3) != 0){
+            else if((ulValue & ADD_KEY_3) != 0){
 
               
                   Add_Key_Fun(g_tMsg.key_add_dec_mode);
 
                   Buzzer_KeySound();
-
-
-
-
             }
 
       
@@ -188,11 +179,7 @@ static void vTaskMsgPro(void *pvParameters)
                  
                 
 
-               
-                     
-                     
-              
-            }
+         }
         
 			
 		}
@@ -537,8 +524,8 @@ static void display_works_timer_timing_fun(uint8_t sel_item)
 
     case mode_set_timer:
     
-
         Set_Timer_Timing_Lcd_Blink(gProcess_t.set_timer_timing_hours,gProcess_t.set_timer_timing_minutes);
+       
         if(gkey_t.gTimer_disp_set_timer > 3){
 
             if(gProcess_t.set_timer_timing_hours == 0 && gProcess_t.set_timer_timing_minutes==0){
@@ -559,6 +546,7 @@ static void display_works_timer_timing_fun(uint8_t sel_item)
               
                 g_tMsg.key_mode = disp_timer_timing;
                 g_tMsg.key_add_dec_mode = set_temp_value_item;
+                
                 LCD_Disp_Timer_Timing_Init();
                
                  

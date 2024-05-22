@@ -150,7 +150,7 @@ static void LCD_Number_ThreeFour_Temperature(void);
 static uint8_t Detecting_Fault_Code(void);
 static void LCD_Fault_Numbers_Code(void);
 
-static void Lcd_Display_Temp_Digital_Blink(void);
+
 
 //static void LCD_Number_FiveSix_Hours(void);
 //static void LCD_Number_SevenEight_Minutes(void);
@@ -432,18 +432,25 @@ void LCD_Number_SevenEight_Minutes(void)
      
      if(ultrasonic_state() == 1){
 
-        //timing ":" blank
-        //TM1723_Write_Display_Data(0xCB,(0x01+lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low]) & 0xffff); //numbers : '1' addr: 0xC4
 
+      if(g_tMsg.key_mode == mode_set_timer){
+
+        //timing ":" blank
+        TM1723_Write_Display_Data(0xCB,(0x01+lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low]) & 0xffff); //numbers : '1' addr: 0xC4
+       }
 	  //number '8'
 	  TM1723_Write_Display_Data(0xCC,(0x01+lcdNumber8_High[glcd_t.number8_high] + lcdNumber8_Low[glcd_t.number8_low] ) & 0xffff); //numbers : '2' addr: 0xC
 
       }
       else{
 
-         
+         if(g_tMsg.key_mode == mode_set_timer){
 
-         TM1723_Write_Display_Data(0xCC,(0x01+lcdNumber8_High[glcd_t.number8_high] + lcdNumber8_Low[glcd_t.number8_low] ) & 0xffff); //numbers
+           //timing ":" blank
+           TM1723_Write_Display_Data(0xCB,(0x01+lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low]) & 0xffff); //numbers : '1' addr: 0xC4
+          }
+
+         TM1723_Write_Display_Data(0xCC,(0x00+lcdNumber8_High[glcd_t.number8_high] + lcdNumber8_Low[glcd_t.number8_low] ) & 0xffff); //numbers
 
       }
 }
@@ -658,13 +665,7 @@ void LCD_Timer_Colon_Flicker(void)
         if(g_tMsg.key_mode != mode_set_timer){
            TM1723_Write_Display_Data(0xCB,(Colon_Symbol+lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
           }
-          else if(g_tMsg.key_mode == mode_set_timer){
-
-               glcd_t.number7_low =   gProcess_t.set_timer_timing_minutes /10;
-               glcd_t.number7_high =   gProcess_t.set_timer_timing_minutes /10;
-              TM1723_Write_Display_Data(0xCB,(Colon_Symbol+lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
-
-          }
+          
         
    }
    else if(glcd_t.gTimer_colon_blink > 5  && glcd_t.gTimer_colon_blink < 7){
@@ -674,14 +675,7 @@ void LCD_Timer_Colon_Flicker(void)
         TM1723_Write_Display_Data(0xCB,(Colon_Symbol+lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
 
       }
-      else if(g_tMsg.key_mode == mode_set_timer){
-
-         glcd_t.number7_low =   gProcess_t.set_timer_timing_minutes /10;
-         glcd_t.number7_high =   gProcess_t.set_timer_timing_minutes /10;
-         TM1723_Write_Display_Data(0xCB,(Colon_Symbol+lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
-
-
-      }
+     
    }
    else if(glcd_t.gTimer_colon_blink > 8){
 
@@ -700,7 +694,7 @@ void LCD_Timer_Colon_Flicker(void)
 	*Return Ref:NO
 	*
 *************************************************************************************/
-static void Lcd_Display_Temp_Digital_Blink(void)
+void Lcd_Display_Temp_Digital_Blink(void)
 {
     static uint8_t times_blink;
 	if(glcd_t.gTimer_lcd_blink  < 100){ //200ms

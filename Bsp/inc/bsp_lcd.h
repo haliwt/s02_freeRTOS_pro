@@ -137,6 +137,7 @@ void LCD_Number_Wifi_OneTwo_Humidity(void);
 
 void Disp_SetTemp_Value(uint8_t temp_value);
 
+void Lcd_Display_Temp_Digital_Blink(void);
 
 
 #endif 
