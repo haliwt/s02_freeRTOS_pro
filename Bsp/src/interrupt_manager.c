@@ -159,16 +159,14 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         wifi_t.gTimer_linking_tencent_duration++;
 
         wifi_t.gTimer_login_tencent_times ++;
+		wifi_t.gTimer_publish_dht11++;
+		wifi_t.gTimer_get_beijing_time++;
+		wifi_t.gTimer_auto_detected_net_state_times++;
+		wifi_t.gTimer_read_beijing_time ++;
+		wifi_t.gTimer_wifi_counter_link_beijing_times++;
        
 
-        
-
-       
-		
-
-     
-		
-		if(tm2 > 59){ //60s = 1 minutes
+        if(tm2 > 59){ //60s = 1 minutes
 			tm2 =0;
 			gProcess_t.gTimer_run_total++;
 			gProcess_t.gTimer_run_time_out ++ ;

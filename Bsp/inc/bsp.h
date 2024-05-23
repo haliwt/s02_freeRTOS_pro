@@ -46,8 +46,22 @@
 #include "bsp_subscription.h"
 #include "bsp_mqtt_iot.h"
 
-#define ENABLE_INT()	__set_PRIMASK(0)	/* 使能全局中断 */
-#define DISABLE_INT()	__set_PRIMASK(1)	/* 禁止全局中断 */
+
+#define  USE_FreeRTOS      1
+
+#if USE_FreeRTOS == 1
+	#include "FreeRTOS.h"
+	#include "task.h"
+	#define DISABLE_INT()    taskENTER_CRITICAL()
+	#define ENABLE_INT()     taskEXIT_CRITICAL()
+#else
+	/* 驴陋鹿脴脠芦戮脰脰脨露脧碌脛潞锚 */
+	#define ENABLE_INT()	__set_PRIMASK(0)	/* enable global interrupter */
+	#define DISABLE_INT()	__set_PRIMASK(1)	/*  */
+#endif
+
+
+
 
 typedef struct {
 

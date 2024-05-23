@@ -180,7 +180,7 @@ static void vTaskMsgPro(void *pvParameters)
                  display_disp_works_timingr_timing_fun(g_tMsg.key_mode);
                  Lcd_Display_Temp_Digital_Blink();
 
-                 WIFI_Process_Handler();
+                 
                  
                 
 
@@ -252,7 +252,7 @@ static void vTaskStart(void *pvParameters)
 
                 recieve_flag++;
                 MainBoard_Run_Feature_Handler();
-               // WIFI_Process_Handler();
+                WIFI_Process_Handler();
 
            }
            else{
