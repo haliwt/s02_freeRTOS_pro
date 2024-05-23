@@ -4,7 +4,9 @@
 uint8_t recieve_flag;
 uint8_t receive_key_message;
 uint8_t receive_task_start;
-uint16_t key_long_counter;
+uint8_t key_long_counter;
+uint8_t power_key_long_counter ;
+
 /*
 **********************************************************************************************************
 											宏定义
@@ -43,10 +45,10 @@ static TaskHandle_t xHandleTaskMsgPro = NULL;
 static TaskHandle_t xHandleTaskStart = NULL;
 
 
-static void display_works_timer_timing_fun(uint8_t sel_item);
+static void display_disp_works_timingr_timing_fun(uint8_t sel_item);
 
 static void mode_long_short_key_fun(void);
-
+static void power_long_short_key_fun(void);
 
 MSG_T   g_tMsg;
 
@@ -122,8 +124,8 @@ static void vTaskMsgPro(void *pvParameters)
              
 			if((ulValue & POWER_KEY_0) != 0)
 			{
-
-          
+   
+                     
                  xTaskNotify(xHandleTaskStart, /* 目标任务 */
 							RUN_POWER_4 ,            /* 设置目标任务事件标志位bit0  */
 							eSetBits);          /* 将目标任务的事件标志位与BIT_0进行或操作，  将结果赋值给事件标志位。*/
@@ -175,12 +177,15 @@ static void vTaskMsgPro(void *pvParameters)
 
                  LCD_Wind_Run_Icon(0);
                  mode_long_short_key_fun();
-                 display_works_timer_timing_fun(g_tMsg.key_mode);
+                 display_disp_works_timingr_timing_fun(g_tMsg.key_mode);
                  Lcd_Display_Temp_Digital_Blink();
+
+                 WIFI_Process_Handler();
                  
                 
 
          }
+        
         
 			
 		}
@@ -199,10 +204,10 @@ static void vTaskMsgPro(void *pvParameters)
 static void vTaskStart(void *pvParameters)
 {
    BaseType_t xResult;
-   const TickType_t xMaxBlockTime = pdMS_TO_TICKS(300); /* 设置最大等待时间为500ms */
-   static uint8_t sound_flag,power_on_first,power_on_sound ;
+   const TickType_t xMaxBlockTime = pdMS_TO_TICKS(30); /* 设置最大等待时间为500ms */
+   static uint8_t sound_flag,power_on_first;
    uint32_t ulValue;
-   
+   static uint8_t power_sound_flag,key_power_long_flag;
 
     while(1)
     {
@@ -220,71 +225,17 @@ static void vTaskStart(void *pvParameters)
 			{
 				//printf("接收到K2按键按下消息, ulNotifiedValue = 0x%08x\r\n", ulValue);
 				//printf("receive notice key1_bit0 \n");
-				
-                   sound_flag =1;
-                  recieve_flag++;
-              
-               
-
-                if(sound_flag ==1){
-                   sound_flag++;
-                   if(gkey_t.key_power==power_off)
-                      gkey_t.key_power=power_on;
-                   else{
-                      gkey_t.key_power=power_off;
-
-                   }
-                   Buzzer_KeySound();
-                   power_on_first=1; 
-                   
-                   
-                }
-		
-			}
-
-            /* 接收到消息，检测那个位被按下 */
-			if((ulValue & RUN_MODE_5 ) != 0)
-			{
-               //switch timer timing and works timing 
-               if(gkey_t.key_power == power_on){
-                
-               	 // gkey_t.key_sound_flag = key_sound;
-                  gkey_t.key_mode_times = gkey_t.key_mode_times ^ 0x01;
-                  if(gkey_t.key_mode_times == 1){
-                      gkey_t.key_mode = mode_set_timer;
-                      
-                  }
-                  else{
-
-                     gkey_t.key_mode = mode_confirm; //如果我只按一次那？，经过一段时间推出，恢复 
-                     
-                  }
-                  
-                  Buzzer_KeySound();
-                }   
+				power_key_long_counter=1;
             }
-
-             /* 接收到消息，检测那个位被按下 */
-			if((ulValue & RUN_DEC_6 ) != 0)
-			{
-
-
-            }
-
-
-             /* 接收到消息，检测那个位被按下 */
-			if((ulValue & RUN_ADD_7 ) != 0)
-			{
-
-
-            }
-
+           
+            
 			
 		}
         else{
-    	    
 
-            if(power_on_first == 1 && gkey_t.key_power==power_on){
+            power_long_short_key_fun();
+
+            if(power_on_first == 0 && gkey_t.key_power==power_on){
                power_on_first++; 
                PowerOn_Init();
                LCD_Numbers1234_Init();
@@ -292,23 +243,28 @@ static void vTaskStart(void *pvParameters)
 
             }
             else if(gkey_t.key_power==power_off){
+                power_on_first=0; 
               PowerOff_freeFun();
 
 
             }
-            if(power_on_first==2 && gkey_t.key_power==power_on){
+            if(power_on_first==1 && gkey_t.key_power==power_on){
 
+                recieve_flag++;
                 MainBoard_Run_Feature_Handler();
+               // WIFI_Process_Handler();
 
            }
            else{
-               if(power_on_sound ==0){
-               power_on_sound ++;
-               Buzzer_KeySound();
-               
-               }
-           
-           }
+               if(power_sound_flag ==0){
+                   power_sound_flag++;
+                   buzzer_sound();
+
+                }
+
+                MainBoard_Self_Inspection_PowerOn_Fun();
+         
+            }
 
          }
     }
@@ -470,6 +426,52 @@ static void mode_long_short_key_fun(void)
 
 }
 
+static void power_long_short_key_fun(void)
+{
+
+    static uint8_t sound_flag;
+    if(KEY_POWER_VALUE() == 1 && power_key_long_counter < 30){
+
+
+        power_key_long_counter++;
+        if( power_key_long_counter > 20){
+             power_key_long_counter = 40;
+
+             gkey_t.wifi_link_net_flag = 1;
+
+             	//WIFI CONNCETOR process
+			wifi_t.esp8266_login_cloud_success =0;
+			wifi_t.runCommand_order_lable=wifi_link_tencent_cloud;
+			wifi_t.wifi_config_net_lable= wifi_set_restor;
+			wifi_t.power_on_login_tencent_cloud_flag=0;
+			wifi_t.link_tencent_step_counter=0;
+			wifi_t.gTimer_linking_tencent_duration=0; //166s -2分7秒
+         
+            Buzzer_KeySound();
+
+        }
+
+    }
+    else if(KEY_POWER_VALUE() == 0 && power_key_long_counter >0 && power_key_long_counter<20){ //short key of function
+
+        power_key_long_counter=0;
+        sound_flag=1;
+        if(sound_flag ==1){
+           sound_flag++;
+           if(gkey_t.key_power==power_off){
+              gkey_t.key_power=power_on;
+            }
+           else{
+              gkey_t.key_power=power_off;
+
+           }
+           Buzzer_KeySound();
+       
+      
+
+        }
+    }
+}
 /*********************************************************************************
 *
 *	函 数 名:static void mode_long_short_key_fun(void)
@@ -479,7 +481,7 @@ static void mode_long_short_key_fun(void)
 *   
 
 *********************************************************************************/
-static void display_works_timer_timing_fun(uint8_t sel_item)
+static void display_disp_works_timingr_timing_fun(uint8_t sel_item)
 {
 
    static uint8_t counter_switch;

@@ -1,7 +1,7 @@
 #include "interrupt_manager.h"
 #include "bsp.h"
 
-uint8_t inputBuf[1];
+
 /********************************************************************************
 	**
 	*Function Name:void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
@@ -18,7 +18,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     //wifi usart1 --wifi 
     if(huart->Instance==USART2)
     {
-       #if 0 
+           
 	  if(wifi_t.linking_tencent_cloud_doing  ==1){ //link tencent netware of URL
 
 			wifi_t.wifi_data[wifi_t.wifi_uart_counter] = wifi_t.usart1_dataBuf[0];
@@ -58,18 +58,27 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 				}
 	      }
 	 
-	  #endif 
+	  
 //	__HAL_UART_CLEAR_NEFLAG(&huart2);
 	__HAL_UART_CLEAR_FEFLAG(&huart2);
 	__HAL_UART_CLEAR_OREFLAG(&huart2);
 	__HAL_UART_CLEAR_IDLEFLAG(&huart2);
 	//__HAL_UART_CLEAR_TXFECF(&huart2);
-	   UART_Start_Receive_IT(&huart2,inputBuf,1);
+	 HAL_UART_Receive_IT(&huart2,wifi_t.usart1_dataBuf,1);
      
 	}
 
 
  }
+
+  
+ 
+
+//	__HAL_UART_CLEAR_NEFLAG(&huart2);
+//	__HAL_UART_CLEAR_FEFLAG(&huart2);
+//	__HAL_UART_CLEAR_OREFLAG(&huart2);
+//	__HAL_UART_CLEAR_TXFECF(&huart2);
+
 
 /*******************************************************************************
 	*
@@ -89,11 +98,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	tm1++;
     tm3++;
 
-    if(tm1>9){
+    if(tm1>9){ //10ms
         tm1=0;
         
         
-       glcd_t.gTimer_fan_blink++;
+       glcd_t.gTimer_fan_blink++; //wind run display 
+       
     	
     }
 	
@@ -102,6 +112,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
        glcd_t.gTimer_colon_blink++ ;
        gProcess_t.gTimer_disp_set_timer_blink ++; //set timer timing counter is digital blink.
        glcd_t.gTimer_set_temp_blink++;   //set temperature value digital numbers blink .
+       //control timer
+       gctl_t.gTimer_wifi_ms_blink++;  //link net led fast blink.
+       
 
        
 	  
@@ -137,6 +150,16 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
         gProcess_t.gTimer_display_dht11_value ++;
         gProcess_t.gTimer_timer_Counter++;   //timer timing counter value 
+
+		//wifi
+		wifi_t.gTimer_wifi_pub_power_off++;
+		wifi_t.gTimer_power_first_link_tencent++;
+		wifi_t.power_on_login_tencent_cloud_flag++;
+		wifi_t.gTimer_power_first_link_tencent++;
+        wifi_t.gTimer_linking_tencent_duration++;
+
+        wifi_t.gTimer_login_tencent_times ++;
+       
 
         
 

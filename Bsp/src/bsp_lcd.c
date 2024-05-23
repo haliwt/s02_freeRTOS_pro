@@ -330,23 +330,50 @@ void LCD_Number_Wifi_OneTwo_Humidity(void)
 
 void Disip_Wifi_Icon_State(void)
 {
-   if(wifi_link_net_state() ==0){
 
-      if(gctl_t.gTimer_wifi_blink < 1  ){
-          TM1723_Write_Display_Data(0xC5,(0x01+lcdNumber2_High[glcd_t.number2_high] + lcdNumber2_Low[glcd_t.number2_low]) & 0xffff); //numbers : '2' addr: 0xC5
-      }
-      else if(gctl_t.gTimer_wifi_blink  > 0 && gctl_t.gTimer_wifi_blink  < 2){
-           TM1723_Write_Display_Data(0xC5,(lcdNumber2_High[glcd_t.number2_high] + lcdNumber2_Low[glcd_t.number2_low]) & 0xffff); //numbers : '2' addr: 0xC5
+   switch(gkey_t.wifi_link_net_flag){
 
-      }
-      else if(gctl_t.gTimer_wifi_blink  > 1){
 
-        gctl_t.gTimer_wifi_blink =0;
+     case 0:
 
-      }
-      
+           if(wifi_link_net_state() ==0   ){
 
-   }
+              if(gctl_t.gTimer_wifi_blink < 1  ){
+                  TM1723_Write_Display_Data(0xC5,(0x01+lcdNumber2_High[glcd_t.number2_high] + lcdNumber2_Low[glcd_t.number2_low]) & 0xffff); //numbers : '2' addr: 0xC5
+              }
+              else if(gctl_t.gTimer_wifi_blink  > 0 && gctl_t.gTimer_wifi_blink  < 2){
+                   TM1723_Write_Display_Data(0xC5,(lcdNumber2_High[glcd_t.number2_high] + lcdNumber2_Low[glcd_t.number2_low]) & 0xffff); //numbers : '2' addr: 0xC5
+
+              }
+              else if(gctl_t.gTimer_wifi_blink  > 1){
+
+                gctl_t.gTimer_wifi_blink =0;
+
+              }
+              
+
+           }
+     break;
+
+     case 1:
+        if(gctl_t.gTimer_wifi_ms_blink < 30  ){ //10* 3
+              TM1723_Write_Display_Data(0xC5,(0x01+lcdNumber2_High[glcd_t.number2_high] + lcdNumber2_Low[glcd_t.number2_low]) & 0xffff); //numbers : '2' addr: 0xC5
+          }
+          else if(gctl_t.gTimer_wifi_ms_blink   > 20 && gctl_t.gTimer_wifi_ms_blink < 50){
+               TM1723_Write_Display_Data(0xC5,(lcdNumber2_High[glcd_t.number2_high] + lcdNumber2_Low[glcd_t.number2_low]) & 0xffff); //numbers : '2' addr: 0xC5
+
+          }
+          else if(gctl_t.gTimer_wifi_ms_blink   > 40){
+
+            gctl_t.gTimer_wifi_ms_blink  =0;
+
+          }
+                  
+
+       break;
+
+    }
+   
 
 
 }

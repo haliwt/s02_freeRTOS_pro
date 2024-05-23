@@ -4,7 +4,7 @@
 
 
 #define	UART1_FIFO_EN	0
-#define	UART2_FIFO_EN	1
+#define	UART2_FIFO_EN	0
 
 
 /* 定义端口号 */

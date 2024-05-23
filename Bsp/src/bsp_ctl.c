@@ -3,6 +3,7 @@
 
 bsp_ctl gctl_t;
 
+uint8_t (*power_on_state)(void);
 
 
 uint8_t (*ptc_state)(void); //adjust of ptc is open or close
@@ -10,7 +11,7 @@ uint8_t (*plasma_state)(void); //adjust of plasma is open or close
 uint8_t (*ultrasonic_state)(void); //adjust of ultrasoic is open or close
 
 uint8_t (*ai_mode_state)(void);
-uint8_t (*wifi_link_net_state)(void);
+
 
 
 
@@ -19,7 +20,8 @@ uint8_t (*fan_error_state)(void);
 
 
 static uint8_t ai_mode_default(void);
-static uint8_t wifi_link_net_default(void);
+static uint8_t power_on_off_default(void);
+
 
 
 
@@ -30,11 +32,11 @@ void bsp_ctl_init(void)
    gctl_t.ptc_warning = 0;
    gctl_t.ptc_flag=1;
    gctl_t.plasma_flag =1;
-   gctl_t.ultrasoinc_flag =1;
+   gctl_t.ultrasonic_flag =1;
    gctl_t.ai_flag =1;
    g_tMsg.key_add_dec_mode = set_temp_value_item;
    
-   UartVarInit();
+   Wifi_Init();
    Ptc_State_Handler(Ptc_Default_Handler);
    Plasma_State_Handler(Plasma_Default_Handler);
    Ultrasonic_state_Handler(Ultrasonic_Default_Handler);
@@ -43,7 +45,11 @@ void bsp_ctl_init(void)
 
    
    Ai_Mode_Handler(ai_mode_default);
-   Wifi_Link_Net_Handler(wifi_link_net_default);
+
+   Power_On_Handler(power_on_off_default);
+
+
+   buzzer_sound_init();
 
 }
 
@@ -117,7 +123,7 @@ void  Ultrasonic_state_Handler(uint8_t(*ultrasonic_handler)(void))
 uint8_t Ultrasonic_Default_Handler(void)
 {
 	
-	if(gctl_t.ultrasoinc_flag == 1){
+	if(gctl_t.ultrasonic_flag == 1){
         return 1;
 	}
 	else{
@@ -214,22 +220,19 @@ void  Ai_Mode_Handler(uint8_t(*ai_handler)(void))
  * Return Ref: close or open 
  * 
 *****************************************************************************/
-static uint8_t wifi_link_net_default(void)
+void Power_On_Handler(uint8_t(*poweron_handler)(void))
 {
 
-    if(gctl_t.wifi_flag ==1)return 1;
-    else return 0;
-   
-
+    power_on_state = poweron_handler;
 
 }
 
-void  Wifi_Link_Net_Handler(uint8_t(*wifi_handler)(void))
+static uint8_t power_on_off_default(void)
 {
 
-    wifi_link_net_state = wifi_handler;
+   if(gkey_t.key_power == power_on) return 1;
+   return 0;
 
 }
-
 
 

@@ -11,6 +11,16 @@
 
 typedef enum{
 
+    KEY_UP,
+    KEY_DOWN,
+    
+
+}key_pressed_t;
+
+
+
+typedef enum{
+
    power_off,
    power_on,
 
@@ -39,6 +49,7 @@ typedef enum mode_key_t{
    uint8_t  key_power;
    uint8_t  key_mode;
    uint8_t  key_sound_flag;
+   uint8_t  wifi_link_net_flag;
  
 
   
