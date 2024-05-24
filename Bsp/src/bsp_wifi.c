@@ -7,6 +7,8 @@ uint8_t get_rx_beijing_time_enable;
 uint8_t beijing_step;
 uint8_t auto_det_flag;
 
+uint8_t power_on_det_net;
+
 
 
 static void RunWifi_Command_Handler(void);
@@ -44,7 +46,7 @@ void WIFI_Process_Handler(void)
 void MainBoard_Self_Inspection_PowerOn_Fun(void)
 {
     static uint8_t counter;
-		if(wifi_t.power_on_linkwifi==0 && wifi_link_net_state()==0 && wifi_t.rx_error_codes_flag==0){
+if( power_on_det_net==0 && wifi_link_net_state()==0 && wifi_t.rx_error_codes_flag==0){
 		
 
 		
@@ -59,95 +61,29 @@ void MainBoard_Self_Inspection_PowerOn_Fun(void)
        
     }
 
-	if(wifi_t.gTimer_wifi_pub_power_off > 20  && wifi_link_net_state()==0 && counter==1){
-		counter++;
-		wifi_t.power_on_linkwifi++;
 
+        
+
+	if(wifi_t.gTimer_wifi_pub_power_off > 6  && wifi_link_net_state()==0 && counter==1){
+		counter++;
+		
+        power_on_det_net++;
    }
 
+   if(wifi_link_net_state()==1 &&   power_on_det_net   < 2){
+       power_on_det_net++;
 
-	if((wifi_link_net_state()==1 && counter==1)){
-		counter++;
-			
-			wifi_t.gTimer_auto_detected_net_state_times=0;
-	        wifi_t.rx_error_codes_flag=0;
-			wifi_t.get_rx_beijing_time_enable=0;
-			wifi_t.rx_error_codes_flag=0;
-		    if(gkey_t.key_power == power_on){
-				wifi_t.power_on_linkwifi++;
-				wifi_t.runCommand_order_lable=wifi_publish_update_tencent_cloud_data; //0x01
-		    }
-			else{
-				if(wifi_t.power_off_step==1){
+   
+       wifi_t.runCommand_order_lable=wifi_tencent_publish_init_data; //0x01
 
-					wifi_t.power_on_linkwifi++;
-                    
-               
-				}
-				else{
-					wifi_t.power_on_linkwifi++;
-				
-					wifi_t.gTimer_wifi_pub_power_off =6;
+       MqttData_Publish_Update_Data();
+       HAL_Delay(200);
 
+      Subscriber_Data_FromCloud_Handler();
+       HAL_Delay(200);
 
-				}
+    }
 
-
-			}
-			
-	    }
-
-
-	if(wifi_t.rx_error_codes_flag==1 && wifi_t.rx_setup_hardware_counter< 6 && wifi_link_net_state()==0 && wifi_t.gTimer_wifi_rx_error >6){
-		wifi_t.gTimer_auto_detected_net_state_times=0;
-		wifi_t.gTimer_get_beijing_time =0;
-		wifi_t.gTimer_wifi_rx_error =0;
-        WIFI_IC_DISABLE();
-		HAL_Delay(1000);
-		//Key_Speical_Power_Fun_Handler();
-	   // HAL_Delay(1000);
-		//Key_Speical_Power_Fun_Handler();
-		WIFI_IC_ENABLE();
-        HAL_Delay(1000);
-		//Key_Speical_Power_Fun_Handler();
-
-		wifi_t.linking_tencent_cloud_doing =1; //enable usart2 receive wifi  data
-		wifi_t.wifi_uart_counter=0;
-		wifi_t.soft_ap_config_flag =0;
-		
- 
-	
-		
-       HAL_UART_Transmit(&huart2, "AT+TCMQTTCONN=1,5000,240,0,1\r\n", strlen("AT+TCMQTTCONN=1,5000,240,0,1\r\n"), 0xffff);//开始连接
-	  
-	   
-
-	   HAL_Delay(1000);
-	   //Key_Speical_Power_Fun_Handler();
-	  
-	   // HAL_Delay(1000);
-	   // Key_Speical_Power_Fun_Handler();
-	 
-	  
-	  wifi_t.rx_setup_hardware_counter++;
-		
-
-	}
-
-
-	if(wifi_link_net_state()==1 && wifi_t.rx_setup_hardware_counter < 8 ){
-
-            wifi_t.rx_setup_hardware_counter=9;
-			wifi_t.rx_error_codes_flag=0;
-			wifi_t.power_on_thefirst_times =0;
-			gctl_t.gTimer_pro_action_publis=0;
-			gctl_t.gTimer_pro_pub_set_timer = 0;
-			wifi_t.runCommand_order_lable= wifi_publish_update_tencent_cloud_data;//04
-	   	 
-
-	}
-
-	
 }
 /********************************************************************************
    *
@@ -316,7 +252,10 @@ static void RunWifi_Command_Handler(void)
 
 			gProcess_t.gTimer_works_counter= wifi_t.real_seconds;
 
-			gctl_t.beijing_time_flag = 1; //WT.2024.04.25
+            wifi_t.gTimer_get_beijing_time=0;
+            wifi_t.gTimer_auto_detected_net_state_times =0;
+
+		//	gctl_t.beijing_time_flag = 1; //WT.2024.04.25
 
 			
 
@@ -329,7 +268,7 @@ static void RunWifi_Command_Handler(void)
 
 	case wifi_auto_to_link_cloud:
 	
-	if(wifi_t.gTimer_auto_detected_net_state_times > 180){
+	if(wifi_t.gTimer_auto_detected_net_state_times > 280){
 
 		wifi_t.gTimer_auto_detected_net_state_times=0;
 
@@ -366,7 +305,7 @@ static void RunWifi_Command_Handler(void)
 
 	case wifi_auto_repeat_link_cloud://09
 
-	if(wifi_t.gTimer_publish_dht11>0){
+	if(wifi_t.gTimer_publish_dht11>180){
 		
 	
 

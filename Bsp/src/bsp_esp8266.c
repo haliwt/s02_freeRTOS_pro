@@ -69,7 +69,7 @@ void SmartPhone_TryToLink_TencentCloud(void)
 	if(wifi_t.gTimer_power_first_link_tencent >3 &&  wifi_t.power_on_login_tencent_cloud_flag==4){
 		wifi_t.gTimer_power_first_link_tencent=0;
 		wifi_t.power_on_login_tencent_cloud_flag++; //5
-		wifi_t.power_on_linkwifi ++;
+	
 
 		if(wifi_link_net_state()==1){
 			wifi_t.runCommand_order_lable= wifi_publish_update_tencent_cloud_data;//04

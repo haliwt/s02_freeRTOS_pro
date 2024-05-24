@@ -60,9 +60,9 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	 
 	  
 //	__HAL_UART_CLEAR_NEFLAG(&huart2);
-	__HAL_UART_CLEAR_FEFLAG(&huart2);
+	//__HAL_UART_CLEAR_FEFLAG(&huart2);
 	__HAL_UART_CLEAR_OREFLAG(&huart2);
-	__HAL_UART_CLEAR_IDLEFLAG(&huart2);
+	//__HAL_UART_CLEAR_IDLEFLAG(&huart2);
 	//__HAL_UART_CLEAR_TXFECF(&huart2);
 	 HAL_UART_Receive_IT(&huart2,wifi_t.usart1_dataBuf,1);
      
@@ -91,6 +91,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   static uint8_t tm1,tm2,tm3;
   static uint16_t tm0;
+
+ 
     
    if(htim->Instance==TIM17){
     
@@ -109,11 +111,14 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	
     if(tm3>99){ //10*10 = 100ms 
        tm3=0;
+     
        glcd_t.gTimer_colon_blink++ ;
        gProcess_t.gTimer_disp_set_timer_blink ++; //set timer timing counter is digital blink.
        glcd_t.gTimer_set_temp_blink++;   //set temperature value digital numbers blink .
        //control timer
        gctl_t.gTimer_wifi_ms_blink++;  //link net led fast blink.
+
+      
        
 
        
@@ -164,6 +169,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		wifi_t.gTimer_auto_detected_net_state_times++;
 		wifi_t.gTimer_read_beijing_time ++;
 		wifi_t.gTimer_wifi_counter_link_beijing_times++;
+        wifi_t.gTimer_det_net_data ++ ;
+       
        
 
         if(tm2 > 59){ //60s = 1 minutes

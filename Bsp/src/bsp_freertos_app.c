@@ -5,7 +5,7 @@ uint8_t recieve_flag;
 uint8_t receive_key_message;
 uint8_t receive_task_start;
 uint8_t key_long_counter;
-uint8_t power_key_long_counter ;
+uint16_t power_key_long_counter ;
 
 /*
 **********************************************************************************************************
@@ -91,7 +91,7 @@ static void vTaskMsgPro(void *pvParameters)
     BaseType_t xResult;
 	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置最大等待时间为500ms */
 	uint32_t ulValue;
-    
+   
 	
     while(1)
     {
@@ -134,30 +134,29 @@ static void vTaskMsgPro(void *pvParameters)
             else if((ulValue & MODE_KEY_1) != 0){
 
                //switch timer timing and works timing 
-               if(gkey_t.key_power == power_on){
-                
 
-                  key_long_counter=1;
-
-                 // Buzzer_KeySound();
-              
-                 }
+                xTaskNotify(xHandleTaskStart, /* 目标任务 */
+							RUN_MODE_5 ,            /* 设置目标任务事件标志位bit0  */
+							eSetBits);          /* 将目标任务的事件标志位与BIT_0进行或操作，  将结果赋值给事件标志位。*/
+               
             }   
             else if((ulValue & DEC_KEY_2) != 0){
 
+
+                xTaskNotify(xHandleTaskStart, /* 目标任务 */
+							RUN_DEC_6 ,            /* 设置目标任务事件标志位bit0  */
+							eSetBits);          /* 将目标任务的事件标志位与BIT_0进行或操作，  将结果赋值给事件标志位。*/
+
                
-                Dec_Key_Fun(g_tMsg.key_add_dec_mode);
-
-                Buzzer_KeySound();
-
-
             }
             else if((ulValue & ADD_KEY_3) != 0){
 
-              
-                  Add_Key_Fun(g_tMsg.key_add_dec_mode);
+                  xTaskNotify(xHandleTaskStart, /* 目标任务 */
+							RUN_ADD_7 ,            /* 设置目标任务事件标志位bit0  */
+							eSetBits);          /* 将目标任务的事件标志位与BIT_0进行或操作，  将结果赋值给事件标志位。*/
 
-                  Buzzer_KeySound();
+              
+                
             }
 
       
@@ -168,23 +167,32 @@ static void vTaskMsgPro(void *pvParameters)
 		{
 			/* 超时 */
        
-        
+          MainBoard_Self_Inspection_PowerOn_Fun();
+
+         
          if(gkey_t.key_power==power_on){
 
-                 Display_MainBoard_Feature_Handler();
-         
-                 LCD_Timer_Colon_Flicker();
+//                 Display_MainBoard_Feature_Handler();
+//         
+//                 LCD_Timer_Colon_Flicker();
+//
+//                 LCD_Wind_Run_Icon(0);
+    //             mode_long_short_key_fun();
+   //              display_disp_works_timingr_timing_fun(g_tMsg.key_mode);
+    //             Lcd_Display_Temp_Digital_Blink();
 
-                 LCD_Wind_Run_Icon(0);
-                 mode_long_short_key_fun();
-                 display_disp_works_timingr_timing_fun(g_tMsg.key_mode);
-                 Lcd_Display_Temp_Digital_Blink();
+                 if(wifi_t.gTimer_det_net_data > 2){
+                    wifi_t.gTimer_det_net_data=0;
+                     WIFI_Process_Handler();
+
+                  }
 
                  
                  
                 
 
          }
+       
         
         
 			
@@ -204,10 +212,10 @@ static void vTaskMsgPro(void *pvParameters)
 static void vTaskStart(void *pvParameters)
 {
    BaseType_t xResult;
-   const TickType_t xMaxBlockTime = pdMS_TO_TICKS(30); /* 设置最大等待时间为500ms */
+   const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置最大等待时间为500ms */
    static uint8_t sound_flag,power_on_first;
    uint32_t ulValue;
-   static uint8_t power_sound_flag,key_power_long_flag;
+   static uint8_t power_sound_flag,key_power_long_flag,add_flag,dec_flag;
 
     while(1)
     {
@@ -227,13 +235,51 @@ static void vTaskStart(void *pvParameters)
 				//printf("receive notice key1_bit0 \n");
 				power_key_long_counter=1;
             }
-           
+            else if((ulValue & RUN_MODE_5 ) != 0)   /* 接收到消息，检测那个位被按下 */
+			{
+
+                 if(gkey_t.key_power == power_on ){
+                
+
+                  key_long_counter=1;
+
+                 // Buzzer_KeySound();
+              
+                 }
+				
+            }
+            else if((ulValue & RUN_DEC_6 ) != 0)   /* 接收到消息，检测那个位被按下 */
+			{
+                dec_flag =1;
+                Dec_Key_Fun(g_tMsg.key_add_dec_mode);
+
+                 if(dec_flag ==1){
+                     add_flag ++;
+                     Buzzer_KeySound();
+
+                  }
+                 
+            }
+            else if((ulValue & RUN_ADD_7 ) != 0)   /* 接收到消息，检测那个位被按下 */
+			{
+                   add_flag =1;
+                   Add_Key_Fun(g_tMsg.key_add_dec_mode);
+
+                  if(add_flag ==1){
+                     add_flag ++;
+                     Buzzer_KeySound();
+
+                  }
+				
+            }
             
-			
-		}
-        else{
+
+            
+        }
+        else {
 
             power_long_short_key_fun();
+           
 
             if(power_on_first == 0 && gkey_t.key_power==power_on){
                power_on_first++; 
@@ -250,9 +296,20 @@ static void vTaskStart(void *pvParameters)
             }
             if(power_on_first==1 && gkey_t.key_power==power_on){
 
-                recieve_flag++;
-                MainBoard_Run_Feature_Handler();
-                WIFI_Process_Handler();
+              //  recieve_flag++;
+            //    MainBoard_Run_Feature_Handler();
+
+                       mode_long_short_key_fun();
+                       LCD_Timer_Colon_Flicker();
+         
+                       LCD_Wind_Run_Icon(0);
+
+                       display_disp_works_timingr_timing_fun(g_tMsg.key_mode);
+
+                       Lcd_Display_Temp_Digital_Blink();
+
+                
+               
 
            }
            else{
@@ -262,7 +319,7 @@ static void vTaskStart(void *pvParameters)
 
                 }
 
-                MainBoard_Self_Inspection_PowerOn_Fun();
+              
          
             }
 
@@ -383,12 +440,12 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 *********************************************************************************/
 static void mode_long_short_key_fun(void)
 {
-    if(KEY_MODE_VALUE() == 1 && key_long_counter < 20){
+    if(KEY_MODE_VALUE() == 1 && key_long_counter < 100){
 
 
         key_long_counter++;
-        if(key_long_counter > 15){
-            key_long_counter = 30;
+        if(key_long_counter >  50 && KEY_MODE_VALUE() == 1){
+            key_long_counter = 150;
             g_tMsg.key_mode = mode_set_timer;
             g_tMsg.key_add_dec_mode = mode_set_timer;
             gctl_t.ai_flag = 0; //timer tiiming model
@@ -398,7 +455,7 @@ static void mode_long_short_key_fun(void)
         }
 
     }
-    else if(KEY_MODE_VALUE() == 0 && key_long_counter >0 && key_long_counter<10){ //short key of function
+    else if(KEY_MODE_VALUE() == 0 && key_long_counter >0 && key_long_counter<50){ //short key of function
 
         key_long_counter=0;
         Buzzer_KeySound();
@@ -430,12 +487,12 @@ static void power_long_short_key_fun(void)
 {
 
     static uint8_t sound_flag;
-    if(KEY_POWER_VALUE() == 1 && power_key_long_counter < 30){
+    if(KEY_POWER_VALUE() == 1 && power_key_long_counter < 60){
 
 
         power_key_long_counter++;
-        if( power_key_long_counter > 20){
-             power_key_long_counter = 40;
+        if( power_key_long_counter > 50   && KEY_POWER_VALUE() == 1){
+             power_key_long_counter = 200;
 
              gkey_t.wifi_link_net_flag = 1;
 
@@ -452,7 +509,7 @@ static void power_long_short_key_fun(void)
         }
 
     }
-    else if(KEY_POWER_VALUE() == 0 && power_key_long_counter >0 && power_key_long_counter<20){ //short key of function
+    else if(KEY_POWER_VALUE() == 0 && power_key_long_counter >0 && power_key_long_counter<50){ //short key of function
 
         power_key_long_counter=0;
         sound_flag=1;

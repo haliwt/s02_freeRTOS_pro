@@ -34,14 +34,14 @@ typedef struct _bsp_ctl{
     //wifi fun
     uint8_t disp_works_hours;
     uint8_t disp_works_minutes;
-    uint8_t beijing_time_flag;
+   // uint8_t beijing_time_flag;
     uint8_t gTimer_pro_mode_key_be_select;
 
     uint8_t gTimer_prcoess_iwdg;
 	uint8_t gTimer_process_display;
     uint8_t gTimer_wifi_blink;
-    uint8_t gTimer_pro_action_publis;
-    uint8_t gTimer_pro_pub_set_timer;
+
+
     uint8_t gTimer_wifi_ms_blink ;
 	
 
