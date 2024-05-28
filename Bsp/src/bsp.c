@@ -5,11 +5,9 @@ BSP_process_t gpro_t;
 static uint8_t Works_Time_Out(void);
 static void Mainboard_Action_Fun(void);
 static void Mainboard_Fun_Stop(void);
-static void Process_Dynamical_Action(void);
 
-//void Set_Timer_Timing_Lcd_Blink(void );
 
-//static void Display_Timer_Timing(int8_t hours,int8_t minutes);
+
 
 static void Display_LCD_Works_Timing(void);
 
@@ -54,30 +52,8 @@ void bsp_Idle(void)
 *********************************************************************************************************
 */
 
-void PowerOn_Init(void)
-{
-  
-    LED_Mode_On();
-    LED_Power_On();
-    Backlight_On();
-    Mainboard_Action_Fun();
-
-}
 
 
-void PowerOff_freeFun(void)
-{
-        LED_Mode_Off();
-	   
-	   
-        Ptc_Off();
-		Ultrasonic_Pwm_Stop();
-		Plasma_Off();
-
-        Fan_Stop();
-		Backlight_Off();
-		Lcd_Display_Off();
-}
 
 /*
 *********************************************************************************************************
@@ -169,155 +145,7 @@ static void Mainboard_Fun_Stop(void)
 
 
 }
-/*
-*********************************************************************************************************
-*
-*	函 数 名: void Process_Dynamical_Action(void)
-*	功能说明: 主板工作：功能动作输出			 
-*	形    参: 无
-*	返 回 值: 无
-*
-*********************************************************************************************************
-*/
-static void Process_Dynamical_Action(void)
-{
-	if(ptc_state() ==1){
 
-	  Ptc_On();
-
-	}
-	else{
-     Ptc_Off();
-
-	}
-
-	if(plasma_state() ==1){
-		
-       Plasma_On();
-
-    }
-	else{
-
-	   Plasma_Off();
-
-	}
-
-    
-
-}
-
-/*
-*********************************************************************************************************
-*
-*	函 数 名: void Display_Works_Timing(void)
-*	功能说明: 显示设备工作的时间，时间最大值是 99个小时
-*	形    参: 无
-*	返 回 值: 无
-*
-*********************************************************************************************************
-*/
-void Display_Works_Timing(void)
-{
-
-    if(gpro_t.gTimer_works_counter > 59 ){
-
-	  gpro_t.gTimer_works_counter=0;
-
-	  gpro_t.gTimer_display_works_minutes++;
-
-	if( gpro_t.gTimer_display_works_minutes > 59){ //1 hours
-		gpro_t.gTimer_display_works_minutes=0;
-
-	     gpro_t.gTimer_display_works_hours++;
-
-
-		glcd_t.number7_low = gpro_t.gTimer_display_works_minutes / 10;
-		glcd_t.number7_high = gpro_t.gTimer_display_works_minutes / 10;
-
-
-		glcd_t.number8_low = gpro_t.gTimer_display_works_minutes  % 10;
-		glcd_t.number8_high = gpro_t.gTimer_display_works_minutes % 10;
-
-		//display hours works
-
-
-        if(gpro_t.gTimer_display_works_hours > 99){
-			gpro_t.gTimer_display_works_hours=0;
-
-
-		}
-		
-		glcd_t.number5_low = gpro_t.gTimer_display_works_hours / 10;
-		glcd_t.number5_high = gpro_t.gTimer_display_works_hours / 10;
-
-
-		glcd_t.number6_low = gpro_t.gTimer_display_works_hours  % 10;
-		glcd_t.number6_high = gpro_t.gTimer_display_works_hours % 10;
-		
-
-	}
-    else{
-	 
-		  glcd_t.number7_low = gpro_t.gTimer_display_works_minutes / 10;
-		  glcd_t.number7_high = gpro_t.gTimer_display_works_minutes / 10;
-		
-						   
-		  glcd_t.number8_low = gpro_t.gTimer_display_works_minutes	% 10;
-		  glcd_t.number8_high = gpro_t.gTimer_display_works_minutes % 10;
-
-	    
-    }
-	 
-    Display_LCD_Works_Timing();
-    
-
-   }
-
-   
-
-}
-
-static void Display_LCD_Works_Timing(void)
-{
-
-
-    LCD_Number_FiveSix_Hours();
-    LCD_Number_SevenEight_Minutes();
-
-
-}
-
-void LCD_Disp_Works_Timing_Init(void)
-{
-
-       gctl_t.ai_flag = 1;
-
-     //  LCD_Number_Wifi_OneTwo_Humidity();
-       
-       glcd_t.number5_low = gpro_t.gTimer_display_works_hours / 10;
-		glcd_t.number5_high = gpro_t.gTimer_display_works_hours / 10;
-
-
-		glcd_t.number6_low = gpro_t.gTimer_display_works_hours  % 10;
-		glcd_t.number6_high = gpro_t.gTimer_display_works_hours % 10;
-		
-
-	
-	 
-		  glcd_t.number7_low = gpro_t.gTimer_display_works_minutes / 10;
-		  glcd_t.number7_high = gpro_t.gTimer_display_works_minutes / 10;
-		
-						   
-		  glcd_t.number8_low = gpro_t.gTimer_display_works_minutes	% 10;
-		  glcd_t.number8_high = gpro_t.gTimer_display_works_minutes % 10;
-
-	    
-
-	 
-    Display_LCD_Works_Timing();
-
-
-}
 
 /*
 *********************************************************************************************************
@@ -329,6 +157,7 @@ void LCD_Disp_Works_Timing_Init(void)
 *
 *********************************************************************************************************
 */
+#if 0
 void Set_Timer_Timing_Lcd_Blink(uint8_t hours,uint8_t minutes)
 {
     if(gpro_t.gTimer_disp_set_timer_blink < 1){//3* 100ms
@@ -378,148 +207,169 @@ void Set_Timer_Timing_Lcd_Blink(uint8_t hours,uint8_t minutes)
 
 }
 
+#endif 
+
+
+
 /*
 *********************************************************************************************************
 *
-*	函 数 名: void Dissplay_Timer_Timing(uint8_t hours,uint8_t minutes)
-*	功能说明: 到记时功能
+*	函 数 名: void Process_Dynamical_Action(void)
+*	功能说明: 主板工作：功能动作输出			 
 *	形    参: 无
 *	返 回 值: 无
 *
 *********************************************************************************************************
 */
-void Display_Timer_Timing(void)
+void Process_Dynamical_Action(void)
 {
 
-     if(gpro_t.gTimer_timer_Counter > 59){
-	    gpro_t.gTimer_timer_Counter =0;
-		
-		gpro_t.set_timer_timing_minutes -- ;
-    
-	
-	    if(gpro_t.set_timer_timing_minutes <  0 ){
-			 
-		   gpro_t.set_timer_timing_hours -- ;
-		   gpro_t.set_timer_timing_minutes =59;
+   static uint8_t the_send_open_ptc,to_tenced_data,ptc_int=0xff,ptc_int_1=0xff;
+   static uint8_t ptc_int_off =0xff,ptc_int_off_1=0xff,to_tenced_off_data;
+   if(gpro_t.set_temperature_value_success == 1){
+       if(gctl_t.gSet_temperature_value > gctl_t.dht11_temp_value ){//if(gctl_t.gSet_temperature_value > gctl_t.dht11_temp_value){
+
+              if(the_send_open_ptc==1){
+                 the_send_open_ptc ++;
+                 to_tenced_off_data++;
+                gctl_t.ptc_flag =1;
+                Ptc_On();
+                Disp_Dry_Icon();
+                if(wifi_link_net_state()==1 &&  ptc_int_1 != to_tenced_data){
+                   ptc_int_1 = to_tenced_data;
+                  MqttData_Publish_SetPtc(1);
+                  HAL_Delay(350);
+                 }
+
+               }
+               else if(the_send_open_ptc==2){
+                 if((gctl_t.gSet_temperature_value -3) > gctl_t.dht11_temp_value ){
+
+                  to_tenced_off_data++;
+                   gctl_t.ptc_flag =1;
+                   Ptc_On();
+                   Disp_Dry_Icon();
+                    if(wifi_link_net_state()==1 && ptc_int !=to_tenced_data ){
+                      ptc_int =to_tenced_data  ; 
+                      MqttData_Publish_SetPtc(1);
+                      HAL_Delay(350);
+                   }
+                  }
+
+               }
+               else{
+                  gctl_t.ptc_flag =1;
+                  Ptc_On();
+                   to_tenced_off_data++;
+                  Disp_Dry_Icon();
+                  
+
+               }
+               
+
+       }
+       else if(gctl_t.gSet_temperature_value <  gctl_t.dht11_temp_value){
+
+              if(the_send_open_ptc==0){
+                   the_send_open_ptc++;
+                  gctl_t.ptc_flag =0;
+                  Ptc_Off(); 
+                  Disp_Dry_Icon();
+                  to_tenced_data++;
+                  if(wifi_link_net_state()==1 && ptc_int_off_1 !=to_tenced_off_data ){
+                      ptc_int_off_1 =to_tenced_off_data ; 
+                      MqttData_Publish_SetPtc(0);
+                      HAL_Delay(350);
+                   }
+
+              }
+              else{
+                  gctl_t.ptc_flag =0;
+                  Ptc_Off(); 
+                  Disp_Dry_Icon();
+                   if(wifi_link_net_state()==1 && ptc_int_off !=to_tenced_off_data ){
+                      ptc_int_off =to_tenced_off_data;
+                      MqttData_Publish_SetPtc(0);
+                      HAL_Delay(350);
+                   }
+                  to_tenced_data++;
+
+
+              }
+
+       }
+
+   
+    }
+    else{
+        
+        if(ptc_state() ==1){
+
+         if(gctl_t.dht11_temp_value > 39){
+             gctl_t.ptc_flag =0;
+             Ptc_Off();
+             Disp_Dry_Icon();
+         }
+         else{
+
+    	   Ptc_On();
+           Disp_Dry_Icon();
          }
 
+    	}
+    	else{
+          Ptc_Off();
+          Disp_Dry_Icon();
+
+    	}
+    }
+
+	if(plasma_state() ==1){
 		
-		
-		 if(gpro_t.set_timer_timing_hours < 0 ){
-		 
-			
-			gpro_t.set_timer_timing_hours=0;
-			gpro_t.set_timer_timing_minutes=0;
-			gkey_t.key_power = power_off;
-			gkey_t.gTimer_power_off=0;
-			
-			
-	      }
-
-
-
-		 //display hours timing
-	     glcd_t.number5_low = gpro_t.set_timer_timing_hours / 10;
-		 glcd_t.number5_high = gpro_t.set_timer_timing_hours / 10;
-	 
-	 
-		 glcd_t.number6_low = gpro_t.set_timer_timing_hours   % 10;
-		 glcd_t.number6_high = gpro_t.set_timer_timing_hours % 10;
-		 
-	      //display minutes 
-		 glcd_t.number7_low = gpro_t.set_timer_timing_minutes / 10;
-		 glcd_t.number7_high = gpro_t.set_timer_timing_minutes / 10;
-		 
-							
-		 glcd_t.number8_low = gpro_t.set_timer_timing_minutes   % 10;
-		 glcd_t.number8_high = gpro_t.set_timer_timing_minutes % 10;
-
-         LCD_Disp_Timer_Timing();
-		    
-     }
-     
-    //LCD_Disp_Timer_Timing();
-
-}
-
-
-void LCD_Disp_Timer_Timing(void)
-{
-
-   LCD_Number_FiveSix_Hours();
-   LCD_Number_SevenEight_Minutes();
-
-}
-
-void LCD_Disp_Timer_Timing_Init(void)
-{
-
-     gctl_t.ai_flag = 0;
-
-    // LCD_Number_Wifi_OneTwo_Humidity();
-//display hours timing
-    glcd_t.number5_low = gpro_t.set_timer_timing_hours / 10;
-    glcd_t.number5_high = gpro_t.set_timer_timing_hours / 10;
-
-
-    glcd_t.number6_low = gpro_t.set_timer_timing_hours   % 10;
-    glcd_t.number6_high = gpro_t.set_timer_timing_hours % 10;
-
-    //display minutes 
-    glcd_t.number7_low = gpro_t.set_timer_timing_minutes / 10;
-    glcd_t.number7_high = gpro_t.set_timer_timing_minutes / 10;
-
-    				
-    glcd_t.number8_low = gpro_t.set_timer_timing_minutes   % 10;
-    glcd_t.number8_high = gpro_t.set_timer_timing_minutes % 10;
-
-    LCD_Disp_Timer_Timing();
-
-}
-
-
-
-/**********************************************************************************************************
-*
-*	函 数 名: void Dissplay_Timer_Timing(uint8_t hours,uint8_t minutes)
-*	功能说明: 到记时功能
-*	形    参: 无
-*	返 回 值: 无
-*
-*********************************************************************************************************/ 
-void Display_MainBoard_Feature_Handler(void)
-{
-
-//
-//    if(gpro_t.gTimer_display_dht11_value  >3 && gpro_t.gTimer_display_dht11_value <5){
-//
-//             Process_Dynamical_Action();
-//
-//
-//     }
-     if(gpro_t.gTimer_display_dht11_value > 9){
-
-          gpro_t.gTimer_display_dht11_value =0;
-            // Update_DHT11_Value();
-
-           if(g_tMsg.key_add_dec_pressed_flag == 0){
-                  Update_DHT11_Value();
-                  Disp_HumidityTemp_Value();
-
-            }
-
-    	          
+       Plasma_On();
 
     }
-    Disip_Wifi_Icon_State();
+	else{
+
+	   Plasma_Off();
+
+	}
+
+    if(ultrasonic_state() ==1){
+
+         Ultrasonic_Pwm_Output();
+
+
+    }
+    else{
+
+    Ultrasonic_Pwm_Stop();
+
+
+    }
+
+  
+    switch(wifi_t.set_wind_speed_value){
+    
+         case 0: //full speed
+    
+    
+           Fan_Run();
+    
+         break;
+    
+         case 1 : //middle speed
+          Fan_Run_Middle();
+    
+         break;
+    
+         case 2: //lower speed
+          Fan_Run_Lower();
+         break;
+    
+    
+       }
 
 }
 
-void MainBoard_Run_Feature_Handler(void)
-{
-
-    Process_Dynamical_Action();
-
-
-}
 

@@ -152,6 +152,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         //process gtimer
 		gpro_t.gTimer_run_adc++ ;
 		gpro_t.gTimer_run_dht11++;
+    
    
 		gpro_t.gTimer_run_one_mintue ++;
 		
@@ -159,6 +160,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
         gpro_t.gTimer_display_dht11_value ++;
         gpro_t.gTimer_timer_Counter++;   //timer timing counter value 
+       
+   
 
 		//wifi
 		wifi_t.gTimer_wifi_pub_power_off++;

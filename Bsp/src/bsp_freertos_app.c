@@ -175,7 +175,9 @@ static void vTaskMsgPro(void *pvParameters)
           
                
 
-              MainBoard_Run_Feature_Handler();
+             // MainBoard_Run_Feature_Handler();
+
+             Process_Dynamical_Action();
                  
              WIFI_Process_Handler();
                 
@@ -533,21 +535,34 @@ static void power_long_short_key_fun(void)
 *********************************************************************************/
 static void display_disp_works_timingr_timing_fun(uint8_t sel_item)
 {
-
-   static uint8_t counter_switch;
-   static uint8_t disp_timer_ref = 0xff ,disp_works_ref = 0xff;
+    static uint8_t switch_counter;
+ 
     switch(sel_item){
 
     case disp_works_timing :
    
-         if(gctl_t.ai_flag ==0){
-             gctl_t.ai_flag =1;
-            
-             LCD_Disp_Works_Timing_Init();
-           }
-        counter_switch=0;
+       if(gctl_t.fan_warning ==0 && gctl_t.ptc_warning==0 ){
 
-        Display_Works_Timing();
+             if(gctl_t.ai_flag ==0){
+                 gctl_t.ai_flag =1;
+                
+                 LCD_Disp_Works_Timing_Init();
+               }
+            if(switch_counter>0){
+               switch_counter =0;
+              }
+         
+            Display_Works_Timing();
+            
+
+        }
+        else{
+            
+          LCD_Fault_Numbers_Code();
+
+
+
+        }
        
     break;
     
@@ -556,7 +571,7 @@ static void display_disp_works_timingr_timing_fun(uint8_t sel_item)
 //       if(gctl_t.ai_flag ==1){
 //           gctl_t.ai_flag =0;
 //        
-//            LCD_Number_Wifi_OneTwo_Humidity();
+//            LCD_Number_Ai_OneTwo_Humidity();
 //             if(g_tMsg.set_timer_timing_success ==1){
 //                
 //              LCD_Disp_Timer_Timing_Init();
@@ -565,24 +580,30 @@ static void display_disp_works_timingr_timing_fun(uint8_t sel_item)
 //
 //        
 //        }
+      if(gctl_t.fan_warning ==0 && gctl_t.ptc_warning==0 ){
+            if(gkey_t.set_timer_timing_success ==1){
 
-        if(g_tMsg.set_timer_timing_success ==1){
+               Display_Timer_Timing();
+               Record_WorksTime_DonotDisp_Handler();
 
-           Display_Timer_Timing();
+            }
+            else if(gkey_t.set_timer_timing_success == 0 ){ //&& gkey_t.gTimer_disp_switch_disp_mode > 3){
 
-        }
-        else if( g_tMsg.set_timer_timing_success == 0 ){ //&& gkey_t.gTimer_disp_switch_disp_mode > 3){
+               
+                gctl_t.ai_flag =0;
+                LCD_Disp_Timer_Timing_Init();
 
-            counter_switch ++;
-            gctl_t.ai_flag =0;
-            LCD_Disp_Timer_Timing_Init();
+                switch_counter ++;
+                if( switch_counter> 20){
+                 gkey_t.key_mode = disp_works_timing;
 
-            if(counter_switch > 250){
-             
-               g_tMsg.key_mode = disp_works_timing;
+                  }
+                Record_WorksTime_DonotDisp_Handler();
+            }
+       }
+        else{
 
-             }
-           
+            LCD_Fault_Numbers_Code();
 
         }
 
@@ -593,29 +614,29 @@ static void display_disp_works_timingr_timing_fun(uint8_t sel_item)
 
     case mode_set_timer:
     
-        Set_Timer_Timing_Lcd_Blink(gpro_t.set_timer_timing_hours,gpro_t.set_timer_timing_minutes);
+        Set_Timer_Timing_Lcd_Blink();//(gpro_t.set_timer_timing_hours,gpro_t.set_timer_timing_minutes);
        
         if(gkey_t.gTimer_disp_set_timer > 3){
 
             if(gpro_t.set_timer_timing_hours == 0 && gpro_t.set_timer_timing_minutes==0){
 
-                g_tMsg.set_timer_timing_success = 0;
+                gkey_t.set_timer_timing_success = 0;
 
                 gctl_t.ai_flag = 1;
-                g_tMsg.key_mode =disp_works_timing;
-                g_tMsg.key_add_dec_mode = set_temp_value_item;
+                gkey_t.key_mode =disp_works_timing;
+                gkey_t.key_add_dec_mode = set_temp_value_item;
                 LCD_Disp_Works_Timing_Init();
                  
                 
             }
             else{
-                g_tMsg.set_timer_timing_success = 1;
+                gkey_t.set_timer_timing_success = 1;
                 gpro_t.gTimer_timer_Counter =0; //start recoder timer timing is "0",from "0" start
 
                 gctl_t.ai_flag = 0;
               
-                g_tMsg.key_mode = disp_timer_timing;
-                g_tMsg.key_add_dec_mode = set_temp_value_item;
+                gkey_t.key_mode = disp_timer_timing;
+                gkey_t.key_add_dec_mode = set_temp_value_item;
                 
                 LCD_Disp_Timer_Timing_Init();
                
@@ -624,5 +645,6 @@ static void display_disp_works_timingr_timing_fun(uint8_t sel_item)
 
        break;
     }
+   
 }
 

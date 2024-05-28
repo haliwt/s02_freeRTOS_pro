@@ -36,6 +36,7 @@
 #include "bsp_plasma.h"
 #include "bsp_ptc.h"
 #include "bsp_usart.h"
+#include "bsp_lcd_app.h"
 #include "bsp_freertos_app.h"
 
 //wifi
@@ -68,6 +69,7 @@ typedef struct {
    uint8_t set_temp_confirm ;
    uint8_t gdht11_temperature;
    uint8_t gDht11_humidity;
+   uint8_t power_off_flag ;
 
    int8_t set_timer_timing_hours;
    int8_t set_timer_timing_minutes;
@@ -99,30 +101,26 @@ extern BSP_process_t gpro_t;
 
 void bsp_Idle(void);
 
-void PowerOn_Init(void);
 
-void LCD_Disp_Works_Timing_Init(void);
 
-void LCD_Disp_Timer_Timing_Init(void);
+
 
 
 void MainBoard_Run_Feature_Handler(void);
 
 
 
-void PowerOff_freeFun(void);
+
 
 void Display_MainBoard_Feature_Handler(void);
 
-void Display_Works_Timing(void);
 
 
-void Display_Timer_Timing(void);
-
-void LCD_Disp_Timer_Timing(void);
+void Process_Dynamical_Action(void);
 
 
-void Set_Timer_Timing_Lcd_Blink(uint8_t hours,uint8_t minutes);
+
+
 
 
 
