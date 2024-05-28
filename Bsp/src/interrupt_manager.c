@@ -168,6 +168,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         gpro_t.gTimer_timer_Counter++;   //timer timing counter value 
 
         gpro_t.gTimer_works_counter_sencods++;
+       
 
         	
 
@@ -189,6 +190,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		wifi_t.gTimer_read_beijing_time ++;
 		wifi_t.gTimer_wifi_counter_link_beijing_times++;
         wifi_t.gTimer_counter_repeat_link_net++;
+
+      
         
        
 

@@ -185,6 +185,22 @@ static void vTaskMsgPro(void *pvParameters)
                   Process_Dynamical_Action();
 
                }
+
+              if(wifi_link_net_state()==1 && wifi_t.smartphone_app_power_on_flag==0 && wifi_t.link_net_tencent_data_flag ==1){ //after send publish datat to tencent .){
+             wifi_t.link_net_tencent_data_flag ++;
+		    
+		     MqttData_Publish_SetOpen(0x01);
+		     HAL_Delay(350);
+            
+
+        		}
+        		if(wifi_link_net_state()==1 && wifi_t.smartphone_app_power_on_flag==0 && wifi_t.link_net_tencent_data_flag ==2 ){
+                     wifi_t.link_net_tencent_data_flag ++;
+        		  
+        		    MqttData_Publish_Update_Data();
+        		     HAL_Delay(350);
+
+        		}
                  
              WIFI_Process_Handler();
                 
@@ -310,7 +326,7 @@ static void vTaskStart(void *pvParameters)
 
                        
 
-                      LCD_Wind_Run_Icon(0);
+                   
                      
 
         			  //fan on
@@ -379,7 +395,7 @@ static void vTaskStart(void *pvParameters)
         		 
         		  
         	}
-        	if(wifi_link_net_state() ==1  && wifi_t.gTimer_wifi_sub_power_off > 4 && power_off_flag==1){
+        	if(wifi_link_net_state() ==1  && wifi_t.gTimer_wifi_sub_power_off > 2 && power_off_flag==1){
         		power_off_flag++;
         		wifi_t.gTimer_wifi_sub_power_off=0;
                 Subscriber_Data_FromCloud_Handler();
@@ -426,7 +442,7 @@ static void vTaskStart(void *pvParameters)
 
                        Wifi_Icon_FastBlink();
          
-                       LCD_Wind_Run_Icon(0);
+                       LCD_Wind_Run_Icon(wifi_t.set_wind_speed_value);
 
                        display_disp_works_timingr_timing_fun(g_tMsg.key_mode);
 
