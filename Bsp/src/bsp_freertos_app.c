@@ -172,19 +172,12 @@ static void vTaskMsgPro(void *pvParameters)
          
          if(gkey_t.key_power==power_on){
 
-//                 Display_MainBoard_Feature_Handler();
-//         
-//                 LCD_Timer_Colon_Flicker();
-//
-//                 LCD_Wind_Run_Icon(0);
-    //             mode_long_short_key_fun();
-   //              display_disp_works_timingr_timing_fun(g_tMsg.key_mode);
-    //             Lcd_Display_Temp_Digital_Blink();
+          
+               
 
-
-                         MainBoard_Run_Feature_Handler();
+              MainBoard_Run_Feature_Handler();
                  
-                 
+             WIFI_Process_Handler();
                 
 
          }
@@ -292,11 +285,13 @@ static void vTaskStart(void *pvParameters)
             }
             if(power_on_first==1 && gkey_t.key_power==power_on){
 
-              //  recieve_flag++;
-            //    MainBoard_Run_Feature_Handler();
+           
 
                        mode_long_short_key_fun();
+                      
                        LCD_Timer_Colon_Flicker();
+
+                       Wifi_Icon_FastBlink();
          
                        LCD_Wind_Run_Icon(0);
 
@@ -493,6 +488,8 @@ static void power_long_short_key_fun(void)
              gkey_t.wifi_link_net_flag = 1;
 
              	//WIFI CONNCETOR process
+			 gkey_t.wifi_led_fast_blink_flag=1;
+			 //WIFI CONNCETOR process
 			wifi_t.esp8266_login_cloud_success =0;
 			wifi_t.runCommand_order_lable=wifi_link_tencent_cloud;
 			wifi_t.wifi_config_net_lable= wifi_set_restor;

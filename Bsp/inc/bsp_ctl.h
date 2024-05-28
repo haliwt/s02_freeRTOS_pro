@@ -28,6 +28,7 @@ typedef struct _bsp_ctl{
     uint8_t gSet_temperature_value ;
     uint8_t run_process_step;
     uint8_t dht11_temp_value;
+    uint8_t beijing_time_flag;
 
 	uint8_t ptc_warning;
 	uint8_t fan_warning;

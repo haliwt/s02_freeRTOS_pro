@@ -72,6 +72,9 @@ typedef struct {
    int8_t set_timer_timing_hours;
    int8_t set_timer_timing_minutes;
    uint8_t  set_temperature_value_success;
+   uint8_t disp_works_hours_value ;
+   uint8_t disp_works_minutes_value;
+   uint8_t  gTimer_works_counter_sencods;
    
 
 
