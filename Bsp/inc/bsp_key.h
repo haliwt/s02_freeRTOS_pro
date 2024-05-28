@@ -50,17 +50,21 @@ typedef enum mode_key_t{
    uint8_t  key_mode;
    uint8_t  key_sound_flag;
    uint8_t  wifi_link_net_flag;
+   uint8_t  key_add_dec_pressed_flag;
+   uint8_t  key_add_dec_mode;
  
 
   
    uint8_t   key_mode_times;
-   int8_t  set_temp_value;
+   uint8_t   set_temp_value;
+   uint8_t   key_mode_switch_flag;
 
-   
+   uint8_t  wifi_led_fast_blink_flag;
    uint8_t  gTimer_set_temp_value;
    uint8_t  gTimer_disp_set_timer_blink;
    uint8_t  gTimer_power_off;
    uint8_t  gTimer_disp_set_timer;
+   uint8_t  gTimer_set_temp_blink;
 
    
 	

@@ -32,7 +32,7 @@ void Dec_Key_Fun(uint8_t cmd)
             glcd_t.number4_high =  gctl_t.gSet_temperature_value   % 10; //
 
             gkey_t.gTimer_set_temp_value=0;
-            gProcess_t.set_temp_confirm = 0;
+            gpro_t.set_temp_confirm = 0;
             g_tMsg.key_add_dec_pressed_flag = 1;
 
             Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
@@ -43,23 +43,23 @@ void Dec_Key_Fun(uint8_t cmd)
 
               gkey_t.gTimer_disp_set_timer = 0; 
 
-              gProcess_t.set_timer_timing_minutes =0;
+              gpro_t.set_timer_timing_minutes =0;
 
-              gProcess_t.set_timer_timing_hours -- ;//run_t.dispTime_minutes = run_t.dispTime_minutes - 1;
-				if(gProcess_t.set_timer_timing_hours < 0){//if(run_t.dispTime_minutes < 0){
+              gpro_t.set_timer_timing_hours -- ;//run_t.dispTime_minutes = run_t.dispTime_minutes - 1;
+				if(gpro_t.set_timer_timing_hours < 0){//if(run_t.dispTime_minutes < 0){
 
-				    gProcess_t.set_timer_timing_hours =24;//run_t.dispTime_hours --;
+				    gpro_t.set_timer_timing_hours =24;//run_t.dispTime_hours --;
 					
 					
 				}
             
 
              //display hours
-                  glcd_t.number5_low =  gProcess_t.set_timer_timing_hours / 10 ;
-                  glcd_t.number5_high =  gProcess_t.set_timer_timing_hours / 10 ;
+                  glcd_t.number5_low =  gpro_t.set_timer_timing_hours / 10 ;
+                  glcd_t.number5_high =  gpro_t.set_timer_timing_hours / 10 ;
 
-                  glcd_t.number6_low  = gProcess_t.set_timer_timing_hours % 10; //
-                  glcd_t.number6_high =  gProcess_t.set_timer_timing_hours % 10; //
+                  glcd_t.number6_low  = gpro_t.set_timer_timing_hours % 10; //
+                  glcd_t.number6_high =  gpro_t.set_timer_timing_hours % 10; //
                    //dispaly minutes 
                   glcd_t.number7_low =  0;
                   glcd_t.number7_high =   0;
@@ -109,7 +109,7 @@ void Add_Key_Fun(uint8_t cmd)
 
      
         gkey_t.gTimer_set_temp_value=0;
-        gProcess_t.set_temp_confirm = 0;
+        gpro_t.set_temp_confirm = 0;
          g_tMsg.key_add_dec_pressed_flag = 1;
         Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
 
@@ -119,20 +119,20 @@ void Add_Key_Fun(uint8_t cmd)
 
          gkey_t.gTimer_disp_set_timer = 0; 
 
-         gProcess_t.set_timer_timing_minutes=0;
+         gpro_t.set_timer_timing_minutes=0;
 
-        	gProcess_t.set_timer_timing_hours++ ;//run_t.dispTime_minutes = run_t.dispTime_minutes + 60;
-		   if(gProcess_t.set_timer_timing_hours > 24){ //if(run_t.dispTime_minutes > 59){
+        	gpro_t.set_timer_timing_hours++ ;//run_t.dispTime_minutes = run_t.dispTime_minutes + 60;
+		   if(gpro_t.set_timer_timing_hours > 24){ //if(run_t.dispTime_minutes > 59){
 
-		          gProcess_t.set_timer_timing_hours=0;//run_t.dispTime_hours =0;
+		          gpro_t.set_timer_timing_hours=0;//run_t.dispTime_hours =0;
 		                
              }
 	//display hours
-        glcd_t.number5_low =  gProcess_t.set_timer_timing_hours / 10 ;
-        glcd_t.number5_high =  gProcess_t.set_timer_timing_hours / 10 ;
+        glcd_t.number5_low =  gpro_t.set_timer_timing_hours / 10 ;
+        glcd_t.number5_high =  gpro_t.set_timer_timing_hours / 10 ;
 
-        glcd_t.number6_low  = gProcess_t.set_timer_timing_hours% 10; //
-        glcd_t.number6_high =  gProcess_t.set_timer_timing_hours % 10; //
+        glcd_t.number6_low  = gpro_t.set_timer_timing_hours% 10; //
+        glcd_t.number6_high =  gpro_t.set_timer_timing_hours % 10; //
         //dispaly minutes 
         glcd_t.number7_low =  0;
         glcd_t.number7_high = 0;

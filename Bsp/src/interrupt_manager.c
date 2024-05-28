@@ -103,8 +103,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     if(tm1>9){ //10ms
         tm1=0;
         
-        
-       glcd_t.gTimer_fan_blink++; //wind run display 
+    gctl_t.gTimer_wifi_fast_blink++;
+  
+    
+	glcd_t.gTimer_fan_blink++;
+
+   
        
     	
     }
@@ -113,11 +117,11 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
        tm3=0;
      
        glcd_t.gTimer_colon_blink++ ;
-       gProcess_t.gTimer_disp_set_timer_blink ++; //set timer timing counter is digital blink.
-       glcd_t.gTimer_set_temp_blink++;   //set temperature value digital numbers blink .
+       gpro_t.gTimer_disp_set_timer_blink ++; //set timer timing counter is digital blink.
+       //set temperature value digital numbers blink .
        //control timer
        gctl_t.gTimer_wifi_ms_blink++;  //link net led fast blink.
-
+       gkey_t.gTimer_set_temp_blink++;
       
        
 
@@ -146,15 +150,15 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
       
 
         //process gtimer
-		gProcess_t.gTimer_run_adc++ ;
-		gProcess_t.gTimer_run_dht11++;
+		gpro_t.gTimer_run_adc++ ;
+		gpro_t.gTimer_run_dht11++;
    
-		gProcess_t.gTimer_run_one_mintue ++;
+		gpro_t.gTimer_run_one_mintue ++;
 		
-		gProcess_t.gTimer_works_counter++;
+		gpro_t.gTimer_works_counter++;
 
-        gProcess_t.gTimer_display_dht11_value ++;
-        gProcess_t.gTimer_timer_Counter++;   //timer timing counter value 
+        gpro_t.gTimer_display_dht11_value ++;
+        gpro_t.gTimer_timer_Counter++;   //timer timing counter value 
 
 		//wifi
 		wifi_t.gTimer_wifi_pub_power_off++;
@@ -169,14 +173,14 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		wifi_t.gTimer_auto_detected_net_state_times++;
 		wifi_t.gTimer_read_beijing_time ++;
 		wifi_t.gTimer_wifi_counter_link_beijing_times++;
-        wifi_t.gTimer_det_net_data ++ ;
+    
        
        
 
         if(tm2 > 59){ //60s = 1 minutes
 			tm2 =0;
-			gProcess_t.gTimer_run_total++;
-			gProcess_t.gTimer_run_time_out ++ ;
+			gpro_t.gTimer_run_total++;
+			gpro_t.gTimer_run_time_out ++ ;
 			
 
 		}

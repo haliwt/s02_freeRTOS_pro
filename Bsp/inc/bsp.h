@@ -71,6 +71,8 @@ typedef struct {
 
    int8_t set_timer_timing_hours;
    int8_t set_timer_timing_minutes;
+   uint8_t  set_temperature_value_success;
+   
 
 
    uint8_t gTimer_run_adc;
@@ -90,7 +92,7 @@ typedef struct {
 
 }BSP_process_t;
 
-extern BSP_process_t gProcess_t;
+extern BSP_process_t gpro_t;
 
 void bsp_Idle(void);
 

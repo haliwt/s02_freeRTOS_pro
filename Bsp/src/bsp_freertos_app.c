@@ -181,12 +181,8 @@ static void vTaskMsgPro(void *pvParameters)
    //              display_disp_works_timingr_timing_fun(g_tMsg.key_mode);
     //             Lcd_Display_Temp_Digital_Blink();
 
-                 if(wifi_t.gTimer_det_net_data > 2){
-                    wifi_t.gTimer_det_net_data=0;
-                     WIFI_Process_Handler();
 
-                  }
-
+                         MainBoard_Run_Feature_Handler();
                  
                  
                 
@@ -600,11 +596,11 @@ static void display_disp_works_timingr_timing_fun(uint8_t sel_item)
 
     case mode_set_timer:
     
-        Set_Timer_Timing_Lcd_Blink(gProcess_t.set_timer_timing_hours,gProcess_t.set_timer_timing_minutes);
+        Set_Timer_Timing_Lcd_Blink(gpro_t.set_timer_timing_hours,gpro_t.set_timer_timing_minutes);
        
         if(gkey_t.gTimer_disp_set_timer > 3){
 
-            if(gProcess_t.set_timer_timing_hours == 0 && gProcess_t.set_timer_timing_minutes==0){
+            if(gpro_t.set_timer_timing_hours == 0 && gpro_t.set_timer_timing_minutes==0){
 
                 g_tMsg.set_timer_timing_success = 0;
 
@@ -617,7 +613,7 @@ static void display_disp_works_timingr_timing_fun(uint8_t sel_item)
             }
             else{
                 g_tMsg.set_timer_timing_success = 1;
-                gProcess_t.gTimer_timer_Counter =0; //start recoder timer timing is "0",from "0" start
+                gpro_t.gTimer_timer_Counter =0; //start recoder timer timing is "0",from "0" start
 
                 gctl_t.ai_flag = 0;
               

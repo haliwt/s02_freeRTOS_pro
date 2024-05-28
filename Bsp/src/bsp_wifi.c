@@ -250,7 +250,7 @@ static void RunWifi_Command_Handler(void)
 
 			gctl_t.disp_works_minutes = wifi_t.real_minutes;
 
-			gProcess_t.gTimer_works_counter= wifi_t.real_seconds;
+			gpro_t.gTimer_works_counter= wifi_t.real_seconds;
 
             wifi_t.gTimer_get_beijing_time=0;
             wifi_t.gTimer_auto_detected_net_state_times =0;

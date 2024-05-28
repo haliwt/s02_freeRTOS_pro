@@ -1,7 +1,7 @@
 #include "bsp.h"
 
 
-BSP_process_t gProcess_t;
+BSP_process_t gpro_t;
 static uint8_t Works_Time_Out(void);
 static void Mainboard_Action_Fun(void);
 static void Mainboard_Fun_Stop(void);
@@ -91,28 +91,28 @@ void PowerOff_freeFun(void)
 uint8_t fan_continue_flag;
 static uint8_t Works_Time_Out(void)
 {
-	if(gProcess_t.gTimer_run_time_out < 11){
+	if(gpro_t.gTimer_run_time_out < 11){
 		
 		Mainboard_Fun_Stop();
 		 
     }
 
-	if(gProcess_t.gTimer_run_one_mintue < 60 && ( fan_continue_flag ==0)){
+	if(gpro_t.gTimer_run_one_mintue < 60 && ( fan_continue_flag ==0)){
 
 		Fan_Run();
 
 	}
 
-	if(gProcess_t.gTimer_run_one_mintue > 60){
+	if(gpro_t.gTimer_run_one_mintue > 60){
 
 	     fan_continue_flag=1;
 
          Fan_Stop();
 	 }
 
-	if(gProcess_t.gTimer_run_time_out > 10){ //10 minutes
-		gProcess_t.gTimer_run_time_out=0;
-		gProcess_t.gTimer_run_total=0;
+	if(gpro_t.gTimer_run_time_out > 10){ //10 minutes
+		gpro_t.gTimer_run_time_out=0;
+		gpro_t.gTimer_run_total=0;
 
 		Mainboard_Action_Fun();
 		
@@ -219,51 +219,51 @@ static void Process_Dynamical_Action(void)
 void Display_Works_Timing(void)
 {
 
-    if(gProcess_t.gTimer_works_counter > 59 ){
+    if(gpro_t.gTimer_works_counter > 59 ){
 
-	  gProcess_t.gTimer_works_counter=0;
+	  gpro_t.gTimer_works_counter=0;
 
-	  gProcess_t.gTimer_display_works_minutes++;
+	  gpro_t.gTimer_display_works_minutes++;
 
-	if( gProcess_t.gTimer_display_works_minutes > 59){ //1 hours
-		gProcess_t.gTimer_display_works_minutes=0;
+	if( gpro_t.gTimer_display_works_minutes > 59){ //1 hours
+		gpro_t.gTimer_display_works_minutes=0;
 
-	     gProcess_t.gTimer_display_works_hours++;
-
-
-		glcd_t.number7_low = gProcess_t.gTimer_display_works_minutes / 10;
-		glcd_t.number7_high = gProcess_t.gTimer_display_works_minutes / 10;
+	     gpro_t.gTimer_display_works_hours++;
 
 
-		glcd_t.number8_low = gProcess_t.gTimer_display_works_minutes  % 10;
-		glcd_t.number8_high = gProcess_t.gTimer_display_works_minutes % 10;
+		glcd_t.number7_low = gpro_t.gTimer_display_works_minutes / 10;
+		glcd_t.number7_high = gpro_t.gTimer_display_works_minutes / 10;
+
+
+		glcd_t.number8_low = gpro_t.gTimer_display_works_minutes  % 10;
+		glcd_t.number8_high = gpro_t.gTimer_display_works_minutes % 10;
 
 		//display hours works
 
 
-        if(gProcess_t.gTimer_display_works_hours > 99){
-			gProcess_t.gTimer_display_works_hours=0;
+        if(gpro_t.gTimer_display_works_hours > 99){
+			gpro_t.gTimer_display_works_hours=0;
 
 
 		}
 		
-		glcd_t.number5_low = gProcess_t.gTimer_display_works_hours / 10;
-		glcd_t.number5_high = gProcess_t.gTimer_display_works_hours / 10;
+		glcd_t.number5_low = gpro_t.gTimer_display_works_hours / 10;
+		glcd_t.number5_high = gpro_t.gTimer_display_works_hours / 10;
 
 
-		glcd_t.number6_low = gProcess_t.gTimer_display_works_hours  % 10;
-		glcd_t.number6_high = gProcess_t.gTimer_display_works_hours % 10;
+		glcd_t.number6_low = gpro_t.gTimer_display_works_hours  % 10;
+		glcd_t.number6_high = gpro_t.gTimer_display_works_hours % 10;
 		
 
 	}
     else{
 	 
-		  glcd_t.number7_low = gProcess_t.gTimer_display_works_minutes / 10;
-		  glcd_t.number7_high = gProcess_t.gTimer_display_works_minutes / 10;
+		  glcd_t.number7_low = gpro_t.gTimer_display_works_minutes / 10;
+		  glcd_t.number7_high = gpro_t.gTimer_display_works_minutes / 10;
 		
 						   
-		  glcd_t.number8_low = gProcess_t.gTimer_display_works_minutes	% 10;
-		  glcd_t.number8_high = gProcess_t.gTimer_display_works_minutes % 10;
+		  glcd_t.number8_low = gpro_t.gTimer_display_works_minutes	% 10;
+		  glcd_t.number8_high = gpro_t.gTimer_display_works_minutes % 10;
 
 	    
     }
@@ -292,24 +292,24 @@ void LCD_Disp_Works_Timing_Init(void)
 
        gctl_t.ai_flag = 1;
 
-       LCD_Number_Wifi_OneTwo_Humidity();
+     //  LCD_Number_Wifi_OneTwo_Humidity();
        
-       glcd_t.number5_low = gProcess_t.gTimer_display_works_hours / 10;
-		glcd_t.number5_high = gProcess_t.gTimer_display_works_hours / 10;
+       glcd_t.number5_low = gpro_t.gTimer_display_works_hours / 10;
+		glcd_t.number5_high = gpro_t.gTimer_display_works_hours / 10;
 
 
-		glcd_t.number6_low = gProcess_t.gTimer_display_works_hours  % 10;
-		glcd_t.number6_high = gProcess_t.gTimer_display_works_hours % 10;
+		glcd_t.number6_low = gpro_t.gTimer_display_works_hours  % 10;
+		glcd_t.number6_high = gpro_t.gTimer_display_works_hours % 10;
 		
 
 	
 	 
-		  glcd_t.number7_low = gProcess_t.gTimer_display_works_minutes / 10;
-		  glcd_t.number7_high = gProcess_t.gTimer_display_works_minutes / 10;
+		  glcd_t.number7_low = gpro_t.gTimer_display_works_minutes / 10;
+		  glcd_t.number7_high = gpro_t.gTimer_display_works_minutes / 10;
 		
 						   
-		  glcd_t.number8_low = gProcess_t.gTimer_display_works_minutes	% 10;
-		  glcd_t.number8_high = gProcess_t.gTimer_display_works_minutes % 10;
+		  glcd_t.number8_low = gpro_t.gTimer_display_works_minutes	% 10;
+		  glcd_t.number8_high = gpro_t.gTimer_display_works_minutes % 10;
 
 	    
 
@@ -331,7 +331,7 @@ void LCD_Disp_Works_Timing_Init(void)
 */
 void Set_Timer_Timing_Lcd_Blink(uint8_t hours,uint8_t minutes)
 {
-    if(gProcess_t.gTimer_disp_set_timer_blink < 1){//3* 100ms
+    if(gpro_t.gTimer_disp_set_timer_blink < 1){//3* 100ms
 
 	  glcd_t.number5_low =  0x0A ;
       glcd_t.number5_high =  0x0A ;
@@ -350,15 +350,15 @@ void Set_Timer_Timing_Lcd_Blink(uint8_t hours,uint8_t minutes)
 
 
     }
-	else if(gProcess_t.gTimer_disp_set_timer_blink > 0 && gProcess_t.gTimer_disp_set_timer_blink < 2){
+	else if(gpro_t.gTimer_disp_set_timer_blink > 0 && gpro_t.gTimer_disp_set_timer_blink < 2){
 	
 
 
-      glcd_t.number5_low =  gProcess_t.set_timer_timing_hours / 10 ;
-      glcd_t.number5_high =  gProcess_t.set_timer_timing_hours / 10 ;
+      glcd_t.number5_low =  gpro_t.set_timer_timing_hours / 10 ;
+      glcd_t.number5_high =  gpro_t.set_timer_timing_hours / 10 ;
 
-      glcd_t.number6_low  = gProcess_t.set_timer_timing_hours% 10; //
-      glcd_t.number6_high = gProcess_t.set_timer_timing_hours % 10; //
+      glcd_t.number6_low  = gpro_t.set_timer_timing_hours% 10; //
+      glcd_t.number6_high = gpro_t.set_timer_timing_hours % 10; //
       
        //dispaly minutes 
       glcd_t.number7_low =  0;
@@ -369,8 +369,8 @@ void Set_Timer_Timing_Lcd_Blink(uint8_t hours,uint8_t minutes)
 
        
 	}
-	else if(gProcess_t.gTimer_disp_set_timer_blink > 1){
-	  gProcess_t.gTimer_disp_set_timer_blink =0;
+	else if(gpro_t.gTimer_disp_set_timer_blink > 1){
+	  gpro_t.gTimer_disp_set_timer_blink =0;
 
     }
 
@@ -391,25 +391,25 @@ void Set_Timer_Timing_Lcd_Blink(uint8_t hours,uint8_t minutes)
 void Display_Timer_Timing(void)
 {
 
-     if(gProcess_t.gTimer_timer_Counter > 59){
-	    gProcess_t.gTimer_timer_Counter =0;
+     if(gpro_t.gTimer_timer_Counter > 59){
+	    gpro_t.gTimer_timer_Counter =0;
 		
-		gProcess_t.set_timer_timing_minutes -- ;
+		gpro_t.set_timer_timing_minutes -- ;
     
 	
-	    if(gProcess_t.set_timer_timing_minutes <  0 ){
+	    if(gpro_t.set_timer_timing_minutes <  0 ){
 			 
-		   gProcess_t.set_timer_timing_hours -- ;
-		   gProcess_t.set_timer_timing_minutes =59;
+		   gpro_t.set_timer_timing_hours -- ;
+		   gpro_t.set_timer_timing_minutes =59;
          }
 
 		
 		
-		 if(gProcess_t.set_timer_timing_hours < 0 ){
+		 if(gpro_t.set_timer_timing_hours < 0 ){
 		 
 			
-			gProcess_t.set_timer_timing_hours=0;
-			gProcess_t.set_timer_timing_minutes=0;
+			gpro_t.set_timer_timing_hours=0;
+			gpro_t.set_timer_timing_minutes=0;
 			gkey_t.key_power = power_off;
 			gkey_t.gTimer_power_off=0;
 			
@@ -419,20 +419,20 @@ void Display_Timer_Timing(void)
 
 
 		 //display hours timing
-	     glcd_t.number5_low = gProcess_t.set_timer_timing_hours / 10;
-		 glcd_t.number5_high = gProcess_t.set_timer_timing_hours / 10;
+	     glcd_t.number5_low = gpro_t.set_timer_timing_hours / 10;
+		 glcd_t.number5_high = gpro_t.set_timer_timing_hours / 10;
 	 
 	 
-		 glcd_t.number6_low = gProcess_t.set_timer_timing_hours   % 10;
-		 glcd_t.number6_high = gProcess_t.set_timer_timing_hours % 10;
+		 glcd_t.number6_low = gpro_t.set_timer_timing_hours   % 10;
+		 glcd_t.number6_high = gpro_t.set_timer_timing_hours % 10;
 		 
 	      //display minutes 
-		 glcd_t.number7_low = gProcess_t.set_timer_timing_minutes / 10;
-		 glcd_t.number7_high = gProcess_t.set_timer_timing_minutes / 10;
+		 glcd_t.number7_low = gpro_t.set_timer_timing_minutes / 10;
+		 glcd_t.number7_high = gpro_t.set_timer_timing_minutes / 10;
 		 
 							
-		 glcd_t.number8_low = gProcess_t.set_timer_timing_minutes   % 10;
-		 glcd_t.number8_high = gProcess_t.set_timer_timing_minutes % 10;
+		 glcd_t.number8_low = gpro_t.set_timer_timing_minutes   % 10;
+		 glcd_t.number8_high = gpro_t.set_timer_timing_minutes % 10;
 
          LCD_Disp_Timer_Timing();
 		    
@@ -456,22 +456,22 @@ void LCD_Disp_Timer_Timing_Init(void)
 
      gctl_t.ai_flag = 0;
 
-     LCD_Number_Wifi_OneTwo_Humidity();
+    // LCD_Number_Wifi_OneTwo_Humidity();
 //display hours timing
-    glcd_t.number5_low = gProcess_t.set_timer_timing_hours / 10;
-    glcd_t.number5_high = gProcess_t.set_timer_timing_hours / 10;
+    glcd_t.number5_low = gpro_t.set_timer_timing_hours / 10;
+    glcd_t.number5_high = gpro_t.set_timer_timing_hours / 10;
 
 
-    glcd_t.number6_low = gProcess_t.set_timer_timing_hours   % 10;
-    glcd_t.number6_high = gProcess_t.set_timer_timing_hours % 10;
+    glcd_t.number6_low = gpro_t.set_timer_timing_hours   % 10;
+    glcd_t.number6_high = gpro_t.set_timer_timing_hours % 10;
 
     //display minutes 
-    glcd_t.number7_low = gProcess_t.set_timer_timing_minutes / 10;
-    glcd_t.number7_high = gProcess_t.set_timer_timing_minutes / 10;
+    glcd_t.number7_low = gpro_t.set_timer_timing_minutes / 10;
+    glcd_t.number7_high = gpro_t.set_timer_timing_minutes / 10;
 
     				
-    glcd_t.number8_low = gProcess_t.set_timer_timing_minutes   % 10;
-    glcd_t.number8_high = gProcess_t.set_timer_timing_minutes % 10;
+    glcd_t.number8_low = gpro_t.set_timer_timing_minutes   % 10;
+    glcd_t.number8_high = gpro_t.set_timer_timing_minutes % 10;
 
     LCD_Disp_Timer_Timing();
 
@@ -491,15 +491,15 @@ void Display_MainBoard_Feature_Handler(void)
 {
 
 //
-//    if(gProcess_t.gTimer_display_dht11_value  >3 && gProcess_t.gTimer_display_dht11_value <5){
+//    if(gpro_t.gTimer_display_dht11_value  >3 && gpro_t.gTimer_display_dht11_value <5){
 //
 //             Process_Dynamical_Action();
 //
 //
 //     }
-     if(gProcess_t.gTimer_display_dht11_value > 9){
+     if(gpro_t.gTimer_display_dht11_value > 9){
 
-          gProcess_t.gTimer_display_dht11_value =0;
+          gpro_t.gTimer_display_dht11_value =0;
             // Update_DHT11_Value();
 
            if(g_tMsg.key_add_dec_pressed_flag == 0){

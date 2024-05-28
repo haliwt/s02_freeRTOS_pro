@@ -27,6 +27,7 @@ typedef struct _bsp_ctl{
     uint8_t  wifi_flag;
     uint8_t gSet_temperature_value ;
     uint8_t run_process_step;
+    uint8_t dht11_temp_value;
 
 	uint8_t ptc_warning;
 	uint8_t fan_warning;
@@ -43,6 +44,7 @@ typedef struct _bsp_ctl{
 
 
     uint8_t gTimer_wifi_ms_blink ;
+    uint8_t gTimer_wifi_fast_blink;
 	
 
 }bsp_ctl;
