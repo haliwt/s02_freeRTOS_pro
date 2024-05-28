@@ -40,6 +40,7 @@ void Set_Timer_Timing_Lcd_Blink(void );
 void Record_WorksTime_DonotDisp_Handler(void);
 
 
+void Mainboard_Action_Fun(void);
 
 
 #endif

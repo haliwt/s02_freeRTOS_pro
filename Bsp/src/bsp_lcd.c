@@ -209,7 +209,10 @@ static void TM1723_Write_OneByte(uint8_t data)
 	 //data =data>>1;//
 	  delay_us(2);
 	// data >>=1;//
-	}
+	
+  
+     
+ }
 
 }
 static void TIM1723_Write_Cmd(uint8_t cmd)

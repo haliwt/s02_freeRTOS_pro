@@ -14,14 +14,16 @@ uint8_t (*ai_mode_state)(void);
 
 
 
-
 uint8_t (*ptc_error_state)(void);
 uint8_t (*fan_error_state)(void);
 
 
 static uint8_t ai_mode_default(void);
-static uint8_t power_on_off_default(void);
 
+//uint8_t (*wifi_link_net_state)(void);
+//static uint8_t wifi_link_net_default(void);
+
+static uint8_t power_on_default(void);
 
 
 
@@ -33,8 +35,11 @@ void bsp_ctl_init(void)
    gctl_t.ptc_flag=1;
    gctl_t.plasma_flag =1;
    gctl_t.ultrasonic_flag =1;
-   gctl_t.ai_flag =1;
-   g_tMsg.key_add_dec_mode = set_temp_value_item;
+   gctl_t.ai_flag = 1;
+   gkey_t.key_add_dec_mode = set_temp_value_item;
+   wifi_t.set_wind_speed_value=0;
+
+   Buzzer_Sound_Init();
    
    Wifi_Init();
    Ptc_State_Handler(Ptc_Default_Handler);
@@ -43,15 +48,30 @@ void bsp_ctl_init(void)
    Ptc_error_state_Handler(Ptc_Error_Default_Handler);
    Fan_error_state_Handler(Fan_Error_Default_Handler);
 
-   
-   Ai_Mode_Handler(ai_mode_default);
-
-   Power_On_Handler(power_on_off_default);
 
 
-   buzzer_sound_init();
+    Ai_Mode_Handler(ai_mode_default);
+
+    Power_On_Handler(power_on_default);
+
+  
+}
+
+void main_fun_init(void)
+{
+   gctl_t.fan_warning =0;
+   gctl_t.ptc_warning = 0;
+   gctl_t.ptc_flag=1;
+   gctl_t.plasma_flag =1;
+   gctl_t.ultrasonic_flag =1;
+   gctl_t.ai_flag = 1;
+   gkey_t.key_add_dec_mode = set_temp_value_item;
+   wifi_t.set_wind_speed_value=0;
+
+
 
 }
+
 
 /*****************************************************************************
  * 
@@ -185,7 +205,6 @@ uint8_t Fan_Error_Default_Handler(void)
     
 }
 
-
 /*****************************************************************************
  * 
  * Function Name: void  Ai_Mode_Handler(uint8_t(*ai_handler)(void))
@@ -211,7 +230,6 @@ void  Ai_Mode_Handler(uint8_t(*ai_handler)(void))
 
 }
 
-
 /*****************************************************************************
  * 
  * Function Name:  Wifi_Link_Net_Handler(uint8_t(*wifi_handler)(void))
@@ -220,19 +238,26 @@ void  Ai_Mode_Handler(uint8_t(*ai_handler)(void))
  * Return Ref: close or open 
  * 
 *****************************************************************************/
-void Power_On_Handler(uint8_t(*poweron_handler)(void))
+static uint8_t power_on_default(void)
 {
 
-    power_on_state = poweron_handler;
+    if(gkey_t.key_power ==power_on)return 1;
+    else return 0;
+   
+
 
 }
 
-static uint8_t power_on_off_default(void)
+void  Power_On_Handler(uint8_t(*power_handler)(void))
+
 {
 
-   if(gkey_t.key_power == power_on) return 1;
-   return 0;
+    power_on_state = power_handler;
 
 }
+
+
+
+
 
 

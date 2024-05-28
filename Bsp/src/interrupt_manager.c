@@ -116,12 +116,13 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     if(tm3>99){ //10*10 = 100ms 
        tm3=0;
      
-       glcd_t.gTimer_colon_blink++ ;
-       gpro_t.gTimer_disp_set_timer_blink ++; //set timer timing counter is digital blink.
-       //set temperature value digital numbers blink .
-       //control timer
-       gctl_t.gTimer_wifi_ms_blink++;  //link net led fast blink.
+            //key timer
        gkey_t.gTimer_set_temp_blink++;
+
+       //lcd timer 
+       glcd_t.gTimer_colon_blink++ ;
+       
+       glcd_t.gTimer_error_times++;
       
        
 
@@ -133,21 +134,26 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		tm0=0;
 		tm2++;
       
-   
-		
-		
-		glcd_t.gTimer_error_times++;
-	    gctl_t.gTimer_prcoess_iwdg++;
+          //control timer
         gctl_t.gTimer_wifi_blink++;
-        
-        //key timer
+       gctl_t.gTimer_prcoess_iwdg++;
+  
+       gctl_t.gTimer_ctl_usart2_error++;
+	   
+       //key timer
+		//gkey_t.gTimer_key_temp_timing++;
+        gkey_t.gTimer_power_off_run_times++;
+        gkey_t.gTimer_set_temp_value++;
+       // gkey_t.gTimer_power_key_counter++;
+       // gkey_t.gTimer_mode_key_counter ++ ;
         gkey_t.gTimer_disp_set_timer++;
-        
-        gkey_t.gTimer_power_off++;
-        gkey_t.gTimer_set_temp_value++;         //add or dec key set temperature value counter
+		
+		
+		
   
 
-      
+         //lcd timer
+        glcd_t.gTimer_error_times++;
 
         //process gtimer
 		gpro_t.gTimer_run_adc++ ;
@@ -160,6 +166,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
         gpro_t.gTimer_display_dht11_value ++;
         gpro_t.gTimer_timer_Counter++;   //timer timing counter value 
+
+        gpro_t.gTimer_works_counter_sencods++;
+
+        	
+
+     
        
    
 
@@ -177,6 +189,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		wifi_t.gTimer_read_beijing_time ++;
 		wifi_t.gTimer_wifi_counter_link_beijing_times++;
         wifi_t.gTimer_counter_repeat_link_net++;
+        
+       
 
       
        

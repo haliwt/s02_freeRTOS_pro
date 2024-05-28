@@ -172,12 +172,19 @@ static void vTaskMsgPro(void *pvParameters)
          
          if(gkey_t.key_power==power_on){
 
-          
-               
+              if(gpro_t.gTimer_run_dht11 >6){
+                gpro_t.gTimer_run_dht11 =0;
+                  Update_DHT11_Value();
+                  Disp_HumidityTemp_Value();
 
-             // MainBoard_Run_Feature_Handler();
+                }
 
-             Process_Dynamical_Action();
+        
+             if(gpro_t.gTimer_works_counter >1){
+                gpro_t.gTimer_works_counter=0;
+                  Process_Dynamical_Action();
+
+               }
                  
              WIFI_Process_Handler();
                 
@@ -206,7 +213,7 @@ static void vTaskStart(void *pvParameters)
    const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置最大等待时间为500ms */
    static uint8_t sound_flag,power_on_first;
    uint32_t ulValue;
-   static uint8_t power_sound_flag,key_power_long_flag,add_flag,dec_flag;
+   static uint8_t power_sound_flag,key_power_long_flag,add_flag,dec_flag,power_off_flag;
 
     while(1)
     {
@@ -274,14 +281,138 @@ static void vTaskStart(void *pvParameters)
 
             if(power_on_first == 0 && gkey_t.key_power==power_on){
                power_on_first++; 
-               PowerOn_Init();
-               LCD_Numbers1234_Init();
-               Display_Wind_Icon_Inint();
+
+        
+              gpro_t.power_off_flag=1;
+              gkey_t.set_timer_timing_success =0;
+              if(wifi_link_net_state()==0){
+    		      gpro_t.disp_works_minutes_value=0;
+    		      gpro_t.disp_works_hours_value =0;
+                }
+              wifi_t.set_wind_speed_value=0;
+              gpro_t.gTimer_run_total=0;
+              if(wifi_t.smartphone_app_power_on_flag==0){
+                     main_fun_init();
+
+               }
+                
+        		      
+        		      LED_Mode_On();
+        		      LED_Power_On();
+        		      Backlight_On();
+
+                          
+                       LCD_Numbers1234_Init();
+                       Display_Wind_Icon_Inint();
+        		  
+        			  Update_DHT11_Value();
+        		      Disp_HumidityTemp_Init();
+
+                       
+
+                      LCD_Wind_Run_Icon(0);
+                     
+
+        			  //fan on
+        			  Mainboard_Action_Fun();
+
+                      if(wifi_link_net_state()==1){
+                          MqttData_Publish_SetOpen(1);  
+            		      HAL_Delay(350);//300
+
+                         Publish_Data_Warning(fan_warning,no_warning);
+
+                          Publish_Data_Warning(ptc_temp_warning,no_warning);
+
+                         }
+                       
+
+                    }
+                    else if(gkey_t.key_power==power_off){
+                        power_on_first=0; 
+
+                     if(gpro_t.power_off_flag == 1){
+            		gpro_t.power_off_flag ++;
+            	    
+                   //key set ref 
+
+                  // gkey_t.gTimer_power_off_run_times=0;
+                   gkey_t.wifi_led_fast_blink_flag=0;
+
+                    gctl_t.fan_warning = 0;
+                    gctl_t.ptc_warning = 0;
+                    gkey_t.set_timer_timing_success =0;
+            	   
+            	  
+            	    //control set ref
+            	    wifi_t.link_net_tencent_data_flag =1;
+
+                   //  gctl_t.step_process=0;
+
+                    //wifi set ref
+            	
+            		wifi_t.link_tencent_thefirst_times=0;
+            	
+            		wifi_t.gTimer_wifi_pub_power_off=0;	
+                    wifi_t.gTimer_linking_tencent_duration=0; //166s -2分7秒
+
+                    wifi_t.repeat_login_tencent_cloud_init_ref=0;
+            	    wifi_t.runCommand_order_lable= 0xff;
+                    wifi_t.three_times_link_beijing=0;
+            		wifi_t.smartphone_app_power_on_flag=0;
+
+                    gpro_t.gTimer_run_dht11=20;
+                    gpro_t.set_temperature_value_success=0;
+                   
+            	    //stop main board function ref.
+            	    PowerOff_Off_Led();
+            	  
+        		
+        	  }
+
+             if(wifi_link_net_state() ==1 && power_off_flag==0 ){
+        		wifi_t.gTimer_wifi_pub_power_off=0;
+        		power_off_flag++;
+        		MqttData_Publish_PowerOff_Ref();
+        		wifi_t.runCommand_order_lable= wifi_publish_update_tencent_cloud_data;
+        	     
+        		 
+        		  
+        	}
+        	if(wifi_link_net_state() ==1  && wifi_t.gTimer_wifi_sub_power_off > 4 && power_off_flag==1){
+        		power_off_flag++;
+        		wifi_t.gTimer_wifi_sub_power_off=0;
+                Subscriber_Data_FromCloud_Handler();
+        	  
+        	
+            }
+            if(wifi_link_net_state() ==1){
+                Record_WorksTime_DonotDisp_Handler();
+               wifi_t.runCommand_order_lable= wifi_publish_update_tencent_cloud_data;
 
             }
-            else if(gkey_t.key_power==power_off){
-                power_on_first=0; 
-              PowerOff_freeFun();
+        	
+            if(	gpro_t.power_off_flag ==2){
+                   if(gkey_t.gTimer_power_off_run_times < 61){
+                        Fan_Run();
+        				OnlyDisp_Wind_Icon_Handler();
+        				
+
+        		   }
+        		   else{
+                      gpro_t.power_off_flag++;
+        			   Fan_Stop();
+        		       Backlight_Off();
+                       Lcd_Display_Off();
+        		     
+        			   
+        		   }
+
+        		}
+
+        		
+                Breath_Led();
+             
 
 
             }
@@ -301,7 +432,7 @@ static void vTaskStart(void *pvParameters)
 
                        Lcd_Display_Temp_Digital_Blink();
 
-                
+                       Disip_Wifi_Icon_State();
                
 
            }

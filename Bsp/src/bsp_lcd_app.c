@@ -2,7 +2,7 @@
 
 
 
-static void Mainboard_Action_Fun(void);
+
 
 
 
@@ -76,7 +76,7 @@ void PowerOff_Off_Led(void)
 *	返 回 值: 无
 *********************************************************************************************************
 */
-static void Mainboard_Action_Fun(void)
+ void Mainboard_Action_Fun(void)
 {
     Ptc_On();
 	Ultrasonic_Pwm_Output();

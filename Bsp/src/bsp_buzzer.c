@@ -1,31 +1,29 @@
 #include "bsp_buzzer.h"
 #include "bsp.h"
 
+
 void (*buzzer_sound)(void);
 
-static void Buzzer_KeySound_Off(void);
 
-/**********************************************************************************************************
-*	Function Name: MODH_Poll
-*	Function: ???????. 1ms ?????
-*	Input Ref: ?
-*	Return Ref: 0 ????? 1????????
-**********************************************************************************************************/
-void buzzer_sound_init(void)
+void Buzzer_Sound_Init(void)
 {
 
-   Buzzer_Sound_Handler(Buzzer_KeySound);
+    Buzzer_Sound_Handler(Buzzer_KeySound);
+
 
 }
 
 
 
-/**********************************************************************************************************
+static void Buzzer_KeySound_Off(void);
+/*
+*********************************************************************************************************
 *	Function Name: MODH_Poll
 *	Function: ???????. 1ms ?????
 *	Input Ref: ?
 *	Return Ref: 0 ????? 1????????
-**********************************************************************************************************/
+*********************************************************************************************************
+*/
 void Buzzer_KeySound(void)
 {
 
@@ -81,11 +79,9 @@ void Buzzer_Ptc_Error_Sound(void)
 }
 
 
-
-void Buzzer_Sound_Handler(void(*sound_handler)(void))
+void Buzzer_Sound_Handler(void(*buzzer_handler)(void))
 {
-
-   buzzer_sound = sound_handler;
+   buzzer_sound = buzzer_handler;
 
 }
 
