@@ -344,12 +344,7 @@ static void vTaskStart(void *pvParameters)
         			  Update_DHT11_Value();
         		      Disp_HumidityTemp_Init();
 
-                       
-
-                   
-                     
-
-        			  //fan on
+                       //fan on
         			  Mainboard_Action_Fun();
 
                       if(wifi_link_net_state()==1){

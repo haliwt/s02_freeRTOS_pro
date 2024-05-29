@@ -91,7 +91,7 @@ static void Mqtt_Value_update_data(void)
 	
 	if(gctl_t.gSet_temperature_value <20)gctl_t.gSet_temperature_value = 40;
 	else if(gctl_t.gSet_temperature_value > 40 )gctl_t.gSet_temperature_value = 40;
-	sg_info.set_temperature = gctl_t.gSet_temperature_value;
+	sg_info.set_temperature = 40;
 
 }
 

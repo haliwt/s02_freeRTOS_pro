@@ -551,7 +551,7 @@ void Json_Parse_Command_Fun(void)
 
         wifi_t.esp8266_login_cloud_success=1;
        
-         gkey_t.power_key_long_counter=1;
+          gkey_t.power_key_long_counter=0;
          wifi_t.smartphone_app_power_on_flag=0;
         gkey_t.key_power = power_off; //WT.EDIT 2024.02.20
 
@@ -562,12 +562,14 @@ void Json_Parse_Command_Fun(void)
 
 	  case OPEN_ON_ITEM:
       	buzzer_sound();
-		   gkey_t.key_power = power_on;
+		  
 	 
-	
+	   //  gkey_t.power_key_long_counter=1;
 		wifi_t.esp8266_login_cloud_success=1;
 		MqttData_Publish_SetOpen(1);  
 		HAL_Delay(350);//300
+
+         gkey_t.key_power = power_on;
 
 		gctl_t.ptc_warning =0;
 		gctl_t.fan_warning =0;
@@ -889,7 +891,7 @@ void Json_Parse_Command_Fun(void)
 		//   gpro_t.gTimer_gpro_temp_delay =0;
 		   wifi_t.set_beijing_time_flag=0;
 		   wifi_t.get_rx_beijing_time_enable=0; //enable beijing times
-           gkey_t.power_key_long_counter = 1;
+          
 		   smartphone_app_timer_power_on_handler();
 
 	      wifi_t.response_wifi_signal_label=0xff;
