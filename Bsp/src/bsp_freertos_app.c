@@ -91,7 +91,7 @@ static void vTaskMsgPro(void *pvParameters)
     BaseType_t xResult;
 	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置最大等待时间为500ms */
 	uint32_t ulValue;
-    static uint8_t power_sound_flag;
+   
    
 	
     while(1)
@@ -168,16 +168,10 @@ static void vTaskMsgPro(void *pvParameters)
 		{
 			/* 超时 */
 
-        if(power_sound_flag==0){
-          power_sound_flag++;
-
-          buzzer_sound();
-
-        }
        
         MainBoard_Self_Inspection_PowerOn_Fun();
-
-        WIFI_Process_Handler();
+        
+         WIFI_Process_Handler();
 
              
               }
@@ -204,7 +198,7 @@ static void vTaskStart(void *pvParameters)
    const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置最大等待时间为500ms */
    static uint8_t sound_flag,power_on_first;
    uint32_t ulValue;
-   static uint8_t add_flag,dec_flag;
+   static uint8_t add_flag,dec_flag,power_sound_flag;
 
     while(1)
     {
@@ -267,8 +261,16 @@ static void vTaskStart(void *pvParameters)
         }
         else {
             
+              
+        if(power_sound_flag==0){
+          power_sound_flag++;
+
+          buzzer_sound();
+
+        }
+
                power_long_short_key_fun();
-               
+              
                
                
               if(gkey_t.key_power==power_on){

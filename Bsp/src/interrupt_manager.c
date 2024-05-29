@@ -158,6 +158,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         gpro_t.gTimer_run_main_fun++;
        
        //wifi
+       #if 0
 		wifi_t.gTimer_power_first_link_tencent++;
 		wifi_t.gTimer_login_tencent_times++;
 		wifi_t.gTimer_wifi_pub_power_off++;
@@ -176,6 +177,24 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		wifi_t.gTimer_wifi_counter_link_beijing_times++;
         wifi_t.gTimer_counter_repeat_link_net++;
         wifi_t.gTimer_normal_send_dat_tencent ++;
+        #endif 
+
+
+
+        	//wifi
+		wifi_t.gTimer_wifi_pub_power_off++;
+		wifi_t.gTimer_power_first_link_tencent++;
+		wifi_t.power_on_login_tencent_cloud_flag++;
+		wifi_t.gTimer_power_first_link_tencent++;
+        wifi_t.gTimer_linking_tencent_duration++;
+
+        wifi_t.gTimer_login_tencent_times ++;
+		wifi_t.gTimer_publish_dht11++;
+		wifi_t.gTimer_get_beijing_time++;
+		wifi_t.gTimer_auto_detected_net_state_times++;
+		wifi_t.gTimer_read_beijing_time ++;
+		wifi_t.gTimer_wifi_counter_link_beijing_times++;
+        wifi_t.gTimer_counter_repeat_link_net++;
 
        if(tm2 > 59){ //60s = 1 minutes
 			tm2 =0;
