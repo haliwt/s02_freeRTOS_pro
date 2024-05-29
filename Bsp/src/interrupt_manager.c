@@ -168,6 +168,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         gpro_t.gTimer_timer_Counter++;   //timer timing counter value 
 
         gpro_t.gTimer_works_counter_sencods++;
+        gpro_t.gTimer_run_total ++;
+         gpro_t.gTimer_run_time_out++;
+       
        
 
         	

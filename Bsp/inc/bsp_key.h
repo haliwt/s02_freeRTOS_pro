@@ -53,6 +53,7 @@ typedef enum mode_key_t{
    uint8_t  key_add_dec_pressed_flag;
    uint8_t  key_add_dec_mode;
    uint8_t  set_timer_timing_success;
+   uint8_t  power_key_long_counter;
    
    
  

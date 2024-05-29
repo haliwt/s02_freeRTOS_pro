@@ -390,11 +390,7 @@ void Tencent_Cloud_Rx_Handler(void)
 
     break;
 
-    
-
-
-    
-     case 7:
+    case 7:
  
     	
     	if(strstr((char *) rx_tencent_num_buffer,"ptc\":0")){
@@ -419,9 +415,6 @@ void Tencent_Cloud_Rx_Handler(void)
 
     case 9: //if(rx_tencent_num[0]  > 7 && rx_tencent_num[0]   < 9){
 
-    
-
-     
     if(strstr((char *) rx_tencent_num_buffer,"Anion\":0")){
           if(power_on_state() ==power_on){
 	      //   gctl_t.plasma_flag=0;
@@ -437,9 +430,7 @@ void Tencent_Cloud_Rx_Handler(void)
 			wifi_t.response_wifi_signal_label = ANION_ON_ITEM;
 		
             }
-
-         
-    }
+      }
 	
     if(strstr((char *)rx_tencent_num_buffer,"sonic\":0")){
             if(power_on_state() ==power_on){
@@ -448,9 +439,6 @@ void Tencent_Cloud_Rx_Handler(void)
         
                 
             }
-
-          
-		
     }
     else if(strstr((char *) rx_tencent_num_buffer,"sonic\":1")){
             if(power_on_state() ==power_on){
@@ -458,15 +446,8 @@ void Tencent_Cloud_Rx_Handler(void)
 			wifi_t.response_wifi_signal_label = SONIC_ON_ITEM;
        
            }
-
-        
-
-
-           
-    }
-
-	
-    if(strstr((char *)rx_tencent_num_buffer,"state\":1")){
+  }
+  if(strstr((char *)rx_tencent_num_buffer,"state\":1")){
            if(power_on_state() ==power_on){
             gctl_t.ai_flag=disp_works_timing;
             
@@ -569,7 +550,9 @@ void Json_Parse_Command_Fun(void)
         HAL_Delay(350);//350
 
         wifi_t.esp8266_login_cloud_success=1;
-
+       
+         gkey_t.power_key_long_counter=1;
+         wifi_t.smartphone_app_power_on_flag=0;
         gkey_t.key_power = power_off; //WT.EDIT 2024.02.20
 
         wifi_t.gTimer_auto_detected_net_state_times=0; //don't need check wifi if has or not
@@ -579,11 +562,9 @@ void Json_Parse_Command_Fun(void)
 
 	  case OPEN_ON_ITEM:
       	buzzer_sound();
-		gkey_t.key_power = power_on;
+		   gkey_t.key_power = power_on;
 	 
-	   // gctl_t.step_process=0;
-  
-       // gpro_t.run_process_step=0;
+	
 		wifi_t.esp8266_login_cloud_success=1;
 		MqttData_Publish_SetOpen(1);  
 		HAL_Delay(350);//300
@@ -908,7 +889,7 @@ void Json_Parse_Command_Fun(void)
 		//   gpro_t.gTimer_gpro_temp_delay =0;
 		   wifi_t.set_beijing_time_flag=0;
 		   wifi_t.get_rx_beijing_time_enable=0; //enable beijing times
-         
+           gkey_t.power_key_long_counter = 1;
 		   smartphone_app_timer_power_on_handler();
 
 	      wifi_t.response_wifi_signal_label=0xff;

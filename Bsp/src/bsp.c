@@ -2,7 +2,7 @@
 
 
 BSP_process_t gpro_t;
-static uint8_t Works_Time_Out(void);
+
 static void Mainboard_Action_Fun(void);
 static void Mainboard_Fun_Stop(void);
 
@@ -65,7 +65,7 @@ void bsp_Idle(void)
 *********************************************************************************************************
 */
 uint8_t fan_continue_flag;
-static uint8_t Works_Time_Out(void)
+uint8_t Works_Time_Out(void)
 {
 	if(gpro_t.gTimer_run_time_out < 11){
 		
@@ -226,6 +226,8 @@ void Process_Dynamical_Action(void)
 
    static uint8_t the_send_open_ptc,to_tenced_data,ptc_int=0xff,ptc_int_1=0xff;
    static uint8_t ptc_int_off =0xff,ptc_int_off_1=0xff,to_tenced_off_data;
+
+   if(gctl_t.interval_stop_run_flag  ==0){
    if(gpro_t.set_temperature_value_success == 1){
        if(gctl_t.gSet_temperature_value > gctl_t.dht11_temp_value ){//if(gctl_t.gSet_temperature_value > gctl_t.dht11_temp_value){
 
@@ -370,6 +372,6 @@ void Process_Dynamical_Action(void)
     
        }
 
+     }
+
 }
-
-

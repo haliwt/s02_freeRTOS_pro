@@ -68,6 +68,7 @@ typedef struct _WIFI_FUN{
 
     //
     uint8_t fin_speed_full_flag;
+   
 	
 	
 	uint8_t esp8266_dynamic_reg_flag;

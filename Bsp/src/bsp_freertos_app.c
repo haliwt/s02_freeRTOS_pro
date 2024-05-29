@@ -203,6 +203,24 @@ static void vTaskMsgPro(void *pvParameters)
         		}
                  
              WIFI_Process_Handler();
+
+              if(gpro_t.gTimer_run_total > 119){ //120 minutes
+			       gpro_t.gTimer_run_total =0;
+				   gpro_t.gTimer_run_time_out=0;  //time out recoder start 10 minutes
+				   gpro_t.gTimer_run_one_mintue =0;
+				 
+                   gctl_t.interval_stop_run_flag  =1 ;
+			  
+		         
+			    }
+               if(gctl_t.interval_stop_run_flag  ==1){
+                   if(Works_Time_Out()==1){
+
+			          gctl_t.interval_stop_run_flag=0;
+			        }
+                }
+
+            // Works_Time_Out();
                 
 
          }
@@ -291,14 +309,16 @@ static void vTaskStart(void *pvParameters)
             
         }
         else {
-
-            power_long_short_key_fun();
-           
+            
+               power_long_short_key_fun();
+                 
 
             if(power_on_first == 0 && gkey_t.key_power==power_on){
                power_on_first++; 
-
-        
+               power_off_flag=0;
+                
+               gctl_t.interval_stop_run_flag =0;
+              gpro_t.gTimer_run_total=0;
               gpro_t.power_off_flag=1;
               gkey_t.set_timer_timing_success =0;
               if(wifi_link_net_state()==0){
@@ -346,6 +366,7 @@ static void vTaskStart(void *pvParameters)
                     }
                     else if(gkey_t.key_power==power_off){
                         power_on_first=0; 
+                       
 
                      if(gpro_t.power_off_flag == 1){
             		gpro_t.power_off_flag ++;
@@ -376,29 +397,33 @@ static void vTaskStart(void *pvParameters)
             	    wifi_t.runCommand_order_lable= 0xff;
                     wifi_t.three_times_link_beijing=0;
             		wifi_t.smartphone_app_power_on_flag=0;
-
+                
+                   
+                  
+                    //main process 
                     gpro_t.gTimer_run_dht11=20;
                     gpro_t.set_temperature_value_success=0;
+                    
                    
             	    //stop main board function ref.
             	    PowerOff_Off_Led();
-            	  
+            	    OnlyDisp_Wind_Icon_Handler();
         		
         	  }
 
              if(wifi_link_net_state() ==1 && power_off_flag==0 ){
         		wifi_t.gTimer_wifi_pub_power_off=0;
         		power_off_flag++;
+                
+            
         		MqttData_Publish_PowerOff_Ref();
+                HAL_Delay(350);
         		wifi_t.runCommand_order_lable= wifi_publish_update_tencent_cloud_data;
         	     
-        		 
-        		  
-        	}
-        	if(wifi_link_net_state() ==1  && wifi_t.gTimer_wifi_sub_power_off > 2 && power_off_flag==1){
-        		power_off_flag++;
+        
         		wifi_t.gTimer_wifi_sub_power_off=0;
                 Subscriber_Data_FromCloud_Handler();
+                 HAL_Delay(350);
         	  
         	
             }
@@ -408,7 +433,7 @@ static void vTaskStart(void *pvParameters)
 
             }
         	
-            if(	gpro_t.power_off_flag ==2){
+            if(	gpro_t.power_off_flag ==1){
                    if(gkey_t.gTimer_power_off_run_times < 61){
                         Fan_Run();
         				OnlyDisp_Wind_Icon_Handler();
@@ -426,7 +451,7 @@ static void vTaskStart(void *pvParameters)
 
         		}
 
-        		
+        		OnlyDisp_Wind_Icon_Handler();
                 Breath_Led();
              
 
@@ -627,12 +652,12 @@ static void power_long_short_key_fun(void)
 {
 
     static uint8_t sound_flag;
-    if(KEY_POWER_VALUE() == 1 && power_key_long_counter < 60){
+    if(KEY_POWER_VALUE() == 1 && gkey_t.power_key_long_counter < 60){
 
 
-        power_key_long_counter++;
-        if( power_key_long_counter > 50   && KEY_POWER_VALUE() == 1){
-             power_key_long_counter = 200;
+        gkey_t.power_key_long_counter++;
+        if( gkey_t.power_key_long_counter > 40   && KEY_POWER_VALUE() == 1){
+             gkey_t.power_key_long_counter = 200;
 
              gkey_t.wifi_link_net_flag = 1;
 
@@ -651,9 +676,9 @@ static void power_long_short_key_fun(void)
         }
 
     }
-    else if(KEY_POWER_VALUE() == 0 && power_key_long_counter >0 && power_key_long_counter<50){ //short key of function
+    else if(KEY_POWER_VALUE() == 0 && gkey_t.power_key_long_counter >0 && gkey_t.power_key_long_counter<40){ //short key of function
 
-        power_key_long_counter=0;
+        gkey_t.power_key_long_counter=0;
         sound_flag=1;
         if(sound_flag ==1){
            sound_flag++;
@@ -670,6 +695,7 @@ static void power_long_short_key_fun(void)
 
         }
     }
+   
 }
 /*********************************************************************************
 *

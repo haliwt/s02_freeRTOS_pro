@@ -57,6 +57,7 @@ void PowerOff_freeFun(void)
 void PowerOff_Off_Led(void)
 {
     LED_Mode_Off();
+    LED_Power_On();
     Ptc_Off();
     Ultrasonic_Pwm_Stop();
     Plasma_Off();

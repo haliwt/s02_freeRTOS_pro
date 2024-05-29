@@ -120,6 +120,7 @@ void Process_Dynamical_Action(void);
 
 
 
+uint8_t Works_Time_Out(void);
 
 
 
