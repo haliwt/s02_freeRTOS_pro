@@ -54,6 +54,7 @@ typedef enum mode_key_t{
    uint8_t  key_add_dec_mode;
    uint8_t  set_timer_timing_success;
    uint8_t  power_key_long_counter;
+   uint8_t  key_mode_long_counter;
    
    
  
@@ -80,6 +81,8 @@ typedef enum mode_key_t{
 
 
  extern key_fun_t gkey_t;
+
+void mode_long_short_key_fun(void);
 
 
 void Dec_Key_Fun(uint8_t cmd);

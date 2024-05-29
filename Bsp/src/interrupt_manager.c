@@ -123,11 +123,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
        glcd_t.gTimer_colon_blink++ ;
        
        glcd_t.gTimer_error_times++;
+       
       
-       
-
-       
-	  
     }
 
     if(tm0>999){ //100 *10ms = 1000ms = 1s
@@ -141,12 +138,13 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
        gctl_t.gTimer_ctl_usart2_error++;
 	   
        //key timer
-		//gkey_t.gTimer_key_temp_timing++;
+	
         gkey_t.gTimer_power_off_run_times++;
         gkey_t.gTimer_set_temp_value++;
-       // gkey_t.gTimer_power_key_counter++;
-       // gkey_t.gTimer_mode_key_counter ++ ;
+     
         gkey_t.gTimer_disp_set_timer++;
+
+     
 		
 		
 		
@@ -162,24 +160,13 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
    
 		gpro_t.gTimer_run_one_mintue ++;
 		
-	
-
-      
-        gpro_t.gTimer_timer_Counter++;   //timer timing counter value 
+	     gpro_t.gTimer_timer_Counter++;   //timer timing counter value 
 
         gpro_t.gTimer_works_counter_sencods++;
         gpro_t.gTimer_run_total ++;
          gpro_t.gTimer_run_time_out++;
        
-       
-
-        	
-
-     
-       
-   
-
-		//wifi
+       //wifi
 		wifi_t.gTimer_wifi_pub_power_off++;
 		wifi_t.gTimer_power_first_link_tencent++;
 		wifi_t.power_on_login_tencent_cloud_flag++;
@@ -194,15 +181,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		wifi_t.gTimer_wifi_counter_link_beijing_times++;
         wifi_t.gTimer_counter_repeat_link_net++;
 
-      
-        
-       
-
-      
-       
-       
-
-        if(tm2 > 59){ //60s = 1 minutes
+       if(tm2 > 59){ //60s = 1 minutes
 			tm2 =0;
 			gpro_t.gTimer_run_total++;
 			gpro_t.gTimer_run_time_out ++ ;

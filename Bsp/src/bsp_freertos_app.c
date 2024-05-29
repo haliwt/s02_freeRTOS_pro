@@ -45,12 +45,12 @@ static TaskHandle_t xHandleTaskMsgPro = NULL;
 static TaskHandle_t xHandleTaskStart = NULL;
 
 
-static void display_disp_works_timingr_timing_fun(uint8_t sel_item);
 
-static void mode_long_short_key_fun(void);
+
+
 static void power_long_short_key_fun(void);
 
-MSG_T   g_tMsg;
+
 
 
 
@@ -91,6 +91,7 @@ static void vTaskMsgPro(void *pvParameters)
     BaseType_t xResult;
 	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置最大等待时间为500ms */
 	uint32_t ulValue;
+    static uint8_t power_sound_flag;
    
 	
     while(1)
@@ -166,8 +167,15 @@ static void vTaskMsgPro(void *pvParameters)
 		else
 		{
 			/* 超时 */
+
+        if(power_sound_flag==0){
+          power_sound_flag++;
+
+          buzzer_sound();
+
+        }
        
-          MainBoard_Self_Inspection_PowerOn_Fun();
+        MainBoard_Self_Inspection_PowerOn_Fun();
 
         WIFI_Process_Handler();
 
@@ -196,7 +204,7 @@ static void vTaskStart(void *pvParameters)
    const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置最大等待时间为500ms */
    static uint8_t sound_flag,power_on_first;
    uint32_t ulValue;
-   static uint8_t power_sound_flag,key_power_long_flag,add_flag,dec_flag,power_off_flag;
+   static uint8_t add_flag,dec_flag;
 
     while(1)
     {
@@ -222,9 +230,9 @@ static void vTaskStart(void *pvParameters)
                  if(gkey_t.key_power == power_on ){
                 
 
-                  key_long_counter=1;
+                  gkey_t.key_mode_long_counter=1;
 
-                 // Buzzer_KeySound();
+               
               
                  }
 				
@@ -232,7 +240,7 @@ static void vTaskStart(void *pvParameters)
             else if((ulValue & RUN_DEC_6 ) != 0)   /* 接收到消息，检测那个位被按下 */
 			{
                 dec_flag =1;
-                Dec_Key_Fun(g_tMsg.key_add_dec_mode);
+                Dec_Key_Fun(gkey_t.key_add_dec_mode);
 
                  if(dec_flag ==1){
                      add_flag ++;
@@ -244,7 +252,7 @@ static void vTaskStart(void *pvParameters)
             else if((ulValue & RUN_ADD_7 ) != 0)   /* 接收到消息，检测那个位被按下 */
 			{
                    add_flag =1;
-                   Add_Key_Fun(g_tMsg.key_add_dec_mode);
+                   Add_Key_Fun(gkey_t.key_add_dec_mode);
 
                   if(add_flag ==1){
                      add_flag ++;
@@ -379,58 +387,7 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 
 
 }
-/*********************************************************************************
-*
-*	函 数 名:static void mode_long_short_key_fun(void)
-*	功能说明: 
-*	形    参: 
-*	返 回 值: 无
-*   
-*********************************************************************************/
-static void mode_long_short_key_fun(void)
-{
-    if(KEY_MODE_VALUE() == 1 && key_long_counter < 100){
 
-
-        key_long_counter++;
-        if(key_long_counter >  50 && KEY_MODE_VALUE() == 1){
-            key_long_counter = 150;
-            g_tMsg.key_mode = mode_set_timer;
-            g_tMsg.key_add_dec_mode = mode_set_timer;
-            gctl_t.ai_flag = 0; //timer tiiming model
-            gkey_t.gTimer_disp_set_timer = 0;       //counter exit timing this "mode_set_timer"
-            Buzzer_KeySound();
-
-        }
-
-    }
-    else if(KEY_MODE_VALUE() == 0 && key_long_counter >0 && key_long_counter<50){ //short key of function
-
-        key_long_counter=0;
-        Buzzer_KeySound();
-        g_tMsg.ucMessageID=0;
-        if(g_tMsg.key_mode  == disp_works_timing){
-            g_tMsg.key_mode  = disp_timer_timing;
-           
-            gctl_t.ai_flag = 0; //timer tiiming model
-               //counter exit timing this "mode_set_timer"
-            g_tMsg.key_mode_switch_flag = 1;
-            LCD_Disp_Timer_Timing_Init();
-
-        }
-        else{
-            g_tMsg.key_mode_switch_flag = 1;
-            g_tMsg.key_mode  = disp_works_timing;
-         
-            gctl_t.ai_flag = 1; //timer tiiming model
-            LCD_Disp_Works_Timing_Init();
-
-        }
-
-    }
-
-
-}
 
 static void power_long_short_key_fun(void)
 {
@@ -478,129 +435,6 @@ static void power_long_short_key_fun(void)
       
 
         }
-    }
-   
-}
-/*********************************************************************************
-*
-*	函 数 名:static void mode_long_short_key_fun(void)
-*	功能说明: 
-*	形    参: 
-*	返 回 值: 无
-*   
-
-*********************************************************************************/
-static void display_disp_works_timingr_timing_fun(uint8_t sel_item)
-{
-    static uint8_t switch_counter;
- 
-    switch(sel_item){
-
-    case disp_works_timing :
-   
-       if(gctl_t.fan_warning ==0 && gctl_t.ptc_warning==0 ){
-
-             if(gctl_t.ai_flag ==0){
-                 gctl_t.ai_flag =1;
-                
-                 LCD_Disp_Works_Timing_Init();
-               }
-            if(switch_counter>0){
-               switch_counter =0;
-              }
-         
-            Display_Works_Timing();
-            
-
-        }
-        else{
-            
-          LCD_Fault_Numbers_Code();
-
-
-
-        }
-       
-    break;
-    
-    case disp_timer_timing:
-   
-//       if(gctl_t.ai_flag ==1){
-//           gctl_t.ai_flag =0;
-//        
-//            LCD_Number_Ai_OneTwo_Humidity();
-//             if(g_tMsg.set_timer_timing_success ==1){
-//                
-//              LCD_Disp_Timer_Timing_Init();
-//
-//             }
-//
-//        
-//        }
-      if(gctl_t.fan_warning ==0 && gctl_t.ptc_warning==0 ){
-            if(gkey_t.set_timer_timing_success ==1){
-
-               Display_Timer_Timing();
-               Record_WorksTime_DonotDisp_Handler();
-
-            }
-            else if(gkey_t.set_timer_timing_success == 0 ){ //&& gkey_t.gTimer_disp_switch_disp_mode > 3){
-
-               
-                gctl_t.ai_flag =0;
-                LCD_Disp_Timer_Timing_Init();
-
-                switch_counter ++;
-                if( switch_counter> 20){
-                 gkey_t.key_mode = disp_works_timing;
-
-                  }
-                Record_WorksTime_DonotDisp_Handler();
-            }
-       }
-        else{
-
-            LCD_Fault_Numbers_Code();
-
-        }
-
-
-    
-    break;
-
-
-    case mode_set_timer:
-    
-        Set_Timer_Timing_Lcd_Blink();//(gpro_t.set_timer_timing_hours,gpro_t.set_timer_timing_minutes);
-       
-        if(gkey_t.gTimer_disp_set_timer > 3){
-
-            if(gpro_t.set_timer_timing_hours == 0 && gpro_t.set_timer_timing_minutes==0){
-
-                gkey_t.set_timer_timing_success = 0;
-
-                gctl_t.ai_flag = 1;
-                gkey_t.key_mode =disp_works_timing;
-                gkey_t.key_add_dec_mode = set_temp_value_item;
-                LCD_Disp_Works_Timing_Init();
-                 
-                
-            }
-            else{
-                gkey_t.set_timer_timing_success = 1;
-                gpro_t.gTimer_timer_Counter =0; //start recoder timer timing is "0",from "0" start
-
-                gctl_t.ai_flag = 0;
-              
-                gkey_t.key_mode = disp_timer_timing;
-                gkey_t.key_add_dec_mode = set_temp_value_item;
-                
-                LCD_Disp_Timer_Timing_Init();
-               
-            }
-        }
-
-       break;
     }
    
 }
