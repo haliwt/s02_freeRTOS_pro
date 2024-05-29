@@ -175,6 +175,7 @@ void mainboard_process_handler(void)
               power_off_flag=0;
               gpro_t.power_off_flag=1;
               gkey_t.set_timer_timing_success =0;
+              gpro_t.set_temperature_value_success=0;
               if(wifi_link_net_state()==0){
     		      gpro_t.disp_works_minutes_value=0;
     		      gpro_t.disp_works_hours_value =0;
