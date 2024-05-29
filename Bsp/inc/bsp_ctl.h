@@ -49,6 +49,8 @@ typedef struct _bsp_ctl{
     uint8_t gTimer_wifi_blink;
     uint8_t gTimer_ctl_usart2_error;
     uint8_t gTimer_wifi_fast_blink;
+
+    
    
 	
 

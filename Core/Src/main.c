@@ -102,6 +102,9 @@ int main(void)
   MX_TIM16_Init(20);
   delay_init(24); 
   bsp_ctl_init();
+  
+
+  
     HAL_TIM_Base_Start_IT(&htim17);
    UART_Start_Receive_IT(&huart2,wifi_t.usart1_dataBuf,1);
    

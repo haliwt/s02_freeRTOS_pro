@@ -66,33 +66,47 @@
 
 typedef struct {
 
-   uint8_t set_temp_confirm ;
-   uint8_t gdht11_temperature;
-   uint8_t gDht11_humidity;
-   uint8_t power_off_flag ;
+
+   uint8_t gPower_On ;
+
+   uint8_t power_off_flag;
+  
+    uint8_t gTimer_power_off_run_times;
+   //WIFI
+   uint8_t run_process_step;
+   uint8_t disp_dht11_value;
+  
+   uint8_t disp_works_hours_value;
+   uint8_t disp_works_minutes_value;
+   uint8_t gTimer_run_main_fun;
+   uint8_t set_temperature_value_success;
+
+
+     
 
    int8_t set_timer_timing_hours;
    int8_t set_timer_timing_minutes;
-   uint8_t  set_temperature_value_success;
-   uint8_t disp_works_hours_value ;
-   uint8_t disp_works_minutes_value;
-   uint8_t  gTimer_works_counter_sencods;
-   
 
 
    uint8_t gTimer_run_adc;
    uint8_t gTimer_run_dht11;
-   uint8_t gTimer_display_dht11_value ;
+
    uint8_t gTimer_run_one_mintue ;
    
-   uint16_t gTimer_run_total;
+   uint8_t gTimer_run_total;
    uint16_t gTimer_run_time_out;
 
-   uint8_t gTimer_works_counter;
-   uint8_t gTimer_display_works_hours;
-   uint8_t gTimer_display_works_minutes;
+   uint8_t gTimer_works_counter_sencods;
+  
    uint8_t gTimer_timer_Counter;
+  
    uint8_t gTimer_disp_set_timer_blink ;
+
+   uint8_t gTimer_timing ;
+   uint8_t gTimer_pro_action_publis;
+
+   
+ 
 
 
 }BSP_process_t;
@@ -101,26 +115,8 @@ extern BSP_process_t gpro_t;
 
 void bsp_Idle(void);
 
+void mainboard_process_handler(void);
 
-
-
-
-
-void MainBoard_Run_Feature_Handler(void);
-
-
-
-
-
-void Display_MainBoard_Feature_Handler(void);
-
-
-
-void Process_Dynamical_Action(void);
-
-
-
-uint8_t Works_Time_Out(void);
 
 
 

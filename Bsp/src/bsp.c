@@ -2,14 +2,16 @@
 
 
 BSP_process_t gpro_t;
-
+static uint8_t Works_Time_Out(void);
 static void Mainboard_Action_Fun(void);
 static void Mainboard_Fun_Stop(void);
+static void Process_Dynamical_Action(void);
 
 
 
 
-static void Display_LCD_Works_Timing(void);
+
+uint8_t  fan_continue_flag;
 
 /*
 *********************************************************************************************************
@@ -22,7 +24,7 @@ static void Display_LCD_Works_Timing(void);
 */
 void bsp_Idle(void)
 {
-	/* --- 喂狗 8s input reset */
+//	/* --- 喂狗 8s input reset */
 //    if(gctl_t.gTimer_prcoess_iwdg > 5){
 //		gctl_t.gTimer_prcoess_iwdg =0;
 //    	iwdg_feed();
@@ -34,11 +36,19 @@ void bsp_Idle(void)
 	/* 例如 emWin 图形库，可以插入图形库需要的轮询函数 */
 	//GUI_Exec();
 
+    if(gkey_t.key_power == power_on){
+
+         LCD_Timer_Colon_Flicker();
+
+         LCD_Wind_Run_Icon(wifi_t.set_wind_speed_value);
+
+         Disip_Wifi_Icon_State();
+
+         Lcd_Display_Temp_Digital_Blink();
+
+    }
 	/* 例如 uIP 协议，可以插入uip轮询函数 */
 	//TOUCH_CapScan();
-
- 
-  LCD_Timer_Colon_Flicker();
 	
 	//MODH_Poll();
 }
@@ -51,10 +61,297 @@ void bsp_Idle(void)
 *	返 回 值: 无
 *********************************************************************************************************
 */
+void mainboard_process_handler(void)
+{
+  
+	
+	static uint8_t power_off_flag;;
+
+	if( gkey_t.key_sound_flag == key_sound){
+		gkey_t.key_sound_flag =0;
+		Buzzer_KeySound();
+
+    }
+
+ 
+
+	switch(gkey_t.key_power){
+
+      case power_off:
+
+       if(gpro_t.power_off_flag == 1){
+    		gpro_t.power_off_flag ++;
+    	    
+           //key set ref 
+
+           gkey_t.gTimer_power_off_run_times=0;
+           gkey_t.wifi_led_fast_blink_flag=0;
+
+            gctl_t.fan_warning = 0;
+            gctl_t.ptc_warning = 0;
+            gkey_t.set_timer_timing_success =0;
+    	   
+    	  
+    	    //control set ref
+    	    wifi_t.link_net_tencent_data_flag =1;
+
+             gctl_t.step_process=0;
+
+            //wifi set ref
+    	
+    		wifi_t.link_tencent_thefirst_times=0;
+    	
+    		wifi_t.gTimer_wifi_pub_power_off=0;	
+            wifi_t.gTimer_linking_tencent_duration=0; //166s -2分7秒
+
+            wifi_t.repeat_login_tencent_cloud_init_ref=0;
+    	    wifi_t.runCommand_order_lable= 0xff;
+            wifi_t.three_times_link_beijing=0;
+    		wifi_t.smartphone_app_power_on_flag=0;
+
+            gpro_t.gTimer_run_dht11=20;
+            gpro_t.set_temperature_value_success=0;
+           
+    	    //stop main board function ref.
+    	    PowerOff_Off_Led();
+    	  
+		
+	  }
+
+     if(wifi_link_net_state() ==1 && power_off_flag==0 ){
+		wifi_t.gTimer_wifi_pub_power_off=0;
+		power_off_flag++;
+		MqttData_Publish_PowerOff_Ref();
+		wifi_t.runCommand_order_lable= wifi_publish_update_tencent_cloud_data;
+	     
+		 
+		  
+	}
+	if(wifi_link_net_state() ==1  && wifi_t.gTimer_wifi_sub_power_off > 4 && power_off_flag==1){
+		power_off_flag++;
+		wifi_t.gTimer_wifi_sub_power_off=0;
+        Subscriber_Data_FromCloud_Handler();
+	  
+	
+    }
+    if(wifi_link_net_state() ==1){
+        Record_WorksTime_DonotDisp_Handler();
+       wifi_t.runCommand_order_lable= wifi_publish_update_tencent_cloud_data;
+
+    }
+	
+    if(	gpro_t.power_off_flag ==2){
+           if(gkey_t.gTimer_power_off_run_times < 61){
+                Fan_Run();
+				OnlyDisp_Wind_Icon_Handler();
+				
+
+		   }
+		   else{
+              gpro_t.power_off_flag++;
+			   Fan_Stop();
+		       Backlight_Off();
+               Lcd_Display_Off();
+		     
+			   
+		   }
+
+		}
+
+		
+        Breath_Led();
+
+	  break;
+
+
+	  case power_on:
+
+        switch(gctl_t.step_process){
+
+
+		  case 0:
+              //led on 
+            
+              power_off_flag=0;
+              gpro_t.power_off_flag=1;
+              gkey_t.set_timer_timing_success =0;
+              if(wifi_link_net_state()==0){
+    		      gpro_t.disp_works_minutes_value=0;
+    		      gpro_t.disp_works_hours_value =0;
+                }
+              wifi_t.set_wind_speed_value=0;
+              gpro_t.gTimer_run_total=0;
+              if(wifi_t.smartphone_app_power_on_flag==0){
+                     main_fun_init();
+
+               }
+                
+		      
+		      LED_Mode_On();
+		      LED_Power_On();
+		      Backlight_On();
+
+                  
+               LCD_Numbers1234_Init();
+               Display_Wind_Icon_Inint();
+		  
+			  Update_DHT11_Value();
+		      Disp_HumidityTemp_Init();
+
+               
+
+              LCD_Wind_Run_Icon(0);
+             
+
+			  //fan on
+			  Mainboard_Action_Fun();
+
+              if(wifi_link_net_state()==1){
+                  MqttData_Publish_SetOpen(1);  
+    		      HAL_Delay(350);//300
+
+                 Publish_Data_Warning(fan_warning,no_warning);
+
+                  Publish_Data_Warning(ptc_temp_warning,no_warning);
+
+                 }
+		  
+		    gctl_t.step_process = 1;
+
+
+		  break;
+
+		   case 1: // display works and timer and set timer timing proc
+          
+	        if(gpro_t.gTimer_timing > 6) {
+                gpro_t.gTimer_timing=0;
+		       Display_WorksTimingr_Handler(gkey_t.key_mode);
+
+             }
+          
+
+
+			gctl_t.step_process=2;
+
+		  case 2:   //run dht11 display 
+
+             if(gpro_t.gTimer_run_dht11 > 12 ){
+                gpro_t.gTimer_run_dht11=0;
+               
+                  Update_DHT11_Value();
+                  Disp_HumidityTemp_Value();
+
+              }
+              //run main board character
+
+             if(gpro_t.gTimer_run_main_fun > 0){
+                 gpro_t.gTimer_run_main_fun =0;
+               if(gctl_t.interval_stop_run_flag  ==0){
+                    Process_Dynamical_Action();
+               }
+               else{
+                   Mainboard_Fun_Stop();
+
+               }
+            }
+
+              
+
+        
+           gctl_t.step_process=3;
+		  
+          break;
+
+		  case 3: //mainboard of hardware function .
+
+           if(gpro_t.gTimer_run_adc > 6 && gpro_t.gTimer_run_adc < 8){ //3 minutes 120s
+				
+			  Get_PTC_Temperature_Voltage(ADC_CHANNEL_1,5);
+			  
+					
+          }
+
+		  if(gpro_t.gTimer_run_adc > 13){ //2 minute 180s
+				gpro_t.gTimer_run_adc=0;
+
+				Get_Fan_Adc_Fun(ADC_CHANNEL_0,5);
+				
+	               
+
+		 }
+
+	
+         gctl_t.step_process=4;
+		break;
+
+
+		 // handler of wifi 
+	  case 4: //7
+
+	  
+	   if(wifi_link_net_state()==1 && wifi_t.smartphone_app_power_on_flag==0 && wifi_t.link_net_tencent_data_flag ==1){ //after send publish datat to tencent .){
+             wifi_t.link_net_tencent_data_flag ++;
+		     gpro_t.gTimer_pro_action_publis =0;
+		     MqttData_Publish_SetOpen(0x01);
+		     HAL_Delay(350);
+            
+
+		}
+		if(wifi_link_net_state()==1 && wifi_t.smartphone_app_power_on_flag==0 && wifi_t.link_net_tencent_data_flag ==2 ){
+             wifi_t.link_net_tencent_data_flag ++;
+		    gpro_t.gTimer_pro_action_publis =0;
+		    MqttData_Publish_Update_Data();
+		     HAL_Delay(350);
+
+		}
+	 
+	   
+	      gctl_t.step_process=5;
+
+	 break;
 
 
 
+	case 5: //check works times 
+			  if(gpro_t.gTimer_run_total > 119){ //120 minutes
+			       gpro_t.gTimer_run_total =0;
+				   gpro_t.gTimer_run_time_out=0;  //time out recoder start 10 minutes
+				   gpro_t.gTimer_run_one_mintue =0;
+				   fan_continue_flag=0;
+                   gctl_t.step_process=7;
+			       gctl_t.interval_stop_run_flag  =1 ;
+		         
+			    }
+			    else{
+				 gctl_t.step_process=1;
 
+              }
+
+		  break;
+
+		  case 7: //works have a rest ten minutes
+
+		       if(Works_Time_Out()==1){
+
+                  gctl_t.interval_stop_run_flag = 0;
+                  gctl_t.step_process=1;
+
+			   }
+               else 
+                   gctl_t.step_process=1;
+                   
+			 
+
+
+		  break;
+
+		  
+
+
+	     }
+
+     }      
+}
 /*
 *********************************************************************************************************
 *	函 数 名: static uint8_t Works_Time_Out(void)
@@ -64,8 +361,7 @@ void bsp_Idle(void)
 *	返 回 值: 无
 *********************************************************************************************************
 */
-uint8_t fan_continue_flag;
-uint8_t Works_Time_Out(void)
+static uint8_t Works_Time_Out(void)
 {
 	if(gpro_t.gTimer_run_time_out < 11){
 		
@@ -140,75 +436,11 @@ static void Mainboard_Fun_Stop(void)
    Ptc_Off();
 
    Ultrasonic_Pwm_Stop();
-   Fan_Stop();
+  // Fan_Stop();
    Plasma_Off();
 
 
 }
-
-
-/*
-*********************************************************************************************************
-*
-*	函 数 名: void Set_Timer_Timing_Lcd_Blink(void )
-*	功能说明: 设置的定时时间闪烁
-*	形    参: 无
-*	返 回 值: 无
-*
-*********************************************************************************************************
-*/
-#if 0
-void Set_Timer_Timing_Lcd_Blink(uint8_t hours,uint8_t minutes)
-{
-    if(gpro_t.gTimer_disp_set_timer_blink < 1){//3* 100ms
-
-	  glcd_t.number5_low =  0x0A ;
-      glcd_t.number5_high =  0x0A ;
-
-      glcd_t.number6_low  =  0x0A; //
-      glcd_t.number6_high =  0x0A; //
-      
-       //dispaly minutes 
-      glcd_t.number7_low =   0x0A;
-      glcd_t.number7_high =   0x0A;
-
-      glcd_t.number8_low =   0x0A;
-      glcd_t.number8_high =   0x0A;
-
-    
-
-
-    }
-	else if(gpro_t.gTimer_disp_set_timer_blink > 0 && gpro_t.gTimer_disp_set_timer_blink < 2){
-	
-
-
-      glcd_t.number5_low =  gpro_t.set_timer_timing_hours / 10 ;
-      glcd_t.number5_high =  gpro_t.set_timer_timing_hours / 10 ;
-
-      glcd_t.number6_low  = gpro_t.set_timer_timing_hours% 10; //
-      glcd_t.number6_high = gpro_t.set_timer_timing_hours % 10; //
-      
-       //dispaly minutes 
-      glcd_t.number7_low =  0;
-      glcd_t.number7_high =  0;
-
-      glcd_t.number8_low = 0;
-      glcd_t.number8_high =   0;
-
-       
-	}
-	else if(gpro_t.gTimer_disp_set_timer_blink > 1){
-	  gpro_t.gTimer_disp_set_timer_blink =0;
-
-    }
-
-  	 LCD_Disp_Timer_Timing();
-
-}
-
-#endif 
-
 
 
 /*
@@ -221,13 +453,11 @@ void Set_Timer_Timing_Lcd_Blink(uint8_t hours,uint8_t minutes)
 *
 *********************************************************************************************************
 */
-void Process_Dynamical_Action(void)
+static void Process_Dynamical_Action(void)
 {
 
    static uint8_t the_send_open_ptc,to_tenced_data,ptc_int=0xff,ptc_int_1=0xff;
    static uint8_t ptc_int_off =0xff,ptc_int_off_1=0xff,to_tenced_off_data;
-
-   if(gctl_t.interval_stop_run_flag  ==0){
    if(gpro_t.set_temperature_value_success == 1){
        if(gctl_t.gSet_temperature_value > gctl_t.dht11_temp_value ){//if(gctl_t.gSet_temperature_value > gctl_t.dht11_temp_value){
 
@@ -372,6 +602,9 @@ void Process_Dynamical_Action(void)
     
        }
 
-     }
-
 }
+
+
+
+
+

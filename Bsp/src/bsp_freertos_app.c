@@ -169,68 +169,17 @@ static void vTaskMsgPro(void *pvParameters)
        
           MainBoard_Self_Inspection_PowerOn_Fun();
 
-         
-         if(gkey_t.key_power==power_on){
+        WIFI_Process_Handler();
 
-              if(gpro_t.gTimer_run_dht11 >6){
-                gpro_t.gTimer_run_dht11 =0;
-                  Update_DHT11_Value();
-                  Disp_HumidityTemp_Value();
-
-                }
-
-        
-             if(gpro_t.gTimer_works_counter >1){
-                gpro_t.gTimer_works_counter=0;
-                  Process_Dynamical_Action();
-
-               }
-
-              if(wifi_link_net_state()==1 && wifi_t.smartphone_app_power_on_flag==0 && wifi_t.link_net_tencent_data_flag ==1){ //after send publish datat to tencent .){
-             wifi_t.link_net_tencent_data_flag ++;
-		    
-		     MqttData_Publish_SetOpen(0x01);
-		     HAL_Delay(350);
-            
-
-        		}
-        		if(wifi_link_net_state()==1 && wifi_t.smartphone_app_power_on_flag==0 && wifi_t.link_net_tencent_data_flag ==2 ){
-                     wifi_t.link_net_tencent_data_flag ++;
-        		  
-        		    MqttData_Publish_Update_Data();
-        		     HAL_Delay(350);
-
-        		}
-                 
-             WIFI_Process_Handler();
-
-              if(gpro_t.gTimer_run_total > 119){ //120 minutes
-			       gpro_t.gTimer_run_total =0;
-				   gpro_t.gTimer_run_time_out=0;  //time out recoder start 10 minutes
-				   gpro_t.gTimer_run_one_mintue =0;
-				 
-                   gctl_t.interval_stop_run_flag  =1 ;
-			  
-		         
-			    }
-               if(gctl_t.interval_stop_run_flag  ==1){
-                   if(Works_Time_Out()==1){
-
-			          gctl_t.interval_stop_run_flag=0;
-			        }
-                }
-
-            // Works_Time_Out();
-                
-
-         }
+             
+              }
        
         
         
 			
 		}
-    }
 }
+
 
 /*
 *********************************************************************************************************
@@ -310,182 +259,22 @@ static void vTaskStart(void *pvParameters)
         }
         else {
             
+
                power_long_short_key_fun();
-                 
-
-            if(power_on_first == 0 && gkey_t.key_power==power_on){
-               power_on_first++; 
-               power_off_flag=0;
-                
-               gctl_t.interval_stop_run_flag =0;
-              gpro_t.gTimer_run_total=0;
-              gpro_t.power_off_flag=1;
-              gkey_t.set_timer_timing_success =0;
-              if(wifi_link_net_state()==0){
-    		      gpro_t.disp_works_minutes_value=0;
-    		      gpro_t.disp_works_hours_value =0;
-                }
-              wifi_t.set_wind_speed_value=0;
-              gpro_t.gTimer_run_total=0;
-              if(wifi_t.smartphone_app_power_on_flag==0){
-                     main_fun_init();
-
-               }
-                
-        		      
-        		      LED_Mode_On();
-        		      LED_Power_On();
-        		      Backlight_On();
-
-                          
-                       LCD_Numbers1234_Init();
-                       Display_Wind_Icon_Inint();
-        		  
-        			  Update_DHT11_Value();
-        		      Disp_HumidityTemp_Init();
-
-                       //fan on
-        			  Mainboard_Action_Fun();
-
-                      if(wifi_link_net_state()==1){
-                          MqttData_Publish_SetOpen(1);  
-            		      HAL_Delay(350);//300
-
-                         Publish_Data_Warning(fan_warning,no_warning);
-
-                          Publish_Data_Warning(ptc_temp_warning,no_warning);
-
-                         }
-                       
-
-                    }
-                    else if(gkey_t.key_power==power_off){
-                        power_on_first=0; 
-                       
-
-                     if(gpro_t.power_off_flag == 1){
-            		gpro_t.power_off_flag ++;
-            	    
-                   //key set ref 
-
-                  // gkey_t.gTimer_power_off_run_times=0;
-                   gkey_t.wifi_led_fast_blink_flag=0;
-
-                    gctl_t.fan_warning = 0;
-                    gctl_t.ptc_warning = 0;
-                    gkey_t.set_timer_timing_success =0;
-            	   
-            	  
-            	    //control set ref
-            	    wifi_t.link_net_tencent_data_flag =1;
-
-                   //  gctl_t.step_process=0;
-
-                    //wifi set ref
-            	
-            		wifi_t.link_tencent_thefirst_times=0;
-            	
-            		wifi_t.gTimer_wifi_pub_power_off=0;	
-                    wifi_t.gTimer_linking_tencent_duration=0; //166s -2分7秒
-
-                    wifi_t.repeat_login_tencent_cloud_init_ref=0;
-            	    wifi_t.runCommand_order_lable= 0xff;
-                    wifi_t.three_times_link_beijing=0;
-            		wifi_t.smartphone_app_power_on_flag=0;
-                
-                   
-                  
-                    //main process 
-                    gpro_t.gTimer_run_dht11=20;
-                    gpro_t.set_temperature_value_success=0;
-                    
-                   
-            	    //stop main board function ref.
-            	    PowerOff_Off_Led();
-            	    OnlyDisp_Wind_Icon_Handler();
-        		
-        	  }
-
-             if(wifi_link_net_state() ==1 && power_off_flag==0 ){
-        		wifi_t.gTimer_wifi_pub_power_off=0;
-        		power_off_flag++;
-                
-            
-        		MqttData_Publish_PowerOff_Ref();
-                HAL_Delay(350);
-        		wifi_t.runCommand_order_lable= wifi_publish_update_tencent_cloud_data;
-        	     
-        
-        		wifi_t.gTimer_wifi_sub_power_off=0;
-                Subscriber_Data_FromCloud_Handler();
-                 HAL_Delay(350);
-        	  
-        	
-            }
-            if(wifi_link_net_state() ==1){
-                Record_WorksTime_DonotDisp_Handler();
-               wifi_t.runCommand_order_lable= wifi_publish_update_tencent_cloud_data;
-
-            }
-        	
-            if(	gpro_t.power_off_flag ==1){
-                   if(gkey_t.gTimer_power_off_run_times < 61){
-                        Fan_Run();
-        				OnlyDisp_Wind_Icon_Handler();
-        				
-
-        		   }
-        		   else{
-                      gpro_t.power_off_flag++;
-        			   Fan_Stop();
-        		       Backlight_Off();
-                       Lcd_Display_Off();
-        		     
-        			   
-        		   }
-
-        		}
-
-        		OnlyDisp_Wind_Icon_Handler();
-                Breath_Led();
-             
-
-
-            }
-            if(power_on_first==1 && gkey_t.key_power==power_on){
-
-           
-
-                       mode_long_short_key_fun();
-                      
-                       LCD_Timer_Colon_Flicker();
-
-                       Wifi_Icon_FastBlink();
-         
-                       LCD_Wind_Run_Icon(wifi_t.set_wind_speed_value);
-
-                       display_disp_works_timingr_timing_fun(g_tMsg.key_mode);
-
-                       Lcd_Display_Temp_Digital_Blink();
-
-                       Disip_Wifi_Icon_State();
+               bsp_Idle();
                
+              if(gkey_t.key_power==power_on){
+                 mode_long_short_key_fun();
 
-           }
-           else{
-               if(power_sound_flag ==0){
-                   power_sound_flag++;
-                   buzzer_sound();
-
-                }
-
-              
+              }
+                
+              mainboard_process_handler();
          
             }
 
          }
-    }
-}
+  }
+
 				
 /*
 *********************************************************************************************************

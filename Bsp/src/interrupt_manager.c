@@ -162,9 +162,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
    
 		gpro_t.gTimer_run_one_mintue ++;
 		
-		gpro_t.gTimer_works_counter++;
+	
 
-        gpro_t.gTimer_display_dht11_value ++;
+      
         gpro_t.gTimer_timer_Counter++;   //timer timing counter value 
 
         gpro_t.gTimer_works_counter_sencods++;

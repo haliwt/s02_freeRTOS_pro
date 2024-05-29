@@ -1091,6 +1091,7 @@ static void smartphone_app_timer_power_on_handler(void)
             wifi_t.link_tencent_thefirst_times=0;
             wifi_t.set_wind_speed_value=0;
 		}
+        
 		
 //		if(gctl_t.ptc_flag ==0)gpro_t.add_or_dec_is_cofirm_key_flag =1;
 

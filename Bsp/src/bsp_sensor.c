@@ -182,7 +182,7 @@ static void  Dht11_Read_TempHumidity_Handler(DHT11_Data_TypeDef * pdth11)
 {
 	if(DHT11_Read_TempAndHumidity(pdth11) == 0){
 		   
-		   gpro_t.gDht11_humidity = pdth11->humi_high8bit;
+		   gctl_t.dht11_humidity_value = pdth11->humi_high8bit;
 		   
 		   gctl_t.dht11_temp_value= pdth11->temp_high8bit;
 
@@ -201,11 +201,7 @@ static void  Dht11_Read_TempHumidity_Handler(DHT11_Data_TypeDef * pdth11)
 		   
 	   
 	 }
-     else{
-
-     gpro_t.gdht11_temperature= 100;
-
-     }
+   
 
 }
 
