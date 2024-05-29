@@ -267,11 +267,12 @@ static void vTaskStart(void *pvParameters)
         }
         else {
             
-
                power_long_short_key_fun();
-               bsp_Idle();
+               
+               
                
               if(gkey_t.key_power==power_on){
+                 bsp_Idle();
                  mode_long_short_key_fun();
 
               }

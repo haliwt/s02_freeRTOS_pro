@@ -26,6 +26,7 @@ void mode_long_short_key_fun(void)
            gkey_t.key_add_dec_mode = mode_set_timer;
            gctl_t.ai_flag = 0; //timer tiiming model
            gkey_t.gTimer_disp_set_timer = 0;       //counter exit timing this "mode_set_timer"
+          
            buzzer_sound();
            Set_Timer_Timing_Lcd_Blink();
            

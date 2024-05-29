@@ -846,8 +846,8 @@ void Disp_SetTemp_Value(uint8_t temp_value)
 *************************************************************************************/
 void Lcd_Display_Temp_Digital_Blink(void)
 {
-    static uint8_t times_blink;
-
+   
+    static uint8_t  set_temp_blink  ;
     if(gkey_t.gTimer_set_temp_value  > 2 &&   gkey_t.key_add_dec_pressed_flag == 1){
 	if(gkey_t.gTimer_set_temp_blink  < 6){ //4 *100ms
         gpro_t.gTimer_run_dht11=0;
@@ -868,15 +868,15 @@ void Lcd_Display_Temp_Digital_Blink(void)
 
      }
 	 else if(gkey_t.gTimer_set_temp_blink > 11){
-       times_blink ++ ;
+      set_temp_blink ++ ;
 	   gkey_t.gTimer_set_temp_blink =0;
 
 	 }
+    
 
+	 if(set_temp_blink  > 3){
 
-	 if(times_blink > 3){
-
-	   times_blink =0 ;
+	   set_temp_blink  =0 ;
        gpro_t.gTimer_run_dht11=0;
        gpro_t.set_temperature_value_success = 1;
        gkey_t.key_add_dec_pressed_flag=0;
@@ -896,6 +896,7 @@ void Lcd_Display_Temp_Digital_Blink(void)
     }
 
 
+   
 
 
 }
