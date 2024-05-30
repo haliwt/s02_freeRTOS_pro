@@ -25,7 +25,12 @@ void Fan_Run(void)
    static uint8_t fan_full_init =0xff;
    if(fan_full_init !=fan_full_speed){
      fan_full_init =fan_full_speed;
+     #if BALL_FAN
+      MX_TIM16_Init(10); //100KHZ,duty =50%
+     #else 
       MX_TIM16_Init(50); //20KHZ,duty =50%
+
+     #endif 
 
     }
 
@@ -46,8 +51,12 @@ void Fan_Run_Middle(void)
      fan_full_speed++;
      fan_lower_speed++;
      fan_stop_flag++;
+     #if BALL_FAN
+        MX_TIM16_Init(8); //100KHZ,duty =50%
 
-     MX_TIM16_Init(40); //50KHZ,duty =50%
+     #else 
+       MX_TIM16_Init(40); //50KHZ,duty =50%
+     #endif 
 
    }
    
@@ -67,7 +76,12 @@ void Fan_Run_Lower(void)
      fan_full_speed++;
      fan_middle_speed++;
      fan_stop_flag++;
+     #if BALL_FAN
+      MX_TIM16_Init(7); //100KHZ,duty =50%
+
+     #else
       MX_TIM16_Init(30); //10KHZ,
+     #endif 
 
     }
    

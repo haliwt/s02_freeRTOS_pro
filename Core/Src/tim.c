@@ -22,6 +22,8 @@
 
 /* USER CODE BEGIN 0 */
 
+
+
 /* USER CODE END 0 */
 
 TIM_HandleTypeDef htim1;
@@ -29,6 +31,8 @@ TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim14;
 TIM_HandleTypeDef htim16;  //fan pwm 
 TIM_HandleTypeDef htim17;
+
+
 
 /* TIM1 init function */
 //Ultrasonic pwm output 25KHz
@@ -170,10 +174,11 @@ void MX_TIM16_Init(uint8_t duty_pwm)
   htim16.Instance = TIM16;
   htim16.Init.Prescaler = 23; //F = 24(MHZ)/(23+1)MHZ = 1MHZ
   htim16.Init.CounterMode = TIM_COUNTERMODE_UP;
-  //htim16.Init.Period = 9 ;//65535; 1//100K F = 1/(1+9)=0.1MHZ = 100KHZ.
-  //htim16.Init.Period = 99 ; // 1/(99+1)= 0.01MHZ = 10KHZ
-  //htim16.Init.Period = 19 ; // 1/(19+1)= 0.05MHZ = 50KHZ
-  htim16.Init.Period = 49 ; // 1/(49+1)= 0.02MHZ = 20KHZ
+  #if BALL_FAN
+     htim16.Init.Period = 9 ;//65535; 1//100K F = 1/(1+9)=0.1MHZ = 100KHZ.
+  #else 
+    htim16.Init.Period = 49 ; // 1/(49+1)= 0.02MHZ = 20KHZ
+  #endif 
   htim16.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim16.Init.RepetitionCounter = 0;
   htim16.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
