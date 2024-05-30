@@ -28,6 +28,7 @@ typedef struct _bsp_ctl{
     uint8_t gSet_temperature_value;
     uint8_t step_process;
     uint8_t interval_stop_run_flag;
+    uint8_t send_ptc_state_data_flag;
 
 
 

@@ -449,7 +449,7 @@ void Tencent_Cloud_Rx_Handler(void)
   }
   if(strstr((char *)rx_tencent_num_buffer,"state\":1")){
            if(power_on_state() ==power_on){
-            gctl_t.ai_flag=disp_works_timing;
+           
             
 			wifi_t.response_wifi_signal_label = STATE_AI_MODEL_ITEM;
         	}
@@ -459,7 +459,7 @@ void Tencent_Cloud_Rx_Handler(void)
     }
     else if(strstr((char *)rx_tencent_num_buffer,"state\":2")){
             if(power_on_state() ==power_on){
-            gctl_t.ai_flag=disp_timer_timing;
+        
 			wifi_t.response_wifi_signal_label = STATE_TIMER_MODEL_ITEM;
             }
 
@@ -701,8 +701,15 @@ void Json_Parse_Command_Fun(void)
 	  	    buzzer_sound();
 	       
 	        gkey_t.key_mode=disp_timer_timing;
-            gctl_t.ai_flag = 1 ; //timer model 
-          //  gpro_t.gTimer_timing =8; //at once display timer timing.
+            gctl_t.ai_flag = 0 ; //timer model
+
+            //gkey_t.key_mode_switch_flag = 1;
+          //  gkey_t.key_add_dec_mode = set_temp_value_item;
+            LCD_Disp_Timer_Timing_Init();
+
+            
+            gpro_t.gTimer_timing =8; //at once run this display timer timing 
+         
             MqttData_Publish_SetState(2); //timer model  = 2, works model = 1
 			HAL_Delay(350);
             //do someting disp timer timing value 
@@ -720,14 +727,21 @@ void Json_Parse_Command_Fun(void)
 	  	 if(power_on_state() ==power_on && ptc_error_state()==0 && fan_error_state()==0){
 		    buzzer_sound();
 		    gkey_t.key_mode=disp_works_timing;
-            gctl_t.ai_flag = 0;
-         //   gpro_t.gTimer_timing =8;
+            gctl_t.ai_flag = 1;//AI mode
+
+          //   gkey_t.key_mode_switch_flag = 1;
+           
+         //   gkey_t.key_add_dec_mode = set_temp_value_item;
+         
+            LCD_Disp_Works_Timing_Init();
+
+           
+
+            
+            gpro_t.gTimer_timing =8; //at once run thi this display timer timing .
             MqttData_Publish_SetState(1); //beijing timing = 1
 			HAL_Delay(350);
-			//do something
-			// gpro_t.disp_disp_works_timingr_timing_mode_item=disp_works_timing;//gpro_t.disp_disp_works_timingr_timing_mode_item
-		
-			// TFT_Display_WorksTime();
+			
           
         }
 
@@ -829,8 +843,6 @@ void Json_Parse_Command_Fun(void)
 
                  }
 
-               
-            
                 if(wind_hundred ==1 && wind_decade==0 && wind_unit==0){
                     
                     wifi_t.set_wind_speed_value=0;

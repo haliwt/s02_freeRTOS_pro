@@ -95,7 +95,8 @@ void Dec_Key_Fun(uint8_t cmd)
             glcd_t.number4_high =  gctl_t.gSet_temperature_value   % 10; //
 
             gkey_t.gTimer_set_temp_value=0;
-          
+            gpro_t.set_temperature_value_success=0;
+            gctl_t.send_ptc_state_data_flag =0;  //send data to tencent to tell ptc on or off state .
             gkey_t.key_add_dec_pressed_flag = 1;
 
             Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
@@ -174,7 +175,8 @@ void Add_Key_Fun(uint8_t cmd)
 
      
         gkey_t.gTimer_set_temp_value=0;
-     
+        gpro_t.set_temperature_value_success=0;
+        gctl_t.send_ptc_state_data_flag =0; //send data to tencent to tell ptc on or off state .
         gkey_t.key_add_dec_pressed_flag = 1;
         Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
        

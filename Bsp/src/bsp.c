@@ -11,7 +11,7 @@ static void power_on_init_function(void);
 
 
 
-
+uint8_t power_off_flag;
 
 uint8_t  fan_continue_flag;
 
@@ -67,7 +67,7 @@ void mainboard_process_handler(void)
 {
   
 	
-	static uint8_t power_off_flag;;
+	
 
 	if( gkey_t.key_sound_flag == key_sound){
 		gkey_t.key_sound_flag =0;
@@ -338,75 +338,82 @@ static void Mainboard_Fun_Stop(void)
 static void Process_Dynamical_Action(void)
 {
 
-   static uint8_t the_send_open_ptc,to_tenced_data,ptc_int=0xff,ptc_int_1=0xff;
+   static uint8_t the_send_open_ptc,to_tenced_data,ptc_int=0xff;
    static uint8_t ptc_int_on_default =0xff,ptc_int_on_send_data;
    static uint8_t ptc_int_off =0xff,ptc_int_off_1=0xff,to_tenced_off_data;
    if(gpro_t.set_temperature_value_success == 1){
        if(gctl_t.gSet_temperature_value > gctl_t.dht11_temp_value ){//if(gctl_t.gSet_temperature_value > gctl_t.dht11_temp_value){
 
-              if(the_send_open_ptc==1){
-                 the_send_open_ptc ++;
+             if(gctl_t.send_ptc_state_data_flag ==0 || gctl_t.send_ptc_state_data_flag==1){ //the first open ptc 
+                 gctl_t.send_ptc_state_data_flag  =2;
                  to_tenced_off_data++;
-                 ptc_int_on_send_data++;
                 gctl_t.ptc_flag =1;
                 Ptc_On();
                 Disp_Dry_Icon();
-                if(wifi_link_net_state()==1 &&  ptc_int_1 != to_tenced_data){
-                   ptc_int_1 = to_tenced_data;
-                  MqttData_Publish_SetPtc(1);
-                  HAL_Delay(350);
-                 }
+              
+                MqttData_Publish_SetPtc(1);
+                HAL_Delay(350);
+                 
 
                }
-               else if(the_send_open_ptc==2){
+               else if(gctl_t.send_ptc_state_data_flag==3){
                  if((gctl_t.gSet_temperature_value -3) > gctl_t.dht11_temp_value ){
 
                   to_tenced_off_data++;
-                  ptc_int_on_send_data++;
-                   ptc_int_on_send_data++;
+                //  ptc_int_on_send_data++;
+                
                    gctl_t.ptc_flag =1;
                    Ptc_On();
                    Disp_Dry_Icon();
-                    if(wifi_link_net_state()==1 && ptc_int !=to_tenced_data ){
-                      ptc_int =to_tenced_data  ; 
+                    if(wifi_link_net_state()==1 && ptc_int !=ptc_int_on_send_data ){
+                      ptc_int =ptc_int_on_send_data  ; 
                       MqttData_Publish_SetPtc(1);
                       HAL_Delay(350);
                    }
                   }
 
                }
-               else{
-                  gctl_t.ptc_flag =1;
-                  Ptc_On();
-                   to_tenced_off_data++;
-                    Disp_Dry_Icon();
-                   if(wifi_link_net_state()==1 && ptc_int_on_default != ptc_int_on_send_data ){
-                      ptc_int =to_tenced_data  ; 
-                      MqttData_Publish_SetPtc(1);
-                      HAL_Delay(350);
-                   }
-                  
-
-               }
+//               else{
+//                  gctl_t.ptc_flag =1;
+//                  Ptc_On();
+//                   to_tenced_off_data++;
+//                    Disp_Dry_Icon();
+//                   if(wifi_link_net_state()==1 && ptc_int_on_default != ptc_int_on_send_data ){
+//                      ptc_int =to_tenced_data  ; 
+//                      MqttData_Publish_SetPtc(1);
+//                      HAL_Delay(350);
+//                   }
+//                  
+//
+//               }
                
 
        }
        else if(gctl_t.gSet_temperature_value <  gctl_t.dht11_temp_value){
 
-              if(the_send_open_ptc==0){
-                   the_send_open_ptc++;
+              if(gctl_t.send_ptc_state_data_flag==0 ||   gctl_t.send_ptc_state_data_flag ==2){ //the first close ptc.
+                  if(gctl_t.send_ptc_state_data_flag ==2){
+                     gctl_t.send_ptc_state_data_flag= 3;
+                   }
+                   else 
+                        gctl_t.send_ptc_state_data_flag= 1;
+                   
                   gctl_t.ptc_flag =0;
+
+                  ptc_int_on_send_data++;
                   Ptc_Off(); 
                   Disp_Dry_Icon();
-                  to_tenced_data++;
-                  if(wifi_link_net_state()==1 && ptc_int_off_1 !=to_tenced_off_data ){
-                      ptc_int_off_1 =to_tenced_off_data ; 
+                   //    to_tenced_off_data++;
+                     
+                  if(wifi_link_net_state()==1 && ptc_int_off_1 !=   gctl_t.send_ptc_state_data_flag ){
+                      ptc_int_off_1 =  gctl_t.send_ptc_state_data_flag; 
                       MqttData_Publish_SetPtc(0);
                       HAL_Delay(350);
                    }
 
               }
               else{
+                   ptc_int_on_send_data++;
                   gctl_t.ptc_flag =0;
                   Ptc_Off(); 
                   Disp_Dry_Icon();
@@ -415,7 +422,7 @@ static void Process_Dynamical_Action(void)
                       MqttData_Publish_SetPtc(0);
                       HAL_Delay(350);
                    }
-                  to_tenced_data++;
+                 
 
 
               }
@@ -425,26 +432,29 @@ static void Process_Dynamical_Action(void)
    
     }
     else{
-        
-        if(ptc_state() ==1){
 
-         if(gctl_t.dht11_temp_value > 39){
-             gctl_t.ptc_flag =0;
-             Ptc_Off();
-             Disp_Dry_Icon();
-         }
-         else{
+       if( gkey_t.key_add_dec_pressed_flag ==0){
+            if(ptc_state() ==1){
 
-    	   Ptc_On();
-           Disp_Dry_Icon();
-         }
+             if(gctl_t.dht11_temp_value > 39){
+                 gctl_t.ptc_flag =0;
+                 Ptc_Off();
+                 Disp_Dry_Icon();
+             }
+             else{
 
-    	}
-    	else{
-          Ptc_Off();
-          Disp_Dry_Icon();
+        	   Ptc_On();
+               Disp_Dry_Icon();
+             }
 
-    	}
+        	}
+        	else{
+              Ptc_Off();
+              Disp_Dry_Icon();
+
+        	}
+        }
+
     }
 
 	if(plasma_state() ==1){
@@ -602,14 +612,23 @@ static void power_on_init_function(void)
             
     power_off_flag=0;
     gpro_t.power_off_flag=1;
+    
     gkey_t.set_timer_timing_success =0;
+    //temperature value inti
     gpro_t.set_temperature_value_success=0;
     if(wifi_link_net_state()==0){
         gpro_t.disp_works_minutes_value=0;
         gpro_t.disp_works_hours_value =0;
     }
-    wifi_t.set_wind_speed_value=0;
+    wifi_t.set_wind_speed_value=0; //init 
+
+    //timig init
     gpro_t.gTimer_run_total=0;
+
+    gpro_t.set_timer_timing_hours =0 ;
+    gpro_t.set_timer_timing_minutes =0;
+
+   
     
     if(wifi_t.smartphone_app_power_on_flag==0){
         main_fun_init();
