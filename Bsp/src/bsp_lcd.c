@@ -912,16 +912,25 @@ void Lcd_Display_Temp_Digital_Blink(void)
 void Disp_Dry_Icon(void)
 {
   
-    if(ptc_state()== 1){
-    
-            //number '5' and 'ptc' icon
-            TM1723_Write_Display_Data(0xC9,(0x01+lcdNumber5_High[glcd_t.number5_high] + lcdNumber5_Low[glcd_t.number5_low]  ) & 0xffff); 
-       }
-       else{
-           //number '5' and 'ptc' icon
-            TM1723_Write_Display_Data(0xC9,(lcdNumber5_High[glcd_t.number5_high] + lcdNumber5_Low[glcd_t.number5_low]  ) & 0xffff); 
-    
-       }
+   if(gctl_t.ptc_warning ==0 && gctl_t.fan_warning ==0){
+
+        if(ptc_state()== 1){
+        
+                //number '5' and 'ptc' icon
+                TM1723_Write_Display_Data(0xC9,(0x01+lcdNumber5_High[glcd_t.number5_high] + lcdNumber5_Low[glcd_t.number5_low]  ) & 0xffff); 
+           }
+           else{
+               //number '5' and 'ptc' icon
+                TM1723_Write_Display_Data(0xC9,(lcdNumber5_High[glcd_t.number5_high] + lcdNumber5_Low[glcd_t.number5_low]  ) & 0xffff); 
+        
+           }
+
+    }
+    else{
+
+        LCD_Fault_Numbers_Code();
+
+    }
 
 }
 

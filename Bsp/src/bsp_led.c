@@ -3,7 +3,7 @@
 
 
 
-static void LED_POWER_OFF(void);
+
 static uint8_t Delay(int32_t count);
 
  uint32_t led_k;
@@ -97,30 +97,36 @@ void Breath_Led(void)
         i++;
      if(switch_flag ==1 || i < 10){
         switch_flag =0;
+        #if 0
         LED_POWER_OFF();
         LED_POWER_OFF();
         LED_Power_On();
         flag = Delay(30-i);
+        #endif 
+        LED_Power_On();
+        flag = Delay(49-i);
         
 
       }
 	  if(flag ==1){
         flag =0;
       
-        
+           if(j< 40){
            LED_POWER_OFF();
            switch_flag = Delay(i);
-        
-        
-    }
-    else{
-           LED_POWER_OFF();
-             switch_flag = Delay(i);
+
+            }
+            else{
+             LED_POWER_OFF();
+             LED_POWER_OFF();
+             LED_POWER_OFF();
+             LED_POWER_OFF();
+             switch_flag = 1;
 
 
-    }
-    }
-
+            }
+        }
+     }
     
     if(led_k > 49 && dec_led_flag==0){
 
@@ -144,21 +150,23 @@ void Breath_Led(void)
       else if(led_k>49 && dec_led_flag==1){
         
      
-        z++; 
-        if(z<20){
-         // LED_POWER_OFF();
-         LED_Power_On();
-         }
-         else{
        
-		led_k=0;
+        led_k=0;
          i=0;
          z=0;
          dec_led_flag=0;
         
-        
-        
-      }
+//        if(z<20){
+//         // LED_POWER_OFF();
+//         LED_Power_On();
+//         }
+//         else{
+//       
+//		led_k=0;
+//         i=0;
+//         z=0;
+//         dec_led_flag=0;
+//        }
 	}
 
 

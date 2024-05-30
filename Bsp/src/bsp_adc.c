@@ -71,8 +71,17 @@ void Get_PTC_Temperature_Voltage(uint32_t channel,uint8_t times)
 	if(ptc_temp_voltage < 373 || ptc_temp_voltage ==373){ //87 degree
   
 	    gctl_t.plasma_flag = 0; //turn off
-	    Ptc_On(); //turn off
+	    Ptc_Off(); //turn off
+
+        gctl_t.ptc_warning = 1;
+        
         Buzzer_Ptc_Error_Sound();
+
+        Publish_Data_Warning(ptc_temp_warning,warning);
+	    HAL_Delay(350);
+
+        MqttData_Publish_SetPtc(0);
+		HAL_Delay(350);  
    	      
    }
 }
@@ -136,6 +145,18 @@ void Get_Fan_Adc_Fun(uint32_t channel,uint8_t times)
 
 		  Buzzer_Fan_Error_Sound();
 
+          
+          
+       
+
+           Publish_Data_Warning(fan_warning,warning);
+	       HAL_Delay(350);
+
+           MqttData_Publis_SetFan(0);
+	       HAL_Delay(350);
+
+
+          LCD_Fault_Numbers_Code();
 
 		}
 		detect_error_times++;
