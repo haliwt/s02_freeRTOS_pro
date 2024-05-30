@@ -47,6 +47,13 @@ void mode_long_short_key_fun(void)
             gkey_t.key_mode_switch_flag = 1;
             gkey_t.key_add_dec_mode = set_temp_value_item;
             LCD_Disp_Timer_Timing_Init();
+             
+             buzzer_sound();
+
+            if(wifi_link_net_state()==1){
+                MqttData_Publish_SetState(2); //timer model  = 2, works model = 1
+                HAL_Delay(200);
+            }
 
         }
         else{
@@ -55,16 +62,20 @@ void mode_long_short_key_fun(void)
             gkey_t.key_add_dec_mode = set_temp_value_item;
             gctl_t.ai_flag = 1; //timer tiiming model
             LCD_Disp_Works_Timing_Init();
+             buzzer_sound();
+            if(wifi_link_net_state()==1){
+                MqttData_Publish_SetState(1); //timer model  = 2, works model = 1
+                HAL_Delay(200);
+             }
 
-        }
-           buzzer_sound();
+         
       
-    }
+            }
 
 
-}
+     }
 
-
+ }
 
 
 /***************************************************************************

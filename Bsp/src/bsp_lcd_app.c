@@ -485,6 +485,11 @@ void Display_WorksTimingr_Handler(uint8_t sel_item)
                 gkey_t.key_add_dec_mode = set_temp_value_item;
                 
                 LCD_Disp_Timer_Timing_Init();
+
+                if(wifi_link_net_state()==1){
+                    MqttData_Publish_SetState(2); //timer model  = 2, works model = 1
+                    HAL_Delay(200);
+                }
                
             }
         }
