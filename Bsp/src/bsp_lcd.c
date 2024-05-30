@@ -928,7 +928,31 @@ void Disp_Dry_Icon(void)
     }
     else{
 
-        LCD_Fault_Numbers_Code();
+        if(gctl_t.ptc_warning ==1 && gctl_t.ptc_warning ==0){
+
+        
+           LCD_Fault_Numbers_Code();
+            if(ptc_state()== 1){
+        
+                //number '5' and 'ptc' icon
+                //TM1723_Write_Display_Data(0xC9,(0x01+lcdNumber5_High[glcd_t.number5_high] + lcdNumber5_Low[glcd_t.number5_low]  ) & 0xffff); 
+                TM1723_Write_Display_Data(0xC9,(lcdNumber5_Low_E[0]  + lcdNumber5_High_E[0] + DRY_Symbol ) & 0xffff); // dry of icon display
+           }
+           else{
+               //number '5' and 'ptc' icon
+               // TM1723_Write_Display_Data(0xC9,(lcdNumber5_High[glcd_t.number5_high] + lcdNumber5_Low[glcd_t.number5_low]  ) & 0xffff); 
+                TM1723_Write_Display_Data(0xC9,(lcdNumber5_Low_E[0]  + lcdNumber5_High_E[0]  ) & 0xffff); //numbers : "dry of icon"
+           }
+
+
+        }
+        if(gctl_t.ptc_warning ==1){
+
+           LCD_Fault_Numbers_Code();
+
+
+        }
+        
 
     }
 
