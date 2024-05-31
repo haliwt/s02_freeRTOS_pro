@@ -383,15 +383,8 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
          portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 
    break;
-
-
-   }
-
-
-
+    }
 }
-
-
 static void power_long_short_key_fun(void)
 {
 

@@ -36,7 +36,7 @@
 #define OpenDispTM1723          0x97 // full screen is tunr on light
 #define OpenDispTM1723_5        0X9f
 #define TM1723Default          	0x87
-#define CloseDispTM1723		    0x80// 
+#define CloseDispTM1723		    0x80//  
 
 
 

@@ -58,7 +58,9 @@ lcd_ref glcd_t;
 #define seg_d              0x80
 
 
-#define LUM_VALUE       0x94//0x92//0x93//0x95//0x94//0x97(max)
+#define LUM_VALUE      0X93//0x94//0x92//0x93//0x95//0x94//0x97(max)
+
+#define MAX_LUM_VALUE  0x9F
 
 const unsigned char segNumber_Low[]={
  
@@ -148,16 +150,6 @@ static void LCD_Number_ThreeFour_Temperature(void);
 
 
 static uint8_t Detecting_Fault_Code(void);
-
-
-
-
-//static void LCD_Number_FiveSix_Hours(void);
-//static void LCD_Number_SevenEight_Minutes(void);
-
-
-
-
 
 
 static uint8_t	ptc_error_flag ,fan_error_flag;
@@ -281,7 +273,7 @@ void Lcd_Display_Detials(void)
 
 
    //open display
-   TIM1723_Write_Cmd(LUM_VALUE);//(0x97);//(0x94);//(0x9B);
+   TIM1723_Write_Cmd(MAX_LUM_VALUE);//(0x97);//(0x94);//(0x9B);
 
 
 }
