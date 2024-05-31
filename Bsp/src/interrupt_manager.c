@@ -12,7 +12,7 @@
 *******************************************************************************/
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-    static uint8_t state_uart1;
+  
     
    
     //wifi usart1 --wifi 

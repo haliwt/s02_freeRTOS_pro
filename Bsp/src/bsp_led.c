@@ -66,7 +66,7 @@ void Breath_Led(void)
 {
    
     static uint8_t flag,switch_flag,dec_led_flag;
-    static uint32_t i,j,z;
+    static uint8_t i,j,z;
     led_k++;
     
 	

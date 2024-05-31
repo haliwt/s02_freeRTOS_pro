@@ -66,7 +66,7 @@ void bsp_Idle(void)
 void mainboard_process_handler(void)
 {
   
-	
+	static uint8_t power_on_run_dht11_times ;
 	
 
 	if( gkey_t.key_sound_flag == key_sound){
@@ -117,9 +117,9 @@ void mainboard_process_handler(void)
 
 		  case 2:   //run dht11 display 
 
-             if(gpro_t.gTimer_run_dht11 > 12 ){
+             if(gpro_t.gTimer_run_dht11 > 12  || power_on_run_dht11_times < 10){
                 gpro_t.gTimer_run_dht11=0;
-               
+                power_on_run_dht11_times++;
                   Update_DHT11_Value();
                   Disp_HumidityTemp_Value();
 
@@ -534,6 +534,8 @@ static void power_off_function(void)
     	    wifi_t.link_net_tencent_data_flag =1;
 
              gctl_t.step_process=0;
+             //cotrol displ dht11 value 
+             gpro_t.gTimer_run_dht11 = 30;
 
             //wifi set ref
     	
@@ -609,7 +611,8 @@ static void power_off_function(void)
 static void power_on_init_function(void)
 {
      //led on 
-            
+
+   
     power_off_flag=0;
     gpro_t.power_off_flag=1;
     
@@ -645,11 +648,12 @@ static void power_on_init_function(void)
     Display_Wind_Icon_Inint();
 
     Update_DHT11_Value();
-    Disp_HumidityTemp_Init();
+    
 
 
 
     LCD_Wind_Run_Icon(0);
+    Disp_HumidityTemp_Init();
 
 
     //fan on
@@ -664,6 +668,8 @@ static void power_on_init_function(void)
     Publish_Data_Warning(ptc_temp_warning,no_warning);
 
     }
+
+    
 
 
 }
