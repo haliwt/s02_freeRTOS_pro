@@ -149,7 +149,6 @@ void Get_Fan_Adc_Fun(uint32_t channel,uint8_t times)
 		   #endif 
            gctl_t.fan_warning = 0;
     }
-
    #endif 
    else{
 
