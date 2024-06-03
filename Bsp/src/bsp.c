@@ -389,7 +389,7 @@ static void Process_Dynamical_Action(void)
                
 
        }
-       else if(gctl_t.gSet_temperature_value <  gctl_t.dht11_temp_value){
+       else if(gctl_t.gSet_temperature_value <  gctl_t.dht11_temp_value || gctl_t.gSet_temperature_value == gctl_t.dht11_temp_value ){
 
               if(gctl_t.send_ptc_state_data_flag==0 ||   gctl_t.send_ptc_state_data_flag ==2){ //the first close ptc.
                   if(gctl_t.send_ptc_state_data_flag ==2){

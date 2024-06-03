@@ -462,7 +462,7 @@ void Display_WorksTimingr_Handler(uint8_t sel_item)
     
         Set_Timer_Timing_Lcd_Blink();//(gpro_t.set_timer_timing_hours,gpro_t.set_timer_timing_minutes);
        
-        if(gkey_t.gTimer_disp_set_timer > 3){
+        if(gkey_t.gTimer_disp_set_timer > 1){
 
             if(gpro_t.set_timer_timing_hours == 0 && gpro_t.set_timer_timing_minutes==0){
 
