@@ -5,13 +5,13 @@
   * @brief          : Main program body
   ******************************************************************************
   * @attention
+  * name: S02
+  * version :1.0     data:2024.05.31  
+  * 
   *
-  * Copyright (c) 2024 STMicroelectronics.
-  * All rights reserved.
   *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+  * 
+  * 
   *
   ******************************************************************************
   */
@@ -99,10 +99,15 @@ int main(void)
   MX_TIM17_Init(); //timer timing 
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
+  MX_TIM16_Init(20);
   delay_init(24); 
   bsp_ctl_init();
+  
+
+  
     HAL_TIM_Base_Start_IT(&htim17);
-   UART_Start_Receive_IT(&huart2,inputBuf,1);
+   UART_Start_Receive_IT(&huart2,wifi_t.usart1_dataBuf,1);
+   
     freeRTOS_Handler();
   /* USER CODE END 2 */
 

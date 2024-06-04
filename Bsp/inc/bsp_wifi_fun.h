@@ -61,6 +61,14 @@ typedef struct _WIFI_FUN{
 
 	uint8_t subscribe_cloud_success;
 	uint8_t power_off_step;
+    uint8_t rx_net_counter;
+    uint8_t link_net_tencent_data_flag; //after send publish datat to tencent .
+    uint8_t tencent_rx_data_success ;
+    uint8_t recoder_tempearture_rx_data;
+
+    //
+    uint8_t fin_speed_full_flag;
+   
 	
 	
 	uint8_t esp8266_dynamic_reg_flag;
@@ -112,7 +120,7 @@ typedef struct _WIFI_FUN{
 	
     //smart phone 
     uint8_t smartphone_app_power_on_flag;
-    uint8_t power_on_linkwifi;
+   
 	uint8_t power_on_login_tencent_cloud_flag;
 	uint8_t repeat_login_tencent_cloud_init_ref;
     
@@ -135,8 +143,9 @@ typedef struct _WIFI_FUN{
 
 	//auto link net
 	uint8_t rx_error_codes_flag;
-	uint8_t power_on_thefirst_times;
+	uint8_t link_tencent_thefirst_times;
 	uint8_t rx_setup_hardware_counter;
+    uint8_t tencent_rx_data_flag;
 
     //wifi gtimer
 	uint8_t gTimer_read_beijing_time;
@@ -144,7 +153,7 @@ typedef struct _WIFI_FUN{
 	
     uint8_t gTimer_beijing_time;
 	uint8_t gTimer_reconnect_wifi;
-	uint8_t gTimer_power_off;
+	uint8_t gTimer_power_off_run_times;
 	uint8_t gTimer_subscriber_send ;
 	uint8_t gTimer_publish_dht11;
 	
@@ -153,9 +162,11 @@ typedef struct _WIFI_FUN{
 	uint8_t gTimer_wifi_pub_power_off;
 	uint8_t gTimer_wifi_power_on_detect ;
 	uint8_t gTimer_wifi_counter_link_beijing_times ;
-	uint8_t gTimer_main_pro_times;
+	uint8_t gTimer_main_gpro_times;
 	uint8_t gTimer_wifi_sub_power_off;
 	uint8_t gTimer_wifi_rx_error;
+    uint8_t gTimer_counter_repeat_link_net;
+    uint8_t gTimer_normal_send_dat_tencent ;
 	
     uint16_t gTimer_get_beijing_time;
 	uint16_t gTimer_auto_detected_net_state_times;
@@ -194,4 +205,5 @@ void GetNTP_Times(void);
 void Wifi_Pro_Runing_Init(void);
 
 #endif 
+
 

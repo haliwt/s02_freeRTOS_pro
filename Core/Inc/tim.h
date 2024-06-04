@@ -29,6 +29,7 @@ extern "C" {
 #include "main.h"
 
 /* USER CODE BEGIN Includes */
+#define BALL_FAN       1 
 
 /* USER CODE END Includes */
 
@@ -38,7 +39,7 @@ extern TIM_HandleTypeDef htim1;
 
 extern TIM_HandleTypeDef htim14;
 
-//extern TIM_HandleTypeDef htim16;
+extern TIM_HandleTypeDef htim16;
 
 extern TIM_HandleTypeDef htim17;
 
@@ -49,7 +50,9 @@ extern TIM_HandleTypeDef htim17;
 void MX_TIM1_Init(void);
 //void MX_TIM3_Init(void);
 void MX_TIM14_Init(void);
-//void MX_TIM16_Init(void);
+
+void MX_TIM16_Init(uint8_t duty_pwm);
+
 void MX_TIM17_Init(void);
 
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);

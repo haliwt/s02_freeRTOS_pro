@@ -36,7 +36,7 @@
 #define OpenDispTM1723          0x97 // full screen is tunr on light
 #define OpenDispTM1723_5        0X9f
 #define TM1723Default          	0x87
-#define CloseDispTM1723		    0x80// 
+#define CloseDispTM1723		    0x80//  
 
 
 
@@ -100,7 +100,8 @@ typedef struct _LCD_Ref{
 	 uint8_t gTimer_colon_blink;
 	 uint8_t gTimer_fan_blink;
 	 uint8_t gTimer_error_times;
-	 uint8_t gTimer_set_temp_blink;
+	 uint8_t gTimer_lcd_blink;
+     uint8_t gTimer_wifi_fast_blink ;
 	
 }lcd_ref;
 
@@ -108,11 +109,28 @@ typedef struct _LCD_Ref{
 
 extern lcd_ref glcd_t; 
 
+void LcdDisp_Init(void);
+
+
 void Lcd_Display_Detials(void);
 
-//void LCD_Display_Wind_Icon_Handler(void);
+void LCD_Display_Wind_Icon_Handler(void);
 
 
+void Disp_Dry_Icon(void);
+
+void Disp_Kill_Icon(void);
+
+void Disp_Ultrsonic_Icon(void);
+
+void Wifi_Icon_FastBlink(void);
+
+
+void Disp_HumidityTemp_Init(void);
+
+
+
+void Lcd_Display_Off(void);
 
 
 void Lcd_Display_Off(void);
@@ -133,13 +151,18 @@ void Disip_Wifi_Icon_State(void  );
 
 void LCD_Numbers1234_Init(void);
 
-void LCD_Number_Wifi_OneTwo_Humidity(void);
+void LCD_Number_Ai_OneTwo_Humidity(void);
 
 void Disp_SetTemp_Value(uint8_t temp_value);
 
 void Lcd_Display_Temp_Digital_Blink(void);
 
+void OnlyDisp_Wind_Icon_Handler(void);
+
+void LCD_Fault_Numbers_Code(void);
+
 
 
 #endif 
+
 

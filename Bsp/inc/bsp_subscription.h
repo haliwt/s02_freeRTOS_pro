@@ -57,18 +57,17 @@ typedef enum _subSignal{ /* enumeration for CParser signals */
 }subSignal;
 
 
-typedef enum _JSONTYPE {
-   JSNONE = -1,
-   JSSTRING = 0,
-   JSOBJECT,
-   JSARRAY,
-   JSNUMBER,
-   JSBOOLEAN,
-   JSNULL,
-   JSTYPEMAX
-}JSONTYPE;
+
 
 extern uint8_t TCMQTTRCVPUB[40];
+
+extern uint8_t rx_tencent_num[1];
+
+extern uint8_t rx_tencent_num_buffer[40] ;
+
+
+
+
 
 
 void Receive_Data_FromCloud_Data(int type, char *str);
@@ -83,4 +82,5 @@ void Wifi_Rx_Beijing_Time_Handler(void);
 void Json_Parse_Command_Fun(void);
 
 #endif 
+
 

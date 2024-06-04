@@ -19,7 +19,8 @@ void LED_Mode_On(void);
 void LED_Mode_Off(void);
 
 void LED_Power_On(void);
-//void LED_Power_Off(void);
+//void LED_POWER_OFF(void);
+
 
 
 void Backlight_On(void);

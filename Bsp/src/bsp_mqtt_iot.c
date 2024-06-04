@@ -91,7 +91,7 @@ static void Mqtt_Value_update_data(void)
 	
 	if(gctl_t.gSet_temperature_value <20)gctl_t.gSet_temperature_value = 40;
 	else if(gctl_t.gSet_temperature_value > 40 )gctl_t.gSet_temperature_value = 40;
-	sg_info.set_temperature = gctl_t.gSet_temperature_value;
+	sg_info.set_temperature = 40;
 
 }
 
@@ -122,7 +122,7 @@ static void mqtt_smart_phone_power_on_ref(void)
 	   sg_info.sonic = gctl_t.ultrasonic_flag ;
 	   sg_info.find =  100;//wifi_t.set_wind_speed_value;
 	   
-	   sg_info.set_temperature = gctl_t.gSet_temperature_value=40;//gProcess_t.gDht11_humidity;
+	   sg_info.set_temperature = gctl_t.gSet_temperature_value=40;//gpro_t.gDht11_humidity;
 
 
 

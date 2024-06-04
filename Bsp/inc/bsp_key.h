@@ -11,6 +11,16 @@
 
 typedef enum{
 
+    KEY_UP,
+    KEY_DOWN,
+    
+
+}key_pressed_t;
+
+
+
+typedef enum{
+
    power_off,
    power_on,
 
@@ -39,25 +49,38 @@ typedef enum mode_key_t{
    uint8_t  key_power;
    uint8_t  key_mode;
    uint8_t  key_sound_flag;
- 
-
+   uint8_t  wifi_link_net_flag;
+   uint8_t  key_add_dec_pressed_flag;
+   uint8_t  key_add_dec_mode;
+   uint8_t  set_timer_timing_success;
+   uint8_t  power_key_long_counter;
+   uint8_t  key_mode_long_counter;
   
-   uint8_t   key_mode_times;
-   int8_t  set_temp_value;
 
-   
+
+   uint8_t   key_mode_times;
+   uint8_t   set_temp_value;
+   uint8_t   key_mode_switch_flag;
+
+   uint8_t  wifi_led_fast_blink_flag;
    uint8_t  gTimer_set_temp_value;
    uint8_t  gTimer_disp_set_timer_blink;
    uint8_t  gTimer_power_off;
    uint8_t  gTimer_disp_set_timer;
+   uint8_t  gTimer_set_temp_blink;
 
-   
+   uint8_t gTimer_power_off_run_times;
+   uint8_t gTimer_key_temp_timing;
+
+   uint8_t gTimer_power_key_counter;
 	
 
 }key_fun_t;
 
 
  extern key_fun_t gkey_t;
+
+void mode_long_short_key_fun(void);
 
 
 void Dec_Key_Fun(uint8_t cmd);
