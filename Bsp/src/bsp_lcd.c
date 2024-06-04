@@ -342,14 +342,14 @@ void Disip_Wifi_Icon_State(void)
   else{
     if(wifi_link_net_state() ==0){
     
-          if(gctl_t.gTimer_wifi_fast_blink < 9  ){ //9 * 10ms
+          if(gctl_t.gTimer_wifi_fast_blink < 15  ){ //9 * 10ms
               TM1723_Write_Display_Data(0xC5,(0x01+lcdNumber2_High[glcd_t.number2_high] + lcdNumber2_Low[glcd_t.number2_low]) & 0xffff); //numbers : '2' addr: 0xC5
           }
-          else if(gctl_t.gTimer_wifi_fast_blink  > 8 && gctl_t.gTimer_wifi_fast_blink < 18){
+          else if(gctl_t.gTimer_wifi_fast_blink  > 14 && gctl_t.gTimer_wifi_fast_blink < 30){
                TM1723_Write_Display_Data(0xC5,(lcdNumber2_High[glcd_t.number2_high] + lcdNumber2_Low[glcd_t.number2_low]) & 0xffff); //numbers : '2' addr: 0xC5
     
           }
-          else if(gctl_t.gTimer_wifi_fast_blink > 17){
+          else if(gctl_t.gTimer_wifi_fast_blink > 29){
     
            gctl_t.gTimer_wifi_fast_blink =0;
     

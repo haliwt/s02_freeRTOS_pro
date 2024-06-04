@@ -328,7 +328,7 @@ void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin)
 
    case KEY_POWER_Pin:
 
-   // if(KEY_POWER_VALUE()==KEY_DOWN){
+    if(KEY_POWER_VALUE()==KEY_DOWN){
 
         xTaskNotifyFromISR(xHandleTaskStart,  /* 目标任务 */
         RUN_POWER_4,      /* 设置目标任务事件标志位bit0  */
@@ -339,7 +339,7 @@ void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin)
         portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 
 
-  ///  }
+     }
             
    
    break;
