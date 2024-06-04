@@ -48,7 +48,7 @@ static TaskHandle_t xHandleTaskStart = NULL;
 
 
 
-static void power_long_short_key_fun(void);
+
 
 
 
@@ -123,16 +123,19 @@ static void vTaskMsgPro(void *pvParameters)
 		{
 			/* 接收到消息，检测那个位被按下 */
              
-			if((ulValue & POWER_KEY_0) != 0)
-			{
-   
-                     
-                 xTaskNotify(xHandleTaskStart, /* 目标任务 */
-							RUN_POWER_4 ,            /* 设置目标任务事件标志位bit0  */
-							eSetBits);          /* 将目标任务的事件标志位与BIT_0进行或操作，  将结果赋值给事件标志位。*/
-				                                    
-			}
-            else if((ulValue & MODE_KEY_1) != 0){
+//			if((ulValue & POWER_KEY_0) != 0)
+//			{
+//   
+//                     
+//                 xTaskNotify(xHandleTaskStart, /* 目标任务 */
+//							RUN_POWER_4 ,            /* 设置目标任务事件标志位bit0  */
+//							eSetBits);          /* 将目标任务的事件标志位与BIT_0进行或操作，  将结果赋值给事件标志位。*/
+//				                                    
+//			}
+//            else 
+
+
+            if((ulValue & MODE_KEY_1) != 0){
 
                //switch timer timing and works timing 
 
@@ -216,7 +219,7 @@ static void vTaskStart(void *pvParameters)
 			{
 				//printf("接收到K2按键按下消息, ulNotifiedValue = 0x%08x\r\n", ulValue);
 				//printf("receive notice key1_bit0 \n");
-				power_key_long_counter=1;
+				gkey_t.power_key_long_counter = 1;
             }
             else if((ulValue & RUN_MODE_5 ) != 0)   /* 接收到消息，检测那个位被按下 */
 			{
@@ -314,7 +317,7 @@ static void AppTaskCreate (void)
 }
 
 
-void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
+void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin)
 {
 
  
@@ -325,10 +328,10 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 
    case KEY_POWER_Pin:
 
-    if(KEY_POWER_VALUE()==1){
+   // if(KEY_POWER_VALUE()==KEY_DOWN){
 
-        xTaskNotifyFromISR(xHandleTaskMsgPro,  /* 目标任务 */
-        POWER_KEY_0,      /* 设置目标任务事件标志位bit0  */
+        xTaskNotifyFromISR(xHandleTaskStart,  /* 目标任务 */
+        RUN_POWER_4,      /* 设置目标任务事件标志位bit0  */
         eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志位 */
         &xHigherPriorityTaskWoken);
 
@@ -336,13 +339,13 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
         portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 
 
-    }
+  ///  }
             
    
    break;
 
    case KEY_MODE_Pin:
-      if(KEY_MODE_VALUE() == 1){
+      if(KEY_MODE_VALUE() == KEY_DOWN){
         xTaskNotifyFromISR(xHandleTaskMsgPro,  /* 目标任务 */
                MODE_KEY_1,     /* 设置目标任务事件标志位bit0  */
                eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志位 */
@@ -382,54 +385,5 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 
    break;
     }
-}
-static void power_long_short_key_fun(void)
-{
-
-    static uint8_t sound_flag;
-    if(KEY_POWER_VALUE() == 1 && gkey_t.power_key_long_counter < 60){
-
-
-        gkey_t.power_key_long_counter++;
-        if( gkey_t.power_key_long_counter > 40   && KEY_POWER_VALUE() == 1){
-             gkey_t.power_key_long_counter = 200;
-
-             gkey_t.wifi_link_net_flag = 1;
-
-             	//WIFI CONNCETOR process
-			 gkey_t.wifi_led_fast_blink_flag=1;
-			 //WIFI CONNCETOR process
-			wifi_t.esp8266_login_cloud_success =0;
-			wifi_t.runCommand_order_lable=wifi_link_tencent_cloud;
-			wifi_t.wifi_config_net_lable= wifi_set_restor;
-			wifi_t.power_on_login_tencent_cloud_flag=0;
-			wifi_t.link_tencent_step_counter=0;
-			wifi_t.gTimer_linking_tencent_duration=0; //166s -2分7秒
-         
-            Buzzer_KeySound();
-
-        }
-
-    }
-    else if(KEY_POWER_VALUE() == 0 && gkey_t.power_key_long_counter >0 && gkey_t.power_key_long_counter<40){ //short key of function
-
-        gkey_t.power_key_long_counter=0;
-        sound_flag=1;
-        if(sound_flag ==1){
-           sound_flag++;
-           if(gkey_t.key_power==power_off){
-              gkey_t.key_power=power_on;
-            }
-           else{
-              gkey_t.key_power=power_off;
-
-           }
-           Buzzer_KeySound();
-       
-      
-
-        }
-    }
-   
 }
 

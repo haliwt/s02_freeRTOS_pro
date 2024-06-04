@@ -5,6 +5,56 @@ key_fun_t gkey_t;
 
 
 
+void power_long_short_key_fun(void)
+{
+
+    static uint8_t sound_flag;
+    if(KEY_POWER_VALUE() ==  KEY_DOWN && gkey_t.power_key_long_counter < 60){
+
+
+        gkey_t.power_key_long_counter++;
+        if( gkey_t.power_key_long_counter > 20   && KEY_POWER_VALUE() == KEY_DOWN){
+             gkey_t.power_key_long_counter = 200;
+
+             gkey_t.wifi_link_net_flag = 1;
+
+             	//WIFI CONNCETOR process
+			 gkey_t.wifi_led_fast_blink_flag=1;
+			 //WIFI CONNCETOR process
+			wifi_t.esp8266_login_cloud_success =0;
+			wifi_t.runCommand_order_lable=wifi_link_tencent_cloud;
+			wifi_t.wifi_config_net_lable= wifi_set_restor;
+			wifi_t.power_on_login_tencent_cloud_flag=0;
+			wifi_t.link_tencent_step_counter=0;
+			wifi_t.gTimer_linking_tencent_duration=0; //166s -2分7秒
+         
+            buzzer_sound();
+
+        }
+
+    }
+    else if(KEY_POWER_VALUE() ==  KEY_UP && gkey_t.power_key_long_counter >0 && gkey_t.power_key_long_counter<40){ //short key of function
+
+        gkey_t.power_key_long_counter=0;
+        sound_flag=1;
+        if(sound_flag ==1){
+           sound_flag++;
+           if(gkey_t.key_power==power_off){
+              gkey_t.key_power=power_on;
+            }
+           else{
+              gkey_t.key_power=power_off;
+
+           }
+           buzzer_sound();
+       
+      
+
+        }
+    }
+   
+}
+
 /*********************************************************************************
 *
 *	函 数 名:static void mode_long_short_key_fun(void)
@@ -15,11 +65,11 @@ key_fun_t gkey_t;
 *********************************************************************************/
 void mode_long_short_key_fun(void)
 {
-    if(KEY_MODE_VALUE() == 1 && gkey_t.key_mode_long_counter < 100){
+    if(KEY_MODE_VALUE() == KEY_DOWN && gkey_t.key_mode_long_counter < 100){
 
 
         gkey_t.key_mode_long_counter++;
-        if(gkey_t.key_mode_long_counter >  40 && KEY_MODE_VALUE() == 1){
+        if(gkey_t.key_mode_long_counter >  20 && KEY_MODE_VALUE() == KEY_DOWN){
             gkey_t.key_mode_long_counter = 150;
 
             gkey_t.key_mode = mode_set_timer;
@@ -34,7 +84,7 @@ void mode_long_short_key_fun(void)
         }
 
     }
-    else if(KEY_MODE_VALUE() == 0 && gkey_t.key_mode_long_counter >0 && gkey_t.key_mode_long_counter<40){ //short key of function
+    else if(KEY_MODE_VALUE() ==  KEY_UP && gkey_t.key_mode_long_counter >0 && gkey_t.key_mode_long_counter<40){ //short key of function
 
         gkey_t.key_mode_long_counter=0;
 

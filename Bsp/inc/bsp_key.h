@@ -11,8 +11,9 @@
 
 typedef enum{
 
-    KEY_UP,
+   
     KEY_DOWN,
+    KEY_UP
     
 
 }key_pressed_t;
@@ -79,6 +80,8 @@ typedef enum mode_key_t{
 
 
  extern key_fun_t gkey_t;
+
+ void power_long_short_key_fun(void);
 
 void mode_long_short_key_fun(void);
 
