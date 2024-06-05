@@ -233,7 +233,10 @@ static void vTaskStart(void *pvParameters)
             }
             else if((ulValue & RUN_DEC_6 ) != 0)   /* 接收到消息，检测那个位被按下 */
 			{
+
+               if(gkey_t.key_power==power_on){
                 dec_flag =1;
+                
                 Dec_Key_Fun(gkey_t.key_add_dec_mode);
 
                  if(dec_flag ==1){
@@ -241,10 +244,14 @@ static void vTaskStart(void *pvParameters)
                      Buzzer_KeySound();
 
                   }
+                }
                  
             }
             else if((ulValue & RUN_ADD_7 ) != 0)   /* 接收到消息，检测那个位被按下 */
 			{
+
+                if(gkey_t.key_power==power_on){
+
                    add_flag =1;
                    Add_Key_Fun(gkey_t.key_add_dec_mode);
 
@@ -253,6 +260,8 @@ static void vTaskStart(void *pvParameters)
                      Buzzer_KeySound();
 
                   }
+
+                 }
 				
             }
             
