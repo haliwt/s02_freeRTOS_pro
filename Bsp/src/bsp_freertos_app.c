@@ -143,21 +143,22 @@ static void vTaskMsgPro(void *pvParameters)
             }   
             else if((ulValue & DEC_KEY_2) != 0){
 
-
+                if(gkey_t.key_power==power_on){
                 xTaskNotify(xHandleTaskStart, /* 目标任务 */
 							RUN_DEC_6 ,            /* 设置目标任务事件标志位bit0  */
 							eSetBits);          /* 将目标任务的事件标志位与BIT_0进行或操作，  将结果赋值给事件标志位。*/
+               }
 
                
             }
             else if((ulValue & ADD_KEY_3) != 0){
-
+                   if(gkey_t.key_power==power_on){
                   xTaskNotify(xHandleTaskStart, /* 目标任务 */
 							RUN_ADD_7 ,            /* 设置目标任务事件标志位bit0  */
 							eSetBits);          /* 将目标任务的事件标志位与BIT_0进行或操作，  将结果赋值给事件标志位。*/
 
               
-                
+                    }
             }
 
       
@@ -236,14 +237,16 @@ static void vTaskStart(void *pvParameters)
 
                if(gkey_t.key_power==power_on){
                 dec_flag =1;
-                
-                Dec_Key_Fun(gkey_t.key_add_dec_mode);
 
-                 if(dec_flag ==1){
-                     add_flag ++;
+                if(dec_flag ==1){
+                     dec_flag ++;
                      Buzzer_KeySound();
 
-                  }
+                 }
+                
+               // Dec_Key_Fun(gkey_t.key_add_dec_mode);
+
+                
                 }
                  
             }
@@ -253,13 +256,14 @@ static void vTaskStart(void *pvParameters)
                 if(gkey_t.key_power==power_on){
 
                    add_flag =1;
-                   Add_Key_Fun(gkey_t.key_add_dec_mode);
-
                   if(add_flag ==1){
                      add_flag ++;
                      Buzzer_KeySound();
 
                   }
+                //   Add_Key_Fun(gkey_t.key_add_dec_mode);
+
+                
 
                  }
 				
@@ -283,10 +287,20 @@ static void vTaskStart(void *pvParameters)
           if(gkey_t.key_power==power_on){
                  bsp_Idle();
                  mode_long_short_key_fun();
+                 if(add_flag ==2){
+                    add_flag ++;
+                    Add_Key_Fun(gkey_t.key_add_dec_mode);
 
-              }
+                 }
+                 else if(dec_flag ==2){
+
+                       dec_flag ++;
+                       Dec_Key_Fun(gkey_t.key_add_dec_mode);
+                 }
+
+           }
                 
-              mainboard_process_handler();
+            mainboard_process_handler();
          
             }
 
