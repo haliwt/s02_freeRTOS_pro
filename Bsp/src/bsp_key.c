@@ -111,6 +111,34 @@ void Dec_Key_Fun(uint8_t cmd)
             gkey_t.key_add_dec_pressed_flag = 1;
 
             Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
+            //compare with by read temperature of sensor value  
+            if(gctl_t.gSet_temperature_value > gctl_t.dht11_temp_value){
+
+                gctl_t.ptc_flag = 1;
+                Ptc_On();
+
+                Disp_Dry_Icon();
+
+               
+                
+
+            }
+            else if(gctl_t.gSet_temperature_value <   gctl_t.dht11_temp_value || gctl_t.gSet_temperature_value ==   gctl_t.dht11_temp_value){
+
+                 gctl_t.ptc_flag = 0;
+                 Ptc_Off();
+                 Disp_Dry_Icon();
+
+
+            }
+
+
+            if(wifi_link_net_state()==1){
+                MqttData_Publis_SetTemp(gctl_t.gSet_temperature_value);
+	     
+
+              }
+            
            
             
          break;
@@ -190,6 +218,34 @@ void Add_Key_Fun(uint8_t cmd)
         gctl_t.send_ptc_state_data_flag =0; //send data to tencent to tell ptc on or off state .
         gkey_t.key_add_dec_pressed_flag = 1;
         Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
+
+         //compare with by read temperature of sensor value  
+         if(gctl_t.gSet_temperature_value > gctl_t.dht11_temp_value){
+
+                gctl_t.ptc_flag = 1;
+                Ptc_On();
+
+                Disp_Dry_Icon();
+
+               
+                
+
+            }
+            else if(gctl_t.gSet_temperature_value <   gctl_t.dht11_temp_value || gctl_t.gSet_temperature_value ==   gctl_t.dht11_temp_value){
+
+                 gctl_t.ptc_flag = 0;
+                 Ptc_Off();
+                 Disp_Dry_Icon();
+
+
+            }
+
+
+            if(wifi_link_net_state()==1){
+                MqttData_Publis_SetTemp(gctl_t.gSet_temperature_value);
+	     
+
+              }
        
 
     break;

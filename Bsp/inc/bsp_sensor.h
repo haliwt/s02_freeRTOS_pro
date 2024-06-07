@@ -50,6 +50,9 @@ typedef struct
 void Update_DHT11_Value(void);
 
 
+void Update_Dht11_Totencent_Value(void);
+
+
 
 #endif 
 

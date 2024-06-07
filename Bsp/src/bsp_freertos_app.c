@@ -119,7 +119,7 @@ static void vTaskMsgPro(void *pvParameters)
 		xResult = xTaskNotifyWait(0x00000000,      
 						          0xFFFFFFFF,      
 						          &ulValue,        /* 保存ulNotifiedValue到变量ulValue中 */
-						          xMaxBlockTime);  /* 最大允许延迟时间 */
+						          portMAX_DELAY);  /* 最大允许延迟时间 */
 		
 		if( xResult == pdPASS )
 		{
@@ -172,9 +172,9 @@ static void vTaskMsgPro(void *pvParameters)
 			/* 超时 */
 
        
-        MainBoard_Self_Inspection_PowerOn_Fun();
+       /// MainBoard_Self_Inspection_PowerOn_Fun();
         
-         WIFI_Process_Handler();
+       //  WIFI_Process_Handler();
 
              
               }
@@ -240,16 +240,8 @@ static void vTaskStart(void *pvParameters)
                if(gkey_t.key_power==power_on){
                 dec_flag =1;
 
-                if(dec_flag ==1){
-                     dec_flag ++;
-                     Buzzer_KeySound();
-
-                 }
-                
-               // Dec_Key_Fun(gkey_t.key_add_dec_mode);
-
-                
-                }
+               
+               }
                  
             }
             else if((ulValue & RUN_ADD_7 ) != 0)   /* 接收到消息，检测那个位被按下 */
@@ -258,12 +250,8 @@ static void vTaskStart(void *pvParameters)
                 if(gkey_t.key_power==power_on){
 
                    add_flag =1;
-                  if(add_flag ==1){
-                     add_flag ++;
-                     Buzzer_KeySound();
-
-                  }
-                //   Add_Key_Fun(gkey_t.key_add_dec_mode);
+                 
+               
 
                 
 
@@ -285,10 +273,26 @@ static void vTaskStart(void *pvParameters)
         }
 
           power_long_short_key_fun();
+          MainBoard_Self_Inspection_PowerOn_Fun();
+        
+          WIFI_Process_Handler();
           if(gkey_t.power_key_long_counter ==0 || gkey_t.power_key_long_counter==200){
           if(gkey_t.key_power==power_on){
                  bsp_Idle();
                  mode_long_short_key_fun();
+
+                if(add_flag ==1){
+                     add_flag ++;
+                     Buzzer_KeySound();
+
+                 }
+                 else if(dec_flag ==1){
+                     dec_flag ++;
+                     Buzzer_KeySound();
+
+                 }
+
+                 
                  if(add_flag ==2){
                     add_flag ++;
                     Add_Key_Fun(gkey_t.key_add_dec_mode);
@@ -326,7 +330,7 @@ static void AppTaskCreate (void)
 	
 	xTaskCreate( vTaskMsgPro,     		/* 任务函数  */
                  "vTaskMsgPro",   		/* 任务名    */
-                 256,             		/* 任务栈大小，单位word，也就是4字节 */
+                 128,             		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
                  1,               		/* 任务优先级*/
                  &xHandleTaskMsgPro );  /* 任务句柄  */
@@ -392,7 +396,7 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 
 
    case KEY_UP_Pin:
-    
+       if(KEY_ADD_VALUE() == KEY_DOWN){
          xTaskNotifyFromISR(xHandleTaskMsgPro,  /* 目标任务 */
                 ADD_KEY_3,     /* 设置目标任务事件标志位bit0  */
                 eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志位 */
@@ -400,12 +404,12 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
    
          /* 如果xHigherPriorityTaskWoken = pdTRUE，那么退出中断后切到当前最高优先级任务执行 */
          portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-       
+        }
    break;
 
    case KEY_DOWN_Pin:
 
-       
+        if(KEY_DEC_VALUE() == KEY_DOWN){
         xTaskNotifyFromISR(xHandleTaskMsgPro,  /* 目标任务 */
                 DEC_KEY_2,     /* 设置目标任务事件标志位bit0  */
                 eSetBits,  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志位 */
@@ -413,7 +417,7 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
    
          /* 如果xHigherPriorityTaskWoken = pdTRUE，那么退出中断后切到当前最高优先级任务执行 */
          portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-
+            }
    break;
     }
 }

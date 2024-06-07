@@ -48,7 +48,7 @@ void bsp_Idle(void)
 
          Disip_Wifi_Icon_State();
 
-         Lcd_Display_Temp_Digital_Blink();
+       // Lcd_Display_Temp_Digital_Blink();
 
     }
 	/* 例如 uIP 协议，可以插入uip轮询函数 */
@@ -128,7 +128,7 @@ void mainboard_process_handler(void)
               }
               //run main board character
 
-             if(gpro_t.gTimer_run_main_fun > 0){
+             if(gpro_t.gTimer_run_main_fun > 5){
                  gpro_t.gTimer_run_main_fun =0;
                if(gctl_t.interval_stop_run_flag  ==0){
                     Process_Dynamical_Action();
@@ -177,17 +177,26 @@ void mainboard_process_handler(void)
              wifi_t.link_net_tencent_data_flag ++;
 		     gpro_t.gTimer_pro_action_publis =0;
 		     MqttData_Publish_SetOpen(0x01);
-		     HAL_Delay(350);
+		     HAL_Delay(200);
             
 
 		}
 		if(wifi_link_net_state()==1 && wifi_t.smartphone_app_power_on_flag==0 && wifi_t.link_net_tencent_data_flag ==2 ){
              wifi_t.link_net_tencent_data_flag ++;
 		    gpro_t.gTimer_pro_action_publis =0;
+           gpro_t.gTimer_publish_tencent_dht11 =20;
 		    MqttData_Publish_Update_Data();
-		     HAL_Delay(350);
+		     HAL_Delay(200);
 
 		}
+
+        if(wifi_link_net_state()==1 && wifi_t.link_net_tencent_data_flag ==3 &&   gpro_t.gTimer_publish_tencent_dht11 > 12){
+             
+            gpro_t.gTimer_publish_tencent_dht11=0;
+            Update_Dht11_Totencent_Value();
+		    
+
+        }
 	 
 	   
 	      gctl_t.step_process=5;
@@ -340,9 +349,9 @@ static void Mainboard_Fun_Stop(void)
 static void Process_Dynamical_Action(void)
 {
 
-   static uint8_t the_send_open_ptc,to_tenced_data,ptc_int=0xff;
-   static uint8_t ptc_int_on_default =0xff,ptc_int_on_send_data;
-   static uint8_t ptc_int_off =0xff,ptc_int_off_1=0xff,to_tenced_off_data;
+
+
+   #if 0
    if(gpro_t.set_temperature_value_success == 1){
        if(gctl_t.gSet_temperature_value > gctl_t.dht11_temp_value ){//if(gctl_t.gSet_temperature_value > gctl_t.dht11_temp_value){
 
@@ -354,7 +363,7 @@ static void Process_Dynamical_Action(void)
                 Disp_Dry_Icon();
               
                 MqttData_Publish_SetPtc(1);
-                HAL_Delay(350);
+                HAL_Delay(200);
                  
 
                }
@@ -458,6 +467,29 @@ static void Process_Dynamical_Action(void)
         }
 
     }
+
+    #endif 
+
+
+    if(ptc_state() ==1){
+
+
+       Ptc_On();
+       Disp_Dry_Icon();
+
+
+     }
+    else{
+
+           
+     Ptc_Off();
+     Disp_Dry_Icon();
+    }
+            
+
+    
+
+    
 
 	if(plasma_state() ==1){
 		

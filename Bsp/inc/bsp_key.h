@@ -8,6 +8,8 @@
 
 #define KEY_DEC_VALUE()    HAL_GPIO_ReadPin(KEY_DOWN_GPIO_Port, KEY_DOWN_Pin)
 
+#define KEY_ADD_VALUE()    HAL_GPIO_ReadPin(KEY_UP_GPIO_Port, KEY_UP_Pin)
+
 
 typedef enum{
 

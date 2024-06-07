@@ -104,6 +104,7 @@ typedef struct {
 
    uint8_t gTimer_timing ;
    uint8_t gTimer_pro_action_publis;
+   uint8_t gTimer_publish_tencent_dht11;
 
    
  
