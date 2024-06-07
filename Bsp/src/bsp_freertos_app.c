@@ -6,6 +6,8 @@ uint8_t receive_key_message;
 uint8_t receive_task_start;
 uint8_t key_long_counter;
 uint16_t power_key_long_counter ;
+uint8_t  dc_power_on;
+
 
 /*
 **********************************************************************************************************
@@ -283,7 +285,7 @@ static void vTaskStart(void *pvParameters)
         }
 
           power_long_short_key_fun();
-              
+          if(gkey_t.power_key_long_counter ==0 || gkey_t.power_key_long_counter==200){
           if(gkey_t.key_power==power_on){
                  bsp_Idle();
                  mode_long_short_key_fun();
@@ -302,6 +304,8 @@ static void vTaskStart(void *pvParameters)
                 
             mainboard_process_handler();
          
+            }
+
             }
 
        }
@@ -348,7 +352,14 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 
    case KEY_POWER_Pin:
 
-    if(KEY_POWER_VALUE()==KEY_DOWN){
+    //if(KEY_POWER_VALUE()==KEY_DOWN){
+
+        if(dc_power_on == 0){
+
+          dc_power_on ++;
+
+        }
+        else{
 
         xTaskNotifyFromISR(xHandleTaskMsgPro,  /* 目标任务 */
         POWER_KEY_0,      /* 设置目标任务事件标志位bit0  */
@@ -359,7 +370,7 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
         portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 
 
-    }
+        }
             
    
    break;
@@ -410,7 +421,7 @@ static void power_long_short_key_fun(void)
 {
 
     static uint8_t sound_flag;
-    if(KEY_POWER_VALUE() == 1 && gkey_t.power_key_long_counter < 60){
+    if(KEY_POWER_VALUE() == 1 && gkey_t.power_key_long_counter > 0 && gkey_t.power_key_long_counter < 60){
 
 
         gkey_t.power_key_long_counter++;
