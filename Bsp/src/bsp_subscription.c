@@ -629,7 +629,7 @@ void Json_Parse_Command_Fun(void)
 	    
 			
             MqttData_Publish_SetPlasma(0);
-			HAL_Delay(350);
+			HAL_Delay(200);
            gctl_t.plasma_flag=0;
            Disp_Kill_Icon();
            	buzzer_sound();
@@ -648,7 +648,7 @@ void Json_Parse_Command_Fun(void)
 			Plasma_On();
 	  
             MqttData_Publish_SetPlasma(1);
-		    HAL_Delay(350);//350
+		    HAL_Delay(200);
            gctl_t.plasma_flag=1;
             Disp_Kill_Icon();
             buzzer_sound();
@@ -665,7 +665,7 @@ void Json_Parse_Command_Fun(void)
 			Ultrasonic_Pwm_Stop();
 	    
             MqttData_Publish_SetUltrasonic(0);
-			HAL_Delay(350);//
+			HAL_Delay(200);
             gctl_t.ultrasonic_flag=0;
              Disp_Ultrsonic_Icon();
             buzzer_sound();
@@ -683,7 +683,7 @@ void Json_Parse_Command_Fun(void)
 			
 			Ultrasonic_Pwm_Output();
             MqttData_Publish_SetUltrasonic(1);
-			HAL_Delay(350);
+			HAL_Delay(200);
           
             gctl_t.ultrasonic_flag=1;
             Disp_Ultrsonic_Icon();
@@ -708,10 +708,10 @@ void Json_Parse_Command_Fun(void)
             LCD_Disp_Timer_Timing_Init();
 
             
-            gpro_t.gTimer_timing =8; //at once run this display timer timing 
+            gpro_t.gTimer_disp_timer_timing_statue =8; //at once run this display timer timing 
          
             MqttData_Publish_SetState(2); //timer model  = 2, works model = 1
-			HAL_Delay(350);
+			HAL_Delay(200);
             //do someting disp timer timing value 
             
 		
@@ -738,9 +738,9 @@ void Json_Parse_Command_Fun(void)
            
 
             
-            gpro_t.gTimer_timing =8; //at once run thi this display timer timing .
+            gpro_t.gTimer_disp_timer_timing_statue =8; //at once run thi this display timer timing .
             MqttData_Publish_SetState(1); //beijing timing = 1
-			HAL_Delay(350);
+			HAL_Delay(200);
 			
           
         }
@@ -787,7 +787,7 @@ void Json_Parse_Command_Fun(void)
 				    Disp_Dry_Icon();
                     
                      MqttData_Publish_SetPtc(1);
-                        HAL_Delay(350);
+                       HAL_Delay(200);
 		    	}
 
 			}
@@ -798,7 +798,7 @@ void Json_Parse_Command_Fun(void)
                     Disp_Dry_Icon();
                     
                      MqttData_Publish_SetPtc(0);
-                     HAL_Delay(350);
+                     HAL_Delay(200);
 			   		
 				}
 			}

@@ -11,6 +11,12 @@
 
 #include "FreeRTOS.h"
 #include "task.h"
+#include "cmsis_os.h"
+
+
+
+
+
 
 #include "interrupt_manager.h"
 #include "adc.h"
@@ -102,7 +108,7 @@ typedef struct {
   
    uint8_t gTimer_disp_set_timer_blink ;
 
-   uint8_t gTimer_timing ;
+   uint8_t gTimer_disp_timer_timing_statue ;
    uint8_t gTimer_pro_action_publis;
    uint8_t gTimer_publish_tencent_dht11;
 

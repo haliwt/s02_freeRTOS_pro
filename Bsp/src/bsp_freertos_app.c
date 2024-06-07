@@ -344,14 +344,9 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 
    case KEY_POWER_Pin:
 
-    //if(KEY_POWER_VALUE()==KEY_DOWN){
+        if(KEY_POWER_VALUE()==KEY_DOWN){
 
-        if(dc_power_on == 0){
-
-          dc_power_on ++;
-
-        }
-        else{
+     
 
         xTaskNotifyFromISR(xHandleTaskMsgPro,  /* 目标任务 */
         POWER_KEY_0,      /* 设置目标任务事件标志位bit0  */

@@ -148,7 +148,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
      
 
         //process gtimer
-        gpro_t.gTimer_timing ++;
+        gpro_t.gTimer_disp_timer_timing_statue ++;
         gpro_t.gTimer_works_counter_sencods ++;
         gpro_t.gTimer_timer_Counter++;
 		gpro_t.gTimer_run_adc++ ;

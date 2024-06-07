@@ -107,8 +107,8 @@ void mainboard_process_handler(void)
 
 		   case 1: // display works and timer and set timer timing proc
           
-	        if(gpro_t.gTimer_timing > 4) {
-                gpro_t.gTimer_timing=0;
+	        if(gpro_t.gTimer_disp_timer_timing_statue > 4) {
+                gpro_t.gTimer_disp_timer_timing_statue=0;
 		       Display_WorksTimingr_Handler(gkey_t.key_mode);
 
              }

@@ -256,6 +256,18 @@ void  Power_On_Handler(uint8_t(*power_handler)(void))
 
 }
 
+/*****************************************************************************
+ * 
+ * Function Name:  Wifi_Link_Net_Handler(uint8_t(*wifi_handler)(void))
+ * Function:
+ * Input Ref: idata is ptc is open "1" or "0"  close 
+ * Return Ref: close or open 
+ * 
+*****************************************************************************/
+
+
+
+
 
 
 
