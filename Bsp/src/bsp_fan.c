@@ -52,7 +52,7 @@ void Fan_Run_Middle(void)
      fan_lower_speed++;
      fan_stop_flag++;
      #if BALL_FAN
-        MX_TIM16_Init(8); //100KHZ,duty =50%
+        MX_TIM16_Init(9); //100KHZ,duty =50%
 
      #else 
        MX_TIM16_Init(40); //50KHZ,duty =50%
@@ -77,7 +77,7 @@ void Fan_Run_Lower(void)
      fan_middle_speed++;
      fan_stop_flag++;
      #if BALL_FAN
-      MX_TIM16_Init(7); //100KHZ,duty =50%
+      MX_TIM16_Init(8); //100KHZ,duty =50%
 
      #else
       MX_TIM16_Init(30); //10KHZ,

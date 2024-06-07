@@ -764,14 +764,14 @@ void Json_Parse_Command_Fun(void)
 
            
             MqttData_Publis_SetTemp(gctl_t.gSet_temperature_value);
-			HAL_Delay(350);//350
+			HAL_Delay(200);//350
 		
 
            
-            gkey_t.key_add_dec_mode = set_temp_value_item;
+            gkey_t.key_add_dec_mode = set_temp_value_item; //set_temp_value_item;
             gkey_t.gTimer_set_temp_value  = 0;
             gpro_t.set_temperature_value_success =1;
-            gkey_t.key_add_dec_pressed_flag = 1;
+        
 
            
          

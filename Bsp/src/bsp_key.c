@@ -1,7 +1,63 @@
 #include "bsp_key.h"
 #include "bsp.h"
 
+#include "FreeRTOS.h"
+#include "task.h"
+#include "main.h"
+#include "cmsis_os.h"
+
+
 key_fun_t gkey_t;
+
+
+void power_long_short_key_fun(void)
+{
+
+    static uint8_t sound_flag;
+    if(KEY_POWER_VALUE() == 1 && gkey_t.power_key_long_counter > 0 && gkey_t.power_key_long_counter < 60){
+
+
+        gkey_t.power_key_long_counter++;
+        if( gkey_t.power_key_long_counter > 40   && KEY_POWER_VALUE() == 1){
+             gkey_t.power_key_long_counter = 200;
+
+          
+             	//WIFI CONNCETOR process
+			 gkey_t.wifi_led_fast_blink_flag=1;
+			 //WIFI CONNCETOR process
+			wifi_t.esp8266_login_cloud_success =0;
+			wifi_t.runCommand_order_lable=wifi_link_tencent_cloud;
+			wifi_t.wifi_config_net_lable= wifi_set_restor;
+			wifi_t.power_on_login_tencent_cloud_flag=0;
+			wifi_t.link_tencent_step_counter=0;
+			wifi_t.gTimer_linking_tencent_duration=0; //166s -2分7秒
+         
+            Buzzer_KeySound();
+
+        }
+
+    }
+    else if(KEY_POWER_VALUE() == 0 && gkey_t.power_key_long_counter >0 && gkey_t.power_key_long_counter<40){ //short key of function
+
+        gkey_t.power_key_long_counter=0;
+        sound_flag=1;
+        if(sound_flag ==1){
+           sound_flag++;
+           if(gkey_t.key_power==power_off){
+              gkey_t.key_power=power_on;
+            }
+           else{
+              gkey_t.key_power=power_off;
+
+           }
+           Buzzer_KeySound();
+       
+      
+
+        }
+    }
+   
+}
 
 
 
@@ -15,7 +71,7 @@ key_fun_t gkey_t;
 *********************************************************************************/
 void mode_long_short_key_fun(void)
 {
-    if(KEY_MODE_VALUE() == 1 && gkey_t.key_mode_long_counter < 100){
+    if(KEY_MODE_VALUE() == 1 && gkey_t.key_mode_long_counter < 100 && gkey_t.key_mode_long_counter >0){
 
 
         gkey_t.key_mode_long_counter++;
@@ -88,6 +144,9 @@ void mode_long_short_key_fun(void)
 ***************************************************************************/
 void Dec_Key_Fun(uint8_t cmd)
 {
+
+   static uint8_t dec_key;
+
     switch(cmd){
 
          case set_temp_value_item: //set temperature 
@@ -105,15 +164,17 @@ void Dec_Key_Fun(uint8_t cmd)
 			   glcd_t.number4_low  = gctl_t.gSet_temperature_value   % 10; //
             glcd_t.number4_high =  gctl_t.gSet_temperature_value   % 10; //
 
-            gkey_t.gTimer_set_temp_value=0;
-            gpro_t.set_temperature_value_success=0;
+        
+          
             gctl_t.send_ptc_state_data_flag =0;  //send data to tencent to tell ptc on or off state .
-            gkey_t.key_add_dec_pressed_flag = 1;
-
+         
+            dec_key = 1;
             Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
             //compare with by read temperature of sensor value  
             if(gctl_t.gSet_temperature_value > gctl_t.dht11_temp_value){
 
+                gkey_t.gTimer_set_temp_value  =0;
+                gpro_t.set_temperature_value_success=1;
                 gctl_t.ptc_flag = 1;
                 Ptc_On();
 
@@ -125,22 +186,15 @@ void Dec_Key_Fun(uint8_t cmd)
             }
             else if(gctl_t.gSet_temperature_value <   gctl_t.dht11_temp_value || gctl_t.gSet_temperature_value ==   gctl_t.dht11_temp_value){
 
+
+                 gkey_t.gTimer_set_temp_value  =0;
+                 gpro_t.set_temperature_value_success=1;
                  gctl_t.ptc_flag = 0;
                  Ptc_Off();
                  Disp_Dry_Icon();
 
 
-            }
-
-
-            if(wifi_link_net_state()==1){
-                MqttData_Publis_SetTemp(gctl_t.gSet_temperature_value);
-	     
-
-              }
-            
-           
-            
+            }     
          break;
 
          case mode_set_timer: //set timer timing value 
@@ -182,6 +236,16 @@ void Dec_Key_Fun(uint8_t cmd)
  
          }
 
+
+     if(dec_key == 1){
+        dec_key ++;
+         if(wifi_link_net_state()==1){
+            MqttData_Publis_SetTemp(gctl_t.gSet_temperature_value);
+            osDelay(200);
+    	  }
+
+     }
+
 }
 
 /***************************************************************************
@@ -194,6 +258,8 @@ void Dec_Key_Fun(uint8_t cmd)
 ***************************************************************************/
 void Add_Key_Fun(uint8_t cmd)
 {
+
+  static uint8_t add_key;
    switch(cmd){
         
     case set_temp_value_item:  //set temperature value 
@@ -214,14 +280,18 @@ void Add_Key_Fun(uint8_t cmd)
 
      
         gkey_t.gTimer_set_temp_value=0;
-        gpro_t.set_temperature_value_success=0;
+      
         gctl_t.send_ptc_state_data_flag =0; //send data to tencent to tell ptc on or off state .
-        gkey_t.key_add_dec_pressed_flag = 1;
+    
         Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
+
+        add_key = 1;
 
          //compare with by read temperature of sensor value  
          if(gctl_t.gSet_temperature_value > gctl_t.dht11_temp_value){
 
+                gkey_t.gTimer_set_temp_value  =0;
+                gpro_t.set_temperature_value_success=1;
                 gctl_t.ptc_flag = 1;
                 Ptc_On();
 
@@ -232,6 +302,9 @@ void Add_Key_Fun(uint8_t cmd)
 
             }
             else if(gctl_t.gSet_temperature_value <   gctl_t.dht11_temp_value || gctl_t.gSet_temperature_value ==   gctl_t.dht11_temp_value){
+
+                gkey_t.gTimer_set_temp_value  =0;
+                gpro_t.set_temperature_value_success=1;
 
                  gctl_t.ptc_flag = 0;
                  Ptc_Off();
@@ -285,6 +358,16 @@ void Add_Key_Fun(uint8_t cmd)
      break;
         
     }
+
+
+    if(add_key == 1){
+        add_key ++;
+     if(wifi_link_net_state()==1){
+        MqttData_Publis_SetTemp(gctl_t.gSet_temperature_value);
+        osDelay(200);
+	  }
+
+     }
     
  }
 

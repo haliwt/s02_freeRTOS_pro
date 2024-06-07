@@ -155,7 +155,7 @@ void LCD_Number_Ai_OneTwo_Humidity(void);
 
 void Disp_SetTemp_Value(uint8_t temp_value);
 
-void Lcd_Display_Temp_Digital_Blink(void);
+void Lcd_Display_SensorTemp_Value(void);
 
 void OnlyDisp_Wind_Icon_Handler(void);
 

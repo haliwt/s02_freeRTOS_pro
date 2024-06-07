@@ -48,7 +48,7 @@ void bsp_Idle(void)
 
          Disip_Wifi_Icon_State();
 
-       // Lcd_Display_Temp_Digital_Blink();
+        Lcd_Display_SensorTemp_Value();
 
     }
 	/* 例如 uIP 协议，可以插入uip轮询函数 */
@@ -653,10 +653,7 @@ static void power_on_init_function(void)
     gkey_t.set_timer_timing_success =0;
     //temperature value inti
     gpro_t.set_temperature_value_success=0;
-    if(wifi_link_net_state()==0){
-        gpro_t.disp_works_minutes_value=0;
-        gpro_t.disp_works_hours_value =0;
-    }
+
     wifi_t.set_wind_speed_value=0; //init 
 
     //timig init
@@ -664,6 +661,12 @@ static void power_on_init_function(void)
 
     gpro_t.set_timer_timing_hours =0 ;
     gpro_t.set_timer_timing_minutes =0;
+
+     if(wifi_t.get_beijing_timing_success ==0 || wifi_link_net_state()==0){
+          gpro_t.disp_works_minutes_value=0;
+          gpro_t.disp_works_hours_value =0;
+
+     }
 
    
     

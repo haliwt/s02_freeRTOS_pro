@@ -906,7 +906,7 @@ void Lcd_Display_Off(void)
 void Disp_HumidityTemp_Value(void)
 {
 
-   if(gkey_t.key_add_dec_pressed_flag == 0){  // || gpro_t.set_temp_confirm == 1){
+   if( gpro_t.set_temperature_value_success == 0){  // || gpro_t.set_temp_confirm == 1){
       
        LCD_Number_ThreeFour_Temperature();
 
@@ -944,67 +944,28 @@ void Disp_SetTemp_Value(uint8_t temp_value)
 
 /*************************************************************************************
 	*
-	*Function Name: void Lcd_Display_Temp_Digital_Blink(void)
+	*Function Name: void Lcd_Display_SensorTemp_Value(void)
 	*Function : digital '3' '4' blink 3 times 
 	*Input Ref: temperature of value 
 	*Return Ref:NO
 	*
 *************************************************************************************/
-void Lcd_Display_Temp_Digital_Blink(void)
+void Lcd_Display_SensorTemp_Value(void)
 {
    
-    static uint8_t  set_temp_blink  ;
-    if(gkey_t.gTimer_set_temp_value  > 2 &&   gkey_t.key_add_dec_pressed_flag == 1){
-	if(gkey_t.gTimer_set_temp_blink  < 6){ //4 *100ms
-        gpro_t.gTimer_run_dht11=0;
-       //number '3' 
-             TM1723_Write_Display_Data(0xC2,(lcdNumber3_High[0x0A] + lcdNumber3_Low[0x0A] + TEMP_Symbol ) & 0xff); //numbers : '3' addr: 0xC2
+    
+    if(gkey_t.gTimer_set_temp_value  > 1 &&   gpro_t.set_temperature_value_success== 1){
+
+       gkey_t.gTimer_set_temp_value=0;
+
+       gpro_t.set_temperature_value_success=0;
+
+       
+        Disp_HumidityTemp_Value();
      
-            //number '4' 
-            TM1723_Write_Display_Data(0xC3,(lcdNumber4_High[0x0A] + lcdNumber4_Low[0x0A] + HUMI_Symbol) & 0xff); //numbers : '4' addr: 0xC3
-
-     }
-	 else if(gkey_t.gTimer_set_temp_blink  > 5 && gkey_t.gTimer_set_temp_blink  < 12){ //lef off
-          gpro_t.gTimer_run_dht11=0;
-		   //number '3' 
-		  TM1723_Write_Display_Data(0xC2,(lcdNumber3_High[glcd_t.number3_high] + lcdNumber3_Low[glcd_t.number3_low] + TEMP_Symbol ) & 0xffff); //numbers : '3' addr: 0xC2
-
-		 //number '4' 
-		 TM1723_Write_Display_Data(0xC3,(lcdNumber4_High[glcd_t.number4_high] + lcdNumber4_Low[glcd_t.number4_low] + HUMI_Symbol) & 0xffff); //numbers : '4' addr: 0xC3
-
-     }
-	 else if(gkey_t.gTimer_set_temp_blink > 11){
-      set_temp_blink ++ ;
-	   gkey_t.gTimer_set_temp_blink =0;
 
 	 }
     
-
-	 if(set_temp_blink  > 3){
-
-	   set_temp_blink  =0 ;
-       gpro_t.gTimer_run_dht11=0;
-       gpro_t.set_temperature_value_success = 1;
-       gkey_t.key_add_dec_pressed_flag=0;
-     
-       gpro_t.gTimer_run_dht11= 30;
-       
-       
-       if(wifi_link_net_state()==1){
-          MqttData_Publis_SetTemp(gctl_t.gSet_temperature_value);
-	      HAL_Delay(350);//350
-
-
-       }
-
-	 }
-
-    }
-
-
-   
-
-
 }
 
 /*************************************************************************************
