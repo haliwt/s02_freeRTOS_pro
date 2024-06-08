@@ -781,18 +781,18 @@ void Json_Parse_Command_Fun(void)
 			
 			if(gctl_t.gSet_temperature_value > gctl_t.dht11_temp_value){
 
-		    	if(ptc_state()==0){
+		    	
 					gctl_t.ptc_flag =1;
 					Ptc_On();
 				    Disp_Dry_Icon();
                     
                      MqttData_Publish_SetPtc(1);
                        HAL_Delay(200);
-		    	}
+		    	
 
 			}
-			else{
-		   		if(ptc_state()==1){
+			else if(gctl_t.gSet_temperature_value <   gctl_t.dht11_temp_value || gctl_t.gSet_temperature_value ==   gctl_t.dht11_temp_value ){
+		   		
                     gctl_t.ptc_flag = 0;
 			   		Ptc_Off();
                     Disp_Dry_Icon();
@@ -800,7 +800,7 @@ void Json_Parse_Command_Fun(void)
                      MqttData_Publish_SetPtc(0);
                      HAL_Delay(200);
 			   		
-				}
+				
 			}
 
 //          for(i=0;i< recoder_tx_net_data_counter;i++){

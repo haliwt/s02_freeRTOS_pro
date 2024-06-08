@@ -351,141 +351,22 @@ static void Process_Dynamical_Action(void)
 
 
 
-   #if 0
-   if(gpro_t.set_temperature_value_success == 1){
-       if(gctl_t.gSet_temperature_value > gctl_t.dht11_temp_value ){//if(gctl_t.gSet_temperature_value > gctl_t.dht11_temp_value){
 
-             if(gctl_t.send_ptc_state_data_flag ==0 || gctl_t.send_ptc_state_data_flag==1){ //the first open ptc 
-                 gctl_t.send_ptc_state_data_flag  =2;
-                 to_tenced_off_data++;
-                gctl_t.ptc_flag =1;
-                Ptc_On();
-                Disp_Dry_Icon();
-              
-                MqttData_Publish_SetPtc(1);
-                HAL_Delay(200);
-                 
-
-               }
-               else if(gctl_t.send_ptc_state_data_flag==3){
-                 if((gctl_t.gSet_temperature_value -3) > gctl_t.dht11_temp_value ){
-
-                  to_tenced_off_data++;
-                //  ptc_int_on_send_data++;
-                
-                   gctl_t.ptc_flag =1;
-                   Ptc_On();
-                   Disp_Dry_Icon();
-                    if(wifi_link_net_state()==1 && ptc_int !=ptc_int_on_send_data ){
-                      ptc_int =ptc_int_on_send_data  ; 
-                      MqttData_Publish_SetPtc(1);
-                      HAL_Delay(350);
-                   }
-                  }
-
-               }
-//               else{
-//                  gctl_t.ptc_flag =1;
-//                  Ptc_On();
-//                   to_tenced_off_data++;
-//                    Disp_Dry_Icon();
-//                   if(wifi_link_net_state()==1 && ptc_int_on_default != ptc_int_on_send_data ){
-//                      ptc_int =to_tenced_data  ; 
-//                      MqttData_Publish_SetPtc(1);
-//                      HAL_Delay(350);
-//                   }
-//                  
+//    if(ptc_state() ==1){
 //
-//               }
-               
-
-       }
-       else if(gctl_t.gSet_temperature_value <  gctl_t.dht11_temp_value || gctl_t.gSet_temperature_value == gctl_t.dht11_temp_value ){
-
-              if(gctl_t.send_ptc_state_data_flag==0 ||   gctl_t.send_ptc_state_data_flag ==2){ //the first close ptc.
-                  if(gctl_t.send_ptc_state_data_flag ==2){
-                     gctl_t.send_ptc_state_data_flag= 3;
-                   }
-                   else 
-                        gctl_t.send_ptc_state_data_flag= 1;
-                   
-                  gctl_t.ptc_flag =0;
-
-                  ptc_int_on_send_data++;
-                  Ptc_Off(); 
-                  Disp_Dry_Icon();
-                   //    to_tenced_off_data++;
-                     
-                  if(wifi_link_net_state()==1 && ptc_int_off_1 !=   gctl_t.send_ptc_state_data_flag ){
-                      ptc_int_off_1 =  gctl_t.send_ptc_state_data_flag; 
-                      MqttData_Publish_SetPtc(0);
-                      HAL_Delay(350);
-                   }
-
-              }
-              else{
-                   ptc_int_on_send_data++;
-                  gctl_t.ptc_flag =0;
-                  Ptc_Off(); 
-                  Disp_Dry_Icon();
-                   if(wifi_link_net_state()==1 && ptc_int_off !=to_tenced_off_data ){
-                      ptc_int_off =to_tenced_off_data;
-                      MqttData_Publish_SetPtc(0);
-                      HAL_Delay(350);
-                   }
-                 
-
-
-              }
-
-       }
-
-   
-    }
-    else{
-
-       if( gkey_t.key_add_dec_pressed_flag ==0){
-            if(ptc_state() ==1){
-
-             if(gctl_t.dht11_temp_value > 39){
-                 gctl_t.ptc_flag =0;
-                 Ptc_Off();
-                 Disp_Dry_Icon();
-             }
-             else{
-
-        	   Ptc_On();
-               Disp_Dry_Icon();
-             }
-
-        	}
-        	else{
-              Ptc_Off();
-              Disp_Dry_Icon();
-
-        	}
-        }
-
-    }
-
-    #endif 
-
-
-    if(ptc_state() ==1){
-
-
-       Ptc_On();
-       Disp_Dry_Icon();
-
-
-     }
-    else{
-
-           
-     Ptc_Off();
-     Disp_Dry_Icon();
-    }
-            
+//
+//       Ptc_On();
+//       Disp_Dry_Icon();
+//
+//
+//     }
+//    else{
+//
+//           
+//     Ptc_Off();
+//     Disp_Dry_Icon();
+//    }
+//            
 
     
 
