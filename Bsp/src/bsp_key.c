@@ -241,7 +241,10 @@ void Dec_Key_Fun(uint8_t cmd)
         dec_key ++;
          if(wifi_link_net_state()==1){
             MqttData_Publis_SetTemp(gctl_t.gSet_temperature_value);
-            osDelay(200);
+            osDelay(100);
+            MqttData_Publish_SetPtc(gctl_t.ptc_flag);
+            osDelay(100);
+            
     	  }
 
      }
@@ -364,7 +367,10 @@ void Add_Key_Fun(uint8_t cmd)
         add_key ++;
      if(wifi_link_net_state()==1){
         MqttData_Publis_SetTemp(gctl_t.gSet_temperature_value);
-        osDelay(200);
+        osDelay(100);
+
+        MqttData_Publish_SetPtc(gctl_t.ptc_flag);
+        osDelay(100);
 	  }
 
      }
