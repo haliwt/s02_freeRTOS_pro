@@ -755,7 +755,7 @@ void Json_Parse_Command_Fun(void)
 	   if(power_on_state() ==power_on && ptc_error_state()==0 && fan_error_state()==0){
 
            
-			
+			 gpro_t.gTimer_run_dht11=0;  // don't display sensor of temperature value 
              temp_decade=rx_tencent_num_buffer[13]-0x30; //
              temp_unit=rx_tencent_num_buffer[14]-0x30;
             gctl_t.gSet_temperature_value = temp_decade*10 +  temp_unit;
@@ -772,7 +772,7 @@ void Json_Parse_Command_Fun(void)
             gkey_t.gTimer_set_temp_value  = 0;
             gpro_t.set_temperature_value_success =1;
         
-
+           
            
          
             Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
@@ -788,6 +788,8 @@ void Json_Parse_Command_Fun(void)
                     
                      MqttData_Publish_SetPtc(1);
                        HAL_Delay(200);
+
+                     gpro_t.gTimer_run_dht11=11;  //at once display sensor of temperature value 
 		    	
 
 			}
@@ -799,6 +801,8 @@ void Json_Parse_Command_Fun(void)
                     
                      MqttData_Publish_SetPtc(0);
                      HAL_Delay(200);
+
+                     gpro_t.gTimer_run_dht11=11;  //at once display sensor of temperature value 
 			   		
 				
 			}

@@ -105,6 +105,7 @@ uint8_t Fan_Error_Default_Handler(void);
 
 
 
+void SetTemp_Compare_SensoTemp(void);
 
 
 

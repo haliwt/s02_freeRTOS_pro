@@ -906,11 +906,12 @@ void Lcd_Display_Off(void)
 void Disp_HumidityTemp_Value(void)
 {
 
-   if( gpro_t.set_temperature_value_success == 0){  // || gpro_t.set_temp_confirm == 1){
-      
-       LCD_Number_ThreeFour_Temperature();
-
-    }
+//   if( gpro_t.set_temperature_value_success == 0){  // || gpro_t.set_temp_confirm == 1){
+//      
+//       LCD_Number_ThreeFour_Temperature();
+//
+//    }
+    LCD_Number_ThreeFour_Temperature();
     LCD_Number_Ai_OneTwo_Humidity();
 }
 
@@ -954,17 +955,17 @@ void Lcd_Display_SensorTemp_Value(void)
 {
    
     
-    if(gkey_t.gTimer_set_temp_value  > 1 &&   gpro_t.set_temperature_value_success== 1){
-
-       gkey_t.gTimer_set_temp_value=0;
-
-       gpro_t.set_temperature_value_success=0;
-
-       
-        Disp_HumidityTemp_Value();
-     
-
-	 }
+//    if(gkey_t.gTimer_set_temp_value  > 1 &&   gpro_t.set_temperature_value_success== 1){
+//
+//       gkey_t.gTimer_set_temp_value=0;
+//
+//       gpro_t.set_temperature_value_success=0;
+//
+//       
+//        Disp_HumidityTemp_Value();
+//     
+//
+//	 }
     
 }
 

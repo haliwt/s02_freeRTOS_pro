@@ -152,7 +152,8 @@ void Dec_Key_Fun(uint8_t cmd)
          case set_temp_value_item: //set temperature 
 
             // gkey_t.key_sound_flag = key_sound;
-             gpro_t.gTimer_run_dht11=0; //不显示，实际的温度值，显示设置的温度值
+             gpro_t.gTimer_run_dht11=0; //不显示，实际的温度值，显示设置的温度
+         
              gctl_t.gSet_temperature_value  --;
 			if( gctl_t.gSet_temperature_value  <20)  gctl_t.gSet_temperature_value  =40;
 	        else if( gctl_t.gSet_temperature_value   >40) gctl_t.gSet_temperature_value  =40;
@@ -180,6 +181,8 @@ void Dec_Key_Fun(uint8_t cmd)
 
                 Disp_Dry_Icon();
 
+               gpro_t.gTimer_run_dht11=20;  //at once display sensor of temperature value 
+
                
                 
 
@@ -192,6 +195,8 @@ void Dec_Key_Fun(uint8_t cmd)
                  gctl_t.ptc_flag = 0;
                  Ptc_Off();
                  Disp_Dry_Icon();
+
+                  gpro_t.gTimer_run_dht11=20;  //at once display sensor of temperature value 
 
 
             }     
@@ -300,7 +305,7 @@ void Add_Key_Fun(uint8_t cmd)
 
                 Disp_Dry_Icon();
 
-               
+                 gpro_t.gTimer_run_dht11=20;  //at once display sensor of temperature value 
                 
 
             }
@@ -312,6 +317,8 @@ void Add_Key_Fun(uint8_t cmd)
                  gctl_t.ptc_flag = 0;
                  Ptc_Off();
                  Disp_Dry_Icon();
+
+                 gpro_t.gTimer_run_dht11=20;  //at once display sensor of temperature value 
 
 
             }
@@ -333,6 +340,7 @@ void Add_Key_Fun(uint8_t cmd)
          gkey_t.gTimer_disp_set_timer = 0; 
 
          gpro_t.set_timer_timing_minutes=0;
+
 
         	gpro_t.set_timer_timing_hours++ ;//run_t.dispTime_minutes = run_t.dispTime_minutes + 60;
 		   if(gpro_t.set_timer_timing_hours > 24){ //if(run_t.dispTime_minutes > 59){

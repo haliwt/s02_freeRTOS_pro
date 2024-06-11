@@ -48,7 +48,7 @@ void bsp_Idle(void)
 
          Disip_Wifi_Icon_State();
 
-        Lcd_Display_SensorTemp_Value();
+       // Lcd_Display_SensorTemp_Value();
 
     }
 	/* 例如 uIP 协议，可以插入uip轮询函数 */
@@ -139,7 +139,12 @@ void mainboard_process_handler(void)
                }
             }
 
-              
+
+            if(gpro_t.gTimer_compare_temp  > 7 ){
+               gpro_t.gTimer_compare_temp =0; 
+                SetTemp_Compare_SensoTemp();
+
+              }
 
         
            gctl_t.step_process=3;
