@@ -772,7 +772,7 @@ void Json_Parse_Command_Fun(void)
             gkey_t.gTimer_set_temp_value  = 0;
             gpro_t.set_temperature_value_success =1;
         
-           
+           gpro_t.gTimer_run_dht11=10; 
            
          
             Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
@@ -789,7 +789,7 @@ void Json_Parse_Command_Fun(void)
                      MqttData_Publish_SetPtc(1);
                        HAL_Delay(200);
 
-                     gpro_t.gTimer_run_dht11=11;  //at once display sensor of temperature value 
+                     gpro_t.gTimer_run_dht11=10;  //at once display sensor of temperature value 
 		    	
 
 			}
@@ -802,7 +802,7 @@ void Json_Parse_Command_Fun(void)
                      MqttData_Publish_SetPtc(0);
                      HAL_Delay(200);
 
-                     gpro_t.gTimer_run_dht11=11;  //at once display sensor of temperature value 
+                     gpro_t.gTimer_run_dht11=10;  //at once display sensor of temperature value 
 			   		
 				
 			}

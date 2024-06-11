@@ -181,7 +181,7 @@ void Dec_Key_Fun(uint8_t cmd)
 
                 Disp_Dry_Icon();
 
-               gpro_t.gTimer_run_dht11=20;  //at once display sensor of temperature value 
+               gpro_t.gTimer_run_dht11=10;  //at once display sensor of temperature value 
 
                
                 
@@ -196,7 +196,7 @@ void Dec_Key_Fun(uint8_t cmd)
                  Ptc_Off();
                  Disp_Dry_Icon();
 
-                  gpro_t.gTimer_run_dht11=20;  //at once display sensor of temperature value 
+                  gpro_t.gTimer_run_dht11=10;  //at once display sensor of temperature value 
 
 
             }     
@@ -246,9 +246,9 @@ void Dec_Key_Fun(uint8_t cmd)
         dec_key ++;
          if(wifi_link_net_state()==1){
             MqttData_Publis_SetTemp(gctl_t.gSet_temperature_value);
-            osDelay(100);
+            HAL_Delay(100);//osDelay(100);
             MqttData_Publish_SetPtc(gctl_t.ptc_flag);
-            osDelay(100);
+            HAL_Delay(100);//osDelay(100);
             
     	  }
 
@@ -305,7 +305,7 @@ void Add_Key_Fun(uint8_t cmd)
 
                 Disp_Dry_Icon();
 
-                 gpro_t.gTimer_run_dht11=20;  //at once display sensor of temperature value 
+                 gpro_t.gTimer_run_dht11=10;  //at once display sensor of temperature value 
                 
 
             }
@@ -318,7 +318,7 @@ void Add_Key_Fun(uint8_t cmd)
                  Ptc_Off();
                  Disp_Dry_Icon();
 
-                 gpro_t.gTimer_run_dht11=20;  //at once display sensor of temperature value 
+                 gpro_t.gTimer_run_dht11=10;  //at once display sensor of temperature value 
 
 
             }
@@ -375,10 +375,10 @@ void Add_Key_Fun(uint8_t cmd)
         add_key ++;
      if(wifi_link_net_state()==1){
         MqttData_Publis_SetTemp(gctl_t.gSet_temperature_value);
-        osDelay(100);
+        HAL_Delay(100);//osDelay(100);
 
         MqttData_Publish_SetPtc(gctl_t.ptc_flag);
-        osDelay(100);
+         HAL_Delay(100);//osDelay(100);
 	  }
 
      }

@@ -455,7 +455,7 @@ static void power_off_function(void)
 
              gctl_t.step_process=0;
              //cotrol displ dht11 value 
-             gpro_t.gTimer_run_dht11 = 30;
+            
 
             //wifi set ref
     	

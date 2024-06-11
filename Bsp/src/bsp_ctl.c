@@ -267,6 +267,7 @@ void  Power_On_Handler(uint8_t(*power_handler)(void))
 void SetTemp_Compare_SensoTemp(void)
 {
 
+     static uint8_t ptc_counter_on,ptc_counter_off, ptc_on_init=0xff,ptc_off_init = 0xff;
      switch(gpro_t.set_temperature_value_success){
 
       case 1:
@@ -280,11 +281,25 @@ void SetTemp_Compare_SensoTemp(void)
 
                 Disp_Dry_Icon();
 
-               
+                  ptc_counter_off ++;
+
+                 if(ptc_on_init !=ptc_counter_on){
+                       ptc_on_init =ptc_counter_on;
+                
+                 if(wifi_link_net_state()==1){
+                    MqttData_Publis_SetTemp(gctl_t.gSet_temperature_value);
+                    osDelay(100);
+
+                    MqttData_Publish_SetPtc(gctl_t.ptc_flag);
+                    osDelay(100);
+            	  }
+
+                  }
                 
 
             }
             else if(gctl_t.gSet_temperature_value <   gctl_t.dht11_temp_value || gctl_t.gSet_temperature_value ==   gctl_t.dht11_temp_value){
+
 
                 gkey_t.gTimer_set_temp_value  =0;
              
@@ -293,16 +308,27 @@ void SetTemp_Compare_SensoTemp(void)
                  Disp_Dry_Icon();
 
 
+                   ptc_counter_on ++
+
+                  if(ptc_off_init != ptc_counter_off){
+                    ptc_off_init = ptc_counter_off;
+                  if(wifi_link_net_state()==1){
+                    MqttData_Publis_SetTemp(gctl_t.gSet_temperature_value);
+                    osDelay(100);
+
+                    MqttData_Publish_SetPtc(gctl_t.ptc_flag);
+                    osDelay(100);
+            	  }
+
+                 }
+
+
             }
 
 
-       if(wifi_link_net_state()==1){
-        MqttData_Publis_SetTemp(gctl_t.gSet_temperature_value);
-        osDelay(100);
+      
 
-        MqttData_Publish_SetPtc(gctl_t.ptc_flag);
-        osDelay(100);
-	  }
+      
 
        break;
 
@@ -311,29 +337,52 @@ void SetTemp_Compare_SensoTemp(void)
 
          if(gctl_t.dht11_temp_value > 40 || gctl_t.dht11_temp_value==40){
 
-
+                    
+                      ptc_counter_off ++;
                        gctl_t.ptc_flag = 0;
                          Ptc_Off();
                          Disp_Dry_Icon();
+
+                         if(ptc_on_init !=ptc_counter_on){
+                            ptc_on_init =ptc_counter_on;
+                            if(wifi_link_net_state()==1){
+                               // MqttData_Publis_SetTemp(gctl_t.gSet_temperature_value);
+                               // osDelay(100);
+
+                                MqttData_Publish_SetPtc(gctl_t.ptc_flag);
+                                osDelay(100);
+                        	  }
+
+                         }
+                         
          }
          else if(gctl_t.dht11_temp_value < 39){
+
+
+                  ptc_counter_on ++
 
                 gctl_t.ptc_flag = 1;
                 Ptc_On();
 
                 Disp_Dry_Icon();
 
+                if(ptc_off_init != ptc_counter_off){
+                    ptc_off_init = ptc_counter_off;
+                   if(wifi_link_net_state()==1){
+                   // MqttData_Publis_SetTemp(gctl_t.gSet_temperature_value);
+                  //  osDelay(100);
+
+                    MqttData_Publish_SetPtc(gctl_t.ptc_flag);
+                    osDelay(100);
+            	  }
+
+                 }
+
 
          }
 
 
-           if(wifi_link_net_state()==1){
-            MqttData_Publis_SetTemp(gctl_t.gSet_temperature_value);
-            osDelay(100);
-
-            MqttData_Publish_SetPtc(gctl_t.ptc_flag);
-            osDelay(100);
-    	  }
+        
 
 
        break;
