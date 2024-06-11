@@ -308,7 +308,7 @@ void SetTemp_Compare_SensoTemp(void)
                  Disp_Dry_Icon();
 
 
-                   ptc_counter_on ++
+                   ptc_counter_on ++;
 
                   if(ptc_off_init != ptc_counter_off){
                     ptc_off_init = ptc_counter_off;
@@ -359,7 +359,7 @@ void SetTemp_Compare_SensoTemp(void)
          else if(gctl_t.dht11_temp_value < 39){
 
 
-                  ptc_counter_on ++
+                  ptc_counter_on ++;
 
                 gctl_t.ptc_flag = 1;
                 Ptc_On();
