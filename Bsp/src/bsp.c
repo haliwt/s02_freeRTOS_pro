@@ -140,7 +140,7 @@ void mainboard_process_handler(void)
             }
 
 
-            if(gpro_t.gTimer_compare_temp  > 7 ){
+            if(gpro_t.gTimer_compare_temp  > 9 ){
                gpro_t.gTimer_compare_temp =0; 
                 SetTemp_Compare_SensoTemp();
 
