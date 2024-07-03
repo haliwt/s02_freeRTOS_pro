@@ -157,8 +157,9 @@ static void vTaskMsgPro(void *pvParameters)
 		else
 		{
 			/* 超时 */
-
-       
+//       if(gkey_t.key_power==power_on){
+//          Disip_Wifi_Icon_State();
+//        }
        /// MainBoard_Self_Inspection_PowerOn_Fun();
         
        //  WIFI_Process_Handler();
@@ -292,9 +293,16 @@ static void vTaskStart(void *pvParameters)
            }
                 
             mainboard_process_handler();
+            if(gkey_t.key_power==power_on){
+              Record_WorksOr_Timer_Timing_DonotDisp_Handler();
+
+            }
             MainBoard_Self_Inspection_PowerOn_Fun();
         
             WIFI_Process_Handler();
+            
+
+            
          
             }
 

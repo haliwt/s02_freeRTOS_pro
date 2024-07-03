@@ -158,63 +158,7 @@ void Display_Works_Timing(void)
 
 }
 
-void Record_WorksTime_DonotDisp_Handler(void)
-{
 
-   
-    if(gpro_t.gTimer_works_counter_sencods > 59 ){
-    
-          gpro_t.gTimer_works_counter_sencods=0;
-    
-          gpro_t.disp_works_minutes_value++;
-    
-        if( gpro_t.disp_works_minutes_value > 59){ //1 hours
-            gpro_t.disp_works_minutes_value=0;
-    
-             gpro_t.disp_works_hours_value++;
-    
-    
-           // glcd_t.number7_low = gpro_t.disp_works_minutes_value / 10;
-          //  glcd_t.number7_high = gpro_t.disp_works_minutes_value / 10;
-    
-    
-           // glcd_t.number8_low = gpro_t.disp_works_minutes_value  % 10;
-           // glcd_t.number8_high = gpro_t.disp_works_minutes_value % 10;
-    
-            //display hours works
-    
-    
-            if(gpro_t.disp_works_hours_value > 99){
-                gpro_t.disp_works_hours_value=0;
-    
-    
-            }
-            
-           // glcd_t.number5_low = gpro_t.disp_works_hours_value / 10;
-           // glcd_t.number5_high = gpro_t.disp_works_hours_value / 10;
-    
-    
-           // glcd_t.number6_low = gpro_t.disp_works_hours_value  % 10;
-          //  glcd_t.number6_high = gpro_t.disp_works_hours_value % 10;
-            
-    
-        }
-        else{
-         
-             // glcd_t.number7_low = gpro_t.disp_works_minutes_value / 10;
-             /// glcd_t.number7_high = gpro_t.disp_works_minutes_value / 10;
-            
-                               
-             // glcd_t.number8_low = gpro_t.disp_works_minutes_value  % 10;
-             // glcd_t.number8_high = gpro_t.disp_works_minutes_value % 10;
-    
-            
-        }
-         
-        
-   }
-
-}
 
 
 static void Display_LCD_Works_Timing(void)
@@ -290,12 +234,21 @@ void Display_Timer_Timing(void)
 		
 		 if(gpro_t.set_timer_timing_hours < 0 ){
 		 
-			
-			gpro_t.set_timer_timing_hours=0;
-			gpro_t.set_timer_timing_minutes=0;
-			gkey_t.key_power = power_off;
-            gpro_t.power_off_flag = 1;
-			//gkey_t.gTimer_power_off_run_times=0;
+			if(gctl_t.ai_flag == 0){
+    			gpro_t.set_timer_timing_hours=0;
+    			gpro_t.set_timer_timing_minutes=0;
+    			gkey_t.key_power = power_off;
+                gpro_t.power_off_flag = 1;
+    			//gkey_t.gTimer_power_off_run_times=0;
+             }
+             else{
+                  gkey_t.set_timer_timing_success = 0;
+                  gpro_t.set_timer_timing_hours=0;
+                  gpro_t.set_timer_timing_minutes=0;
+                        
+
+
+             }
             
 			
 			
@@ -414,23 +367,12 @@ void Display_WorksTimingr_Handler(uint8_t sel_item)
     
     case disp_timer_timing:
    
-//       if(gctl_t.ai_flag ==1){
-//           gctl_t.ai_flag =0;
-//        
-//            LCD_Number_Ai_OneTwo_Humidity();
-//             if(g_tMsg.set_timer_timing_success ==1){
-//                
-//              LCD_Disp_Timer_Timing_Init();
-//
-//             }
-//
-//        
-//        }
+
       if(gctl_t.fan_warning ==0 && gctl_t.ptc_warning==0 ){
             if(gkey_t.set_timer_timing_success ==1){
                gctl_t.ai_flag = 0; // don't  DISPLAY AI ICON
                Display_Timer_Timing();
-               Record_WorksTime_DonotDisp_Handler();
+             //  Record_WorksTime_DonotDisp_Handler();
 
             }
             else if(gkey_t.set_timer_timing_success == 0 ){ //&& gkey_t.gTimer_disp_switch_disp_mode > 3){
@@ -443,8 +385,8 @@ void Display_WorksTimingr_Handler(uint8_t sel_item)
                 if( switch_counter> 20){
                  gkey_t.key_mode = disp_works_timing;
 
-                  }
-                Record_WorksTime_DonotDisp_Handler();
+               }
+               
             }
        }
         else{
@@ -497,6 +439,77 @@ void Display_WorksTimingr_Handler(uint8_t sel_item)
 
        break;
     }
+}
+
+
+void Record_WorksOr_Timer_Timing_DonotDisp_Handler(void)
+{
+    if(gkey_t.key_mode == disp_timer_timing){
+    if(gpro_t.gTimer_works_counter_sencods > 59 ){
+    
+          gpro_t.gTimer_works_counter_sencods=0;
+    
+          gpro_t.disp_works_minutes_value++;
+    
+        if( gpro_t.disp_works_minutes_value > 59){ //1 hours
+            gpro_t.disp_works_minutes_value=0;
+    
+             gpro_t.disp_works_hours_value++;
+    
+    
+            if(gpro_t.disp_works_hours_value > 99){
+                gpro_t.disp_works_hours_value=0;
+    
+    
+            }
+            
+        }
+        }
+     }
+     else if(gkey_t.key_mode == disp_works_timing){
+
+     if( gkey_t.set_timer_timing_success == 1){
+     if(gpro_t.gTimer_timer_Counter > 59){
+	    gpro_t.gTimer_timer_Counter =0;
+		
+		gpro_t.set_timer_timing_minutes -- ;
+    
+	
+	    if(gpro_t.set_timer_timing_minutes <  0 ){
+			 
+		   gpro_t.set_timer_timing_hours -- ;
+		   gpro_t.set_timer_timing_minutes =59;
+         }
+
+		
+		
+		 if(gpro_t.set_timer_timing_hours < 0 ){
+		 
+			
+			if(gctl_t.ai_flag == 0){
+    			gpro_t.set_timer_timing_hours=0;
+    			gpro_t.set_timer_timing_minutes=0;
+    			gkey_t.key_power = power_off;
+                gpro_t.power_off_flag = 1;
+    			//gkey_t.gTimer_power_off_run_times=0;
+             }
+             else{
+                  gkey_t.set_timer_timing_success = 0;
+                  gpro_t.set_timer_timing_hours=0;
+                  gpro_t.set_timer_timing_minutes=0;
+                        
+
+
+             }
+            
+			
+	      }
+
+        }
+         }
+
+    }
+
 }
 
 /*

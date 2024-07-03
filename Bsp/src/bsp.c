@@ -228,7 +228,7 @@ void mainboard_process_handler(void)
 
 
 	case 5: //check works times 
-			  if(gpro_t.gTimer_run_total > 13){//119 //120 minutes
+			  if(gpro_t.gTimer_run_total > 119){//119 //120 minutes
 			       gpro_t.gTimer_run_total =0;
 				   gpro_t.gTimer_run_time_out=0;  //time out recoder start 10 minutes
 				   gpro_t.gTimer_run_one_mintue =0;
@@ -594,7 +594,7 @@ static void power_off_function(void)
 	
     }
     if(wifi_link_net_state() ==1){
-        Record_WorksTime_DonotDisp_Handler();
+       // Record_WorksTime_DonotDisp_Handler();
        wifi_t.runCommand_order_lable= wifi_publish_update_tencent_cloud_data;
 
     }

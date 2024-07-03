@@ -6,6 +6,8 @@ static uint16_t Get_Adc_Channel(uint32_t ch) ;
 
 static uint16_t Get_Adc_Average(uint32_t ch,uint8_t times);
 
+uint16_t fan_detect_voltage;
+
 /*****************************************************************
 *
 	*Function Name: static uint16_t Get_Adc(uint32_t ch)  
@@ -120,18 +122,18 @@ void Get_PTC_Temperature_Voltage(uint32_t channel,uint8_t times)
 *****************************************************************/
 void Get_Fan_Adc_Fun(uint32_t channel,uint8_t times)
 {
-	uint16_t adc_fan_hex,fan_detect_voltage;
+	uint16_t adc_fan_hex;//,fan_detect_voltage;
 	
 	static uint8_t detect_error_times;
 	
 	adc_fan_hex = Get_Adc_Average(channel,times);
 
     fan_detect_voltage  =(uint16_t)((adc_fan_hex * 3300)/4096); //amplification 1000 ,3.111V -> 3111
-	HAL_Delay(5);
+	
 
 
     #if BALL_FAN
-      if(fan_detect_voltage > 130 &&  fan_detect_voltage < 1400){
+      if(fan_detect_voltage > 250 &&  fan_detect_voltage < 1400){
                    detect_error_times=0;
     		   #ifdef DEBUG
                      printf("adc= %d",run_t.fan_detect_voltage);

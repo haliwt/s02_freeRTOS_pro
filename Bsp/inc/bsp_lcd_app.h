@@ -37,10 +37,14 @@ void Display_WorksTimingr_Handler(uint8_t sel_item);
 void Set_Timer_Timing_Lcd_Blink(void );
 
 
-void Record_WorksTime_DonotDisp_Handler(void);
+//void Record_WorksTime_DonotDisp_Handler(void);
 
 
 void Mainboard_Action_Fun(void);
+
+
+void Record_WorksOr_Timer_Timing_DonotDisp_Handler(void);
+
 
 
 #endif
