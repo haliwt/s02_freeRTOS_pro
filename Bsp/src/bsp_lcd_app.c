@@ -389,7 +389,7 @@ void Display_WorksTimingr_Handler(uint8_t sel_item)
    
        if(gctl_t.fan_warning ==0 && gctl_t.ptc_warning==0 ){
 
-            
+           gctl_t.ai_flag = 1; // AI DISPLAY AI ICON
            if(gpro_t.first_disp_work_time ==0){
                gpro_t.first_disp_work_time ++; 
              LCD_Disp_Works_Timing_Init();
@@ -430,7 +430,7 @@ void Display_WorksTimingr_Handler(uint8_t sel_item)
 //        }
       if(gctl_t.fan_warning ==0 && gctl_t.ptc_warning==0 ){
             if(gkey_t.set_timer_timing_success ==1){
-
+               gctl_t.ai_flag = 0; // don't  DISPLAY AI ICON
                Display_Timer_Timing();
                Record_WorksTime_DonotDisp_Handler();
 
@@ -472,6 +472,7 @@ void Display_WorksTimingr_Handler(uint8_t sel_item)
 
                 gctl_t.ai_flag = 1;
                 gkey_t.key_mode =disp_works_timing;
+                gpro_t.first_disp_work_time =0; //at once display works times of value ;
                 gkey_t.key_add_dec_mode = set_temp_value_item;
                 LCD_Disp_Works_Timing_Init();
                  
