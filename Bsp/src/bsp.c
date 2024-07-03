@@ -9,6 +9,9 @@ static void Process_Dynamical_Action(void);
 static void power_off_function(void);
 static void power_on_init_function(void);
 
+static void interval_continuce_works_fun(void);
+
+
 
 
 uint8_t power_off_flag;
@@ -135,8 +138,10 @@ void mainboard_process_handler(void)
                   Update_DHT11_Value();
                   Disp_HumidityTemp_Value();
 
-                
-                  SetTemp_Compare_SensoTemp();
+                  if(gctl_t.interval_stop_run_flag==0){
+                     SetTemp_Compare_SensoTemp();
+
+                  }
 
                     
 
@@ -146,10 +151,11 @@ void mainboard_process_handler(void)
              if(gpro_t.gTimer_run_main_fun > 5){
                  gpro_t.gTimer_run_main_fun =0;
                if(gctl_t.interval_stop_run_flag  ==0){
-                  //  Process_Dynamical_Action();
+                    Process_Dynamical_Action();
                }
                else{
                    Mainboard_Fun_Stop();
+                
 
                }
             }
@@ -166,15 +172,15 @@ void mainboard_process_handler(void)
 
            if(gpro_t.gTimer_run_adc > 6 && gpro_t.gTimer_run_adc < 8){ //3 minutes 120s
 				
-			  Get_PTC_Temperature_Voltage(ADC_CHANNEL_1,5);
+			  Get_PTC_Temperature_Voltage(ADC_CHANNEL_1,20);
 			  
 					
           }
 
-		  if(gpro_t.gTimer_run_adc > 13){ //2 minute 180s
+		  if(gpro_t.gTimer_run_adc > 13 && gctl_t.interval_stop_run_flag==0){ //2 minute 180s
 				gpro_t.gTimer_run_adc=0;
 
-				Get_Fan_Adc_Fun(ADC_CHANNEL_0,5);
+				Get_Fan_Adc_Fun(ADC_CHANNEL_0,20);
 				
 	               
 
@@ -222,7 +228,7 @@ void mainboard_process_handler(void)
 
 
 	case 5: //check works times 
-			  if(gpro_t.gTimer_run_total > 119){ //120 minutes
+			  if(gpro_t.gTimer_run_total > 13){//119 //120 minutes
 			       gpro_t.gTimer_run_total =0;
 				   gpro_t.gTimer_run_time_out=0;  //time out recoder start 10 minutes
 				   gpro_t.gTimer_run_one_mintue =0;
@@ -231,18 +237,23 @@ void mainboard_process_handler(void)
 			       gctl_t.interval_stop_run_flag  =1 ;
 		         
 			    }
+                else if(gctl_t.interval_stop_run_flag  ==1){
+                 gctl_t.step_process=7;
+                
+                }
 			    else{
 				 gctl_t.step_process=1;
 
-              }
+                 }
 
 		  break;
 
 		  case 7: //works have a rest ten minutes
+              if(gctl_t.interval_stop_run_flag  ==1){
 
-		       if(Works_Time_Out()==1){
+		            Works_Time_Out();
 
-                  gctl_t.interval_stop_run_flag = 0;
+                
                   gctl_t.step_process=1;
 
 			   }
@@ -295,7 +306,11 @@ static uint8_t Works_Time_Out(void)
 		gpro_t.gTimer_run_time_out=0;
 		gpro_t.gTimer_run_total=0;
 
-		Mainboard_Action_Fun();
+        gctl_t.interval_stop_run_flag= 0;
+
+		//Continuce_main_action_Fun();
+		
+        interval_continuce_works_fun();
 		
 
 		return 1;
@@ -333,7 +348,7 @@ static void Mainboard_Action_Fun(void)
 /*
 *********************************************************************************************************
 *
-*	函 数 名: static void Mainboard_Action_Fun(void)
+*	函 数 名: static void Mainboard_Fun_Stop(void)
 *	功能说明: 主板工作：功能动作输出			 
 *	形    参: 无
 *	返 回 值: 无
@@ -368,21 +383,21 @@ static void Process_Dynamical_Action(void)
 
 
 
-//    if(ptc_state() ==1){
-//
-//
-//       Ptc_On();
-//       Disp_Dry_Icon();
-//
-//
-//     }
-//    else{
-//
-//           
-//     Ptc_Off();
-//     Disp_Dry_Icon();
-//    }
-//            
+    if(ptc_state() ==1){
+
+
+       Ptc_On();
+       Disp_Dry_Icon();
+
+
+     }
+    else{
+
+           
+     Ptc_Off();
+     Disp_Dry_Icon();
+    }
+            
 
     
 
@@ -433,6 +448,79 @@ static void Process_Dynamical_Action(void)
     
     
        }
+
+}
+
+
+static void interval_continuce_works_fun(void)
+{
+  
+    if(ptc_state() ==1){
+    
+    
+          Ptc_On();
+          Disp_Dry_Icon();
+    
+    
+        }
+       else{
+    
+              
+        Ptc_Off();
+        Disp_Dry_Icon();
+       }
+               
+    
+       
+    
+       
+    
+       if(plasma_state() ==1){
+           
+          Plasma_On();
+    
+       }
+       else{
+    
+          Plasma_Off();
+    
+       }
+    
+       if(ultrasonic_state() ==1){
+    
+            Ultrasonic_Pwm_Output();
+    
+    
+       }
+       else{
+    
+       Ultrasonic_Pwm_Stop();
+    
+    
+       }
+    
+     
+       switch(wifi_t.set_wind_speed_value){
+       
+            case 0: //full speed
+       
+       
+              Fan_Run();
+       
+            break;
+       
+            case 1 : //middle speed
+             Fan_Run_Middle();
+       
+            break;
+       
+            case 2: //lower speed
+             Fan_Run_Lower();
+            break;
+       
+       
+          }
+
 
 }
 
@@ -525,9 +613,9 @@ static void power_off_function(void)
                Lcd_Display_Off();
 		     
 			   
-		   }
+		  }
 
-		}
+	}
 
 }
 
@@ -571,6 +659,7 @@ static void power_on_init_function(void)
         main_fun_init();
 
     }
+   
 
 
     LED_Mode_On();

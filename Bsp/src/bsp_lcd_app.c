@@ -83,8 +83,6 @@ void PowerOff_Off_Led(void)
 	Ultrasonic_Pwm_Output();
 	Fan_Run();
 	Plasma_On();
-	
-	
 }
 
 

@@ -326,11 +326,7 @@ void SetTemp_Compare_SensoTemp(void)
             }
 
 
-      
-
-      
-
-       break;
+      break;
 
 
        case 0:
