@@ -18,7 +18,7 @@ void power_long_short_key_fun(void)
 
 
         gkey_t.power_key_long_counter++;
-        if( gkey_t.power_key_long_counter > 40   && KEY_POWER_VALUE() == 1){
+        if( gkey_t.power_key_long_counter > 29   && KEY_POWER_VALUE() == 1){
              gkey_t.power_key_long_counter = 200;
 
           
@@ -37,7 +37,7 @@ void power_long_short_key_fun(void)
         }
 
     }
-    else if(KEY_POWER_VALUE() == 0 && gkey_t.power_key_long_counter >0 && gkey_t.power_key_long_counter<40){ //short key of function
+    else if(KEY_POWER_VALUE() == 0 && gkey_t.power_key_long_counter >0 && gkey_t.power_key_long_counter<30){ //short key of function
 
         gkey_t.power_key_long_counter=0;
         sound_flag=1;
@@ -75,7 +75,7 @@ void mode_long_short_key_fun(void)
 
 
         gkey_t.key_mode_long_counter++;
-        if(gkey_t.key_mode_long_counter >  40 && KEY_MODE_VALUE() == 1){
+        if(gkey_t.key_mode_long_counter >  29  && KEY_MODE_VALUE() == 1){
             gkey_t.key_mode_long_counter = 150;
 
             gkey_t.key_mode = mode_set_timer;
@@ -90,7 +90,7 @@ void mode_long_short_key_fun(void)
         }
 
     }
-    else if(KEY_MODE_VALUE() == 0 && gkey_t.key_mode_long_counter >0 && gkey_t.key_mode_long_counter<40){ //short key of function
+    else if(KEY_MODE_VALUE() == 0 && gkey_t.key_mode_long_counter >0 && gkey_t.key_mode_long_counter<30){ //short key of function
 
         gkey_t.key_mode_long_counter=0;
 
@@ -98,7 +98,7 @@ void mode_long_short_key_fun(void)
          if(gkey_t.key_mode  == disp_works_timing){
              gkey_t.key_mode  = disp_timer_timing;
            
-               gctl_t.ai_flag = 0; //timer tiiming model
+               gctl_t.ai_flag = 0; // DON'T DISP AI ICON
                //counter exit timing this "mode_set_timer"
             gkey_t.key_mode_switch_flag = 1;
             gkey_t.key_add_dec_mode = set_temp_value_item;
@@ -116,7 +116,7 @@ void mode_long_short_key_fun(void)
             gkey_t.key_mode_switch_flag = 1;
             gkey_t.key_mode  = disp_works_timing;
             gkey_t.key_add_dec_mode = set_temp_value_item;
-            gctl_t.ai_flag = 1; //timer tiiming model
+            gctl_t.ai_flag = 1; // AI DISPLAY AI ICON
             LCD_Disp_Works_Timing_Init();
              buzzer_sound();
             if(wifi_link_net_state()==1){

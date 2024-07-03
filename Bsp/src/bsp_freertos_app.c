@@ -78,7 +78,7 @@ static void vTaskMsgPro(void *pvParameters)
 {
    // MSG_T *ptMsg;
     BaseType_t xResult;
-	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(40); /* 设置最大等待时间为500ms */
+	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(100); /* 设置最大等待时间为500ms */
 	uint32_t ulValue;
    
    
@@ -185,7 +185,7 @@ static void vTaskMsgPro(void *pvParameters)
 static void vTaskStart(void *pvParameters)
 {
    BaseType_t xResult;
-   const TickType_t xMaxBlockTime = pdMS_TO_TICKS(40); /* 设置最大等待时间为500ms */
+   const TickType_t xMaxBlockTime = pdMS_TO_TICKS(100); /* 设置最大等待时间为500ms */
    static uint8_t sound_flag,power_on_first;
    uint32_t ulValue;
    static uint8_t add_flag,dec_flag,power_sound_flag;

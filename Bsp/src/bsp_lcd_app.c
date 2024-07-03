@@ -389,11 +389,13 @@ void Display_WorksTimingr_Handler(uint8_t sel_item)
    
        if(gctl_t.fan_warning ==0 && gctl_t.ptc_warning==0 ){
 
-             if(gctl_t.ai_flag ==0){
-                 gctl_t.ai_flag =1;
-                
-                 LCD_Disp_Works_Timing_Init();
-               }
+            
+           if(gpro_t.first_disp_work_time ==0){
+               gpro_t.first_disp_work_time ++; 
+             LCD_Disp_Works_Timing_Init();
+
+            }
+               
             if(switch_counter>0){
                switch_counter =0;
               }

@@ -356,10 +356,10 @@ void SetTemp_Compare_SensoTemp(void)
                          }
                          
          }
-         else if(gctl_t.dht11_temp_value < 39){
+         else if(gctl_t.dht11_temp_value < 39){ // gctl_t.dht11_temp_value
 
 
-                  ptc_counter_on ++;
+                ptc_counter_on ++;
 
                 gctl_t.ptc_flag = 1;
                 Ptc_On();

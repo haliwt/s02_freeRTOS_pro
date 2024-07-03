@@ -99,6 +99,16 @@ void mainboard_process_handler(void)
 		  case 0:
 
             power_on_init_function();
+
+             gctl_t.ai_flag = 1; // AI DISPLAY AI ICON
+             gkey_t.key_mode  = disp_works_timing;
+
+           gpro_t.gTimer_timer_Counter =0;
+		   gpro_t.set_timer_timing_hours=0;
+		   gpro_t.set_timer_timing_minutes=0;
+
+           gpro_t.gTimer_disp_timer_timing_statue = 10;
+           gpro_t.first_disp_work_time=0;
             
 		    gctl_t.step_process = 1;
 
@@ -125,13 +135,18 @@ void mainboard_process_handler(void)
                   Update_DHT11_Value();
                   Disp_HumidityTemp_Value();
 
+                
+                  SetTemp_Compare_SensoTemp();
+
+                    
+
               }
               //run main board character
 
              if(gpro_t.gTimer_run_main_fun > 5){
                  gpro_t.gTimer_run_main_fun =0;
                if(gctl_t.interval_stop_run_flag  ==0){
-                    Process_Dynamical_Action();
+                  //  Process_Dynamical_Action();
                }
                else{
                    Mainboard_Fun_Stop();
@@ -140,11 +155,7 @@ void mainboard_process_handler(void)
             }
 
 
-            if(gpro_t.gTimer_compare_temp  > 9 ){
-               gpro_t.gTimer_compare_temp =0; 
-                SetTemp_Compare_SensoTemp();
-
-              }
+           
 
         
            gctl_t.step_process=3;
