@@ -7,8 +7,8 @@
   * @attention
   * name: S02
   * version :1.0     data:2024.05.31  
-  * modify update buzzer of sound .DATA:2024.06.24
-  * version : 1.0
+  * modify update buzzer of sound .DATA:2024.07.04
+  * version : 1.3
   *
   ******************************************************************************
   */
