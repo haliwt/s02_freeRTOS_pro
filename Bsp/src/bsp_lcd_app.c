@@ -234,22 +234,14 @@ void Display_Timer_Timing(void)
 		
 		 if(gpro_t.set_timer_timing_hours < 0 ){
 		 
-			if(gctl_t.ai_flag == 0){
+			
     			gpro_t.set_timer_timing_hours=0;
     			gpro_t.set_timer_timing_minutes=0;
     			gkey_t.key_power = power_off;
                 gpro_t.power_off_flag = 1;
     			//gkey_t.gTimer_power_off_run_times=0;
-             }
-             else{
-                  gkey_t.set_timer_timing_success = 0;
-                  gpro_t.set_timer_timing_hours=0;
-                  gpro_t.set_timer_timing_minutes=0;
-                        
-
-
-             }
-            
+             
+           
 			
 			
 	      }
@@ -486,27 +478,18 @@ void Record_WorksOr_Timer_Timing_DonotDisp_Handler(void)
 		 if(gpro_t.set_timer_timing_hours < 0 ){
 		 
 			
-			if(gctl_t.ai_flag == 0){
-    			gpro_t.set_timer_timing_hours=0;
-    			gpro_t.set_timer_timing_minutes=0;
-    			gkey_t.key_power = power_off;
-                gpro_t.power_off_flag = 1;
+			gpro_t.set_timer_timing_hours=0;
+    		gpro_t.set_timer_timing_minutes=0;
+    		gkey_t.key_power = power_off;
+            gpro_t.power_off_flag = 1;
     			//gkey_t.gTimer_power_off_run_times=0;
-             }
-             else{
-                  gkey_t.set_timer_timing_success = 0;
-                  gpro_t.set_timer_timing_hours=0;
-                  gpro_t.set_timer_timing_minutes=0;
-                        
-
-
-             }
+           
             
 			
 	      }
 
         }
-         }
+        }
 
     }
 
