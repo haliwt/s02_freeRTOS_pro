@@ -2,12 +2,6 @@
 
 
 
-
-
-
-
-
-
 //static void Display_Timer_Timing(int8_t hours,int8_t minutes);
 
 static void Display_LCD_Works_Timing(void);
@@ -246,9 +240,7 @@ void Display_Timer_Timing(void)
 			
 	      }
 
-
-
-		 //display hours timing
+         //display hours timing
 	     glcd_t.number5_low = gpro_t.set_timer_timing_hours / 10;
 		 glcd_t.number5_high = gpro_t.set_timer_timing_hours / 10;
 	 

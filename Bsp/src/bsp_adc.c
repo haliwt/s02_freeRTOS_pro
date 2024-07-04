@@ -133,7 +133,7 @@ void Get_Fan_Adc_Fun(uint32_t channel,uint8_t times)
 
 
     #if BALL_FAN
-      if(fan_detect_voltage > 250 &&  fan_detect_voltage < 1400){
+      if(fan_detect_voltage > 300 &&  fan_detect_voltage < 1400){ //
                    detect_error_times=0;
     		   #ifdef DEBUG
                      printf("adc= %d",run_t.fan_detect_voltage);
