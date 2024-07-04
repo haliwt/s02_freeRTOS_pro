@@ -668,6 +668,7 @@ static void power_on_init_function(void)
      if(wifi_t.get_beijing_timing_success ==0 || wifi_link_net_state()==0){
           gpro_t.disp_works_minutes_value=0;
           gpro_t.disp_works_hours_value =0;
+          gpro_t.gTimer_works_counter_sencods =0;
 
      }
 
