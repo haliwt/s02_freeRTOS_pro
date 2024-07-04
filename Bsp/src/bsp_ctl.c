@@ -68,6 +68,15 @@ void main_fun_init(void)
    gkey_t.key_add_dec_mode = set_temp_value_item;
    wifi_t.set_wind_speed_value=0;
 
+   
+
+   Plasma_On();
+
+   Ptc_On();
+
+   Ultrasonic_Pwm_Output();
+
+  fan_max_run();
 
 
 }

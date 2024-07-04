@@ -45,9 +45,11 @@ void power_long_short_key_fun(void)
            sound_flag++;
            if(gkey_t.key_power==power_off){
               gkey_t.key_power=power_on;
+              gctl_t.step_process=0;
             }
            else{
               gkey_t.key_power=power_off;
+              gctl_t.step_process=0;
 
            }
            Buzzer_KeySound();

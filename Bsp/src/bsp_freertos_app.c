@@ -292,9 +292,14 @@ static void vTaskStart(void *pvParameters)
 
            }
                 
-            mainboard_process_handler();
+
             if(gkey_t.key_power==power_on){
+              power_on_run_handler();
               Record_WorksOr_Timer_Timing_DonotDisp_Handler();
+
+            }
+            else{
+             power_off_run_handler();
 
             }
             MainBoard_Self_Inspection_PowerOn_Fun();

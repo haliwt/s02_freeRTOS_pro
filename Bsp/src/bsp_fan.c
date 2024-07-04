@@ -40,6 +40,16 @@ void Fan_Run(void)
 
 }
 
+void fan_max_run(void)
+{
+   
+   MX_TIM16_Init(10); //100KHZ,duty =50%
+   HAL_TIM_PWM_Start(&htim16, TIM_CHANNEL_1);//ultrasnoic On
+   FAN_COM_SetLow(); //PA6
+}
+
+
+
 
 void Fan_Run_Middle(void)
 {

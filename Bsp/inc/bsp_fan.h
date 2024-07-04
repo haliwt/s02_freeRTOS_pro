@@ -25,6 +25,8 @@ void Fan_Run_Middle(void);
 
 void Fan_Run_Lower(void);
 
+void fan_max_run(void);
+
 
 #endif
 

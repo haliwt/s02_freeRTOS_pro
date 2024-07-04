@@ -68,35 +68,31 @@ void bsp_Idle(void)
 *	返 回 值: 无
 *********************************************************************************************************
 */
-void mainboard_process_handler(void)
+//void mainboard_process_handler(void)
+void power_off_run_handler(void)
 {
-  
-	static uint8_t power_on_run_dht11_times ;
-	
 
-	if( gkey_t.key_sound_flag == key_sound){
+  
+  if( gkey_t.key_sound_flag == key_sound){
 		gkey_t.key_sound_flag =0;
 		Buzzer_KeySound();
 
     }
 
- 
-
-	switch(gkey_t.key_power){
-
-      case power_off:
-
-       
-       power_off_function();
+   power_off_function();
 		
-        Breath_Led();
+   Breath_Led();
 
-	  break;
+}
 
 
-	  case power_on:
 
-        switch(gctl_t.step_process){
+
+void power_on_run_handler(void)
+{
+
+   static uint8_t power_on_run_dht11_times ;
+     switch(gctl_t.step_process){
 
 
 		  case 0:
@@ -148,17 +144,17 @@ void mainboard_process_handler(void)
               }
               //run main board character
 
-             if(gpro_t.gTimer_run_main_fun > 5){
-                 gpro_t.gTimer_run_main_fun =0;
-               if(gctl_t.interval_stop_run_flag  ==0){
-                    Process_Dynamical_Action();
-               }
-               else{
-                   Mainboard_Fun_Stop();
-                
-
-               }
-            }
+//             if(gpro_t.gTimer_run_main_fun > 5){
+//                 gpro_t.gTimer_run_main_fun =0;
+//               if(gctl_t.interval_stop_run_flag  ==0){
+//                    Process_Dynamical_Action();
+//               }
+//               else{
+//                   Mainboard_Fun_Stop();
+//                
+//
+//               }
+//            }
 
 
            
@@ -180,7 +176,9 @@ void mainboard_process_handler(void)
 		  if(gpro_t.gTimer_run_adc > 13 && gctl_t.interval_stop_run_flag==0){ //2 minute 180s
 				gpro_t.gTimer_run_adc=0;
 
-				Get_Fan_Adc_Fun(ADC_CHANNEL_0,20);
+                if( gctl_t.interval_stop_run_flag  ==0){
+				   Get_Fan_Adc_Fun(ADC_CHANNEL_0,20);
+                }
 				
 	               
 
@@ -270,7 +268,27 @@ void mainboard_process_handler(void)
 
 	     }
 
-     }      
+ }      
+
+
+
+void mainboard_active_handler(void)
+{
+
+   
+    if(gpro_t.gTimer_run_main_fun > 0){
+                    gpro_t.gTimer_run_main_fun =0;
+                  if(gctl_t.interval_stop_run_flag  ==0){
+                       Process_Dynamical_Action();
+                  }
+                  else{
+                      Mainboard_Fun_Stop();
+                   
+    
+                  }
+               }
+    
+
 }
 /*
 *********************************************************************************************************

@@ -124,11 +124,16 @@ extern BSP_process_t gpro_t;
 
 void bsp_Idle(void);
 
-void mainboard_process_handler(void);
 
 
 
 
+void power_off_run_handler(void);
+
+
+void power_on_run_handler(void);
+
+void mainboard_active_handler(void);
 
 
 
