@@ -284,7 +284,7 @@ static void vTaskStart(void *pvParameters)
             if(gkey_t.key_power==power_on){
               power_on_run_handler();
               Record_WorksOr_Timer_Timing_DonotDisp_Handler();
-               Detected_Fan_Error();
+              Detected_Fan_Error();
 
             }
             else{
