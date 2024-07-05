@@ -30,7 +30,7 @@ uint8_t key_mode_long_sound_flag,key_power_long_sound_flag;
 **********************************************************************************************************
 */
 //static void vTaskTaskUserIF(void *pvParameters);
-//static void vTaskLED(void *pvParameters);
+static void vTaskMsgRun(void *pvParameters);
 static void vTaskMsgPro(void *pvParameters);
 static void vTaskStart(void *pvParameters);
 static void AppTaskCreate (void);
@@ -42,7 +42,7 @@ static void AppTaskCreate (void);
 **********************************************************************************************************
 */
 //static TaskHandle_t xHandleTaskUserIF = NULL;
-//static TaskHandle_t xHandleTaskLED = NULL;
+static TaskHandle_t xHandleTaskMsgRun= NULL;
 static TaskHandle_t xHandleTaskMsgPro = NULL;
 static TaskHandle_t xHandleTaskStart = NULL;
 
@@ -67,8 +67,49 @@ void freeRTOS_Handler(void)
     /* 启动调度，开始执行任务 */
     vTaskStartScheduler();
 }
+/*
+*********************************************************************************************************
+*	函 数 名: vTaskMsgPro
+*	功能说明: 使用函数xTaskNotifyWait接收任务vTaskTaskUserIF发送的事件标志位设置
+*	形    参: pvParameters 是在创建该任务时传递的形参
+*	返 回 值: 无
+*   优 先 级: 3  
+*********************************************************************************************************
+*/
+static void vTaskMsgRun(void *pvParameters)
+{
+   
+    while(1)
+    {
 
+       
+       
+        if(gkey_t.key_power==power_on){
+         power_on_run_handler();
+         Record_WorksOr_Timer_Timing_DonotDisp_Handler();
+         Detected_Fan_Error();
+         Detected_Ptc_Error();
 
+           bsp_Idle();
+       
+       }
+       else{
+        //power_off_run_handler();
+         power_off_function();
+       
+           Breath_Led();
+       
+       }
+       
+
+       MainBoard_Self_Inspection_PowerOn_Fun();
+        
+       WIFI_Process_Handler();
+            
+    
+      vTaskDelay(30);
+    }
+}
 /*
 *********************************************************************************************************
 *	函 数 名: vTaskMsgPro
@@ -80,10 +121,7 @@ void freeRTOS_Handler(void)
 */
 static void vTaskMsgPro(void *pvParameters)
 {
-   // MSG_T *ptMsg;
-    BaseType_t xResult;
-	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置最大等待时间为500ms */
-	uint32_t ulValue;
+  
    
    
 	
@@ -160,7 +198,7 @@ static void vTaskMsgPro(void *pvParameters)
                
        } 
 
-     vTaskDelay(20);
+     vTaskDelay(30);
      
      } 
 
@@ -179,7 +217,7 @@ static void vTaskMsgPro(void *pvParameters)
 static void vTaskStart(void *pvParameters)
 {
    BaseType_t xResult;
-   const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置最大等待时间为500ms */
+   const TickType_t xMaxBlockTime = pdMS_TO_TICKS(100); /* 设置最大等待时间为500ms */
    static uint8_t sound_flag,power_on_first;
    uint32_t ulValue;
    static uint8_t add_flag,dec_flag,power_sound_flag,powr_on_short_key;
@@ -347,27 +385,13 @@ static void vTaskStart(void *pvParameters)
                           }
 
 
-                    bsp_Idle();
+
+                  
 
               }
                 
        
-            if(gkey_t.key_power==power_on){
-              power_on_run_handler();
-              Record_WorksOr_Timer_Timing_DonotDisp_Handler();
-              Detected_Fan_Error();
-              Detected_Ptc_Error();
-
-            }
-            else{
-             power_off_run_handler();
-
-            }
-            MainBoard_Self_Inspection_PowerOn_Fun();
-        
-            WIFI_Process_Handler();
-            
-
+         
             
          
             }
@@ -389,12 +413,20 @@ static void vTaskStart(void *pvParameters)
 static void AppTaskCreate (void)
 {
 
-	
+    xTaskCreate( vTaskMsgRun,     		/* 任务函数  */
+                 "vTaskMsgPro",   		/* 任务名    */
+                 128,             		/* 任务栈大小，单位word，也就是4字节 */
+                 NULL,           		/* 任务参数  */
+                 1,               		/* 任务优先级*/
+                 &xHandleTaskMsgRun );  /* 任务句柄  */
+
+
+
 	xTaskCreate( vTaskMsgPro,     		/* 任务函数  */
                  "vTaskMsgPro",   		/* 任务名    */
                  128,             		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
-                 2,               		/* 任务优先级*/
+                 3,               		/* 任务优先级*/
                  &xHandleTaskMsgPro );  /* 任务句柄  */
 	
 	
@@ -402,7 +434,7 @@ static void AppTaskCreate (void)
                  "vTaskStart",   		/* 任务名    */
                  128,            		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
-                 1,              		/* 任务优先级*/
+                 2,              		/* 任务优先级*/
                  &xHandleTaskStart );   /* 任务句柄  */
 }
 

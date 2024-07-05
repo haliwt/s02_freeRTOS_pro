@@ -6,7 +6,7 @@ static uint8_t Works_Time_Out(void);
 static void Mainboard_Action_Fun(void);
 static void Mainboard_Fun_Stop(void);
 static void Process_Dynamical_Action(void);
-static void power_off_function(void);
+//static void power_off_function(void);
 static void power_on_init_function(void);
 
 static void interval_continuce_works_fun(void);
@@ -539,7 +539,7 @@ static void interval_continuce_works_fun(void)
 *Return Ref:NO
 *
 ************************************************************************/
-static void power_off_function(void)
+void power_off_function(void)
 {
 
   if(gpro_t.power_off_flag == 1){
