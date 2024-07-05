@@ -135,6 +135,7 @@ void power_on_run_handler(void);
 
 void mainboard_active_handler(void);
 
+void Detected_Fan_Error(void);
 
 
 #endif 

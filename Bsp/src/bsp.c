@@ -142,25 +142,10 @@ void power_on_run_handler(void)
                     
 
               }
-              //run main board character
-
-//             if(gpro_t.gTimer_run_main_fun > 5){
-//                 gpro_t.gTimer_run_main_fun =0;
-//               if(gctl_t.interval_stop_run_flag  ==0){
-//                    Process_Dynamical_Action();
-//               }
-//               else{
-//                   Mainboard_Fun_Stop();
-//                
-//
-//               }
-//            }
 
 
-           
 
-        
-           gctl_t.step_process=3;
+          gctl_t.step_process=3;
 		  
           break;
 
@@ -173,6 +158,8 @@ void power_on_run_handler(void)
 					
           }
 
+         #if 0
+
 		  if(gpro_t.gTimer_run_adc > 13 && gctl_t.interval_stop_run_flag==0){ //2 minute 180s
 				gpro_t.gTimer_run_adc=0;
 
@@ -183,7 +170,7 @@ void power_on_run_handler(void)
 	               
 
 		 }
-
+         #endif 
 	
          gctl_t.step_process=4;
 		break;
@@ -344,15 +331,13 @@ static uint8_t Works_Time_Out(void)
 }
 
 
-/*
-*********************************************************************************************************
+/**********************************************************************************************************
 *	函 数 名: static void Mainboard_Action_Fun(void)
 *	功能说明: 主板工作：功能动作输出
 *			 
 *	形    参: 无
 *	返 回 值: 无
-*********************************************************************************************************
-*/
+**********************************************************************************************************/
 static void Mainboard_Action_Fun(void)
 {
     Ptc_On();
@@ -673,7 +658,6 @@ static void power_on_init_function(void)
      }
 
    
-    
     if(wifi_t.smartphone_app_power_on_flag==0){
         main_fun_init();
 
@@ -712,6 +696,24 @@ static void power_on_init_function(void)
     }
 
     
+
+
+}
+
+
+
+void Detected_Fan_Error(void)
+{
+    if(gpro_t.gTimer_run_adc > 13 && gctl_t.interval_stop_run_flag==0){ //2 minute 180s
+				gpro_t.gTimer_run_adc=0;
+
+                if( gctl_t.interval_stop_run_flag  ==0){
+				   Get_Fan_Adc_Fun(ADC_CHANNEL_0,20);
+                }
+				
+	               
+
+		 }
 
 
 }

@@ -92,7 +92,6 @@ int main(void)
  // MX_IWDG_Init();
   MX_TIM1_Init(); //ultrasonic
   MX_TIM14_Init(); //beep pwm
-
   MX_TIM17_Init(); //timer timing 
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */

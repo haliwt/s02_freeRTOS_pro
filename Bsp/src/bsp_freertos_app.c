@@ -78,7 +78,7 @@ static void vTaskMsgPro(void *pvParameters)
 {
    // MSG_T *ptMsg;
     BaseType_t xResult;
-	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(300); /* 设置最大等待时间为500ms */
+	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(40); /* 设置最大等待时间为500ms */
 	uint32_t ulValue;
    
    
@@ -154,19 +154,7 @@ static void vTaskMsgPro(void *pvParameters)
 
 		
 		}
-		else
-		{
-			/* 超时 */
-//       if(gkey_t.key_power==power_on){
-//          Disip_Wifi_Icon_State();
-//        }
-       /// MainBoard_Self_Inspection_PowerOn_Fun();
-        
-       //  WIFI_Process_Handler();
 
-             
-        }
-       
         
         
 			
@@ -186,7 +174,7 @@ static void vTaskMsgPro(void *pvParameters)
 static void vTaskStart(void *pvParameters)
 {
    BaseType_t xResult;
-   const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置最大等待时间为500ms */
+   const TickType_t xMaxBlockTime = pdMS_TO_TICKS(40); /* 设置最大等待时间为500ms */
    static uint8_t sound_flag,power_on_first;
    uint32_t ulValue;
    static uint8_t add_flag,dec_flag,power_sound_flag;
@@ -296,6 +284,7 @@ static void vTaskStart(void *pvParameters)
             if(gkey_t.key_power==power_on){
               power_on_run_handler();
               Record_WorksOr_Timer_Timing_DonotDisp_Handler();
+               Detected_Fan_Error();
 
             }
             else{
@@ -333,7 +322,7 @@ static void AppTaskCreate (void)
                  "vTaskMsgPro",   		/* 任务名    */
                  128,             		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
-                 1,               		/* 任务优先级*/
+                 2,               		/* 任务优先级*/
                  &xHandleTaskMsgPro );  /* 任务句柄  */
 	
 	
@@ -341,7 +330,7 @@ static void AppTaskCreate (void)
                  "vTaskStart",   		/* 任务名    */
                  128,            		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
-                 2,              		/* 任务优先级*/
+                 1,              		/* 任务优先级*/
                  &xHandleTaskStart );   /* 任务句柄  */
 }
 

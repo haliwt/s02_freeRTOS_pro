@@ -80,10 +80,10 @@ void Get_PTC_Temperature_Voltage(uint32_t channel,uint8_t times)
         Buzzer_Ptc_Error_Sound();
 
         Publish_Data_Warning(ptc_temp_warning,warning);
-	    HAL_Delay(350);
+	     osDelay(300);//HAL_Delay(350);
 
         MqttData_Publish_SetPtc(0);
-		HAL_Delay(350);  
+		 osDelay(300);//HAL_Delay(350);  
    	      
    }
 }
@@ -166,10 +166,10 @@ void Get_Fan_Adc_Fun(uint32_t channel,uint8_t times)
        
 
            Publish_Data_Warning(fan_warning,warning);
-	       HAL_Delay(350);
+	       osDelay(350);//HAL_Delay(350);
 
            MqttData_Publis_SetFan(0);
-	       HAL_Delay(350);
+	       osDelay(350);//HAL_Delay(350);
 
 
           LCD_Fault_Numbers_Code();
