@@ -151,12 +151,15 @@ void power_on_run_handler(void)
 
 		  case 3: //mainboard of hardware function .
 
+          #if 0
+
            if(gpro_t.gTimer_run_adc > 6 && gpro_t.gTimer_run_adc < 8){ //3 minutes 120s
 				
 			  Get_PTC_Temperature_Voltage(ADC_CHANNEL_1,20);
 			  
 					
           }
+          #endif 
 
          #if 0
 
@@ -714,6 +717,21 @@ void Detected_Fan_Error(void)
 	               
 
 		 }
+
+
+}
+
+void Detected_Ptc_Error(void)
+{
+
+   if(gpro_t.gTimer_ptc_detected > 6 ){ //3 minutes 120s
+			gpro_t.gTimer_ptc_detected =0;	
+			  Get_PTC_Temperature_Voltage(ADC_CHANNEL_1,20);
+
+              
+					
+       }
+
 
 
 }

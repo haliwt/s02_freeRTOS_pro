@@ -113,6 +113,7 @@ typedef struct {
    uint8_t gTimer_pro_action_publis;
    uint8_t gTimer_publish_tencent_dht11;
    uint8_t gTimer_compare_temp;
+   uint8_t gTimer_ptc_detected;
 
    
  
@@ -136,6 +137,7 @@ void power_on_run_handler(void);
 void mainboard_active_handler(void);
 
 void Detected_Fan_Error(void);
+void Detected_Ptc_Error(void);
 
 
 #endif 

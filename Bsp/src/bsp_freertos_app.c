@@ -78,7 +78,7 @@ static void vTaskMsgPro(void *pvParameters)
 {
    // MSG_T *ptMsg;
     BaseType_t xResult;
-	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(40); /* 设置最大等待时间为500ms */
+	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(30); /* 设置最大等待时间为500ms */
 	uint32_t ulValue;
    
    
@@ -106,7 +106,7 @@ static void vTaskMsgPro(void *pvParameters)
 		xResult = xTaskNotifyWait(0x00000000,      
 						          0xFFFFFFFF,      
 						          &ulValue,        /* 保存ulNotifiedValue到变量ulValue中 */
-						          portMAX_DELAY);  /* 最大允许延迟时间 */
+						          xMaxBlockTime);  /* 最大允许延迟时间 */
 		
 		if( xResult == pdPASS )
 		{
@@ -174,7 +174,7 @@ static void vTaskMsgPro(void *pvParameters)
 static void vTaskStart(void *pvParameters)
 {
    BaseType_t xResult;
-   const TickType_t xMaxBlockTime = pdMS_TO_TICKS(40); /* 设置最大等待时间为500ms */
+   const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置最大等待时间为500ms */
    static uint8_t sound_flag,power_on_first;
    uint32_t ulValue;
    static uint8_t add_flag,dec_flag,power_sound_flag;
@@ -285,6 +285,7 @@ static void vTaskStart(void *pvParameters)
               power_on_run_handler();
               Record_WorksOr_Timer_Timing_DonotDisp_Handler();
               Detected_Fan_Error();
+              Detected_Ptc_Error();
 
             }
             else{

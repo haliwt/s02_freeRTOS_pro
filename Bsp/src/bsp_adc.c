@@ -60,6 +60,8 @@ static uint16_t Get_Adc_Average(uint32_t ch,uint8_t times)
 void Get_PTC_Temperature_Voltage(uint32_t channel,uint8_t times)
 {
     uint16_t adcx,ptc_temp_voltage;
+
+    #if 1
 	
 	adcx = Get_Adc_Average(channel,times);
 
@@ -70,6 +72,11 @@ void Get_PTC_Temperature_Voltage(uint32_t channel,uint8_t times)
       printf("ptc= %d",run_t.ptc_temp_voltage);
 	#endif 
 
+   
+
+    #endif 
+
+
 	if(ptc_temp_voltage < 373 || ptc_temp_voltage ==373){ //87 degree
   
 	    gctl_t.plasma_flag = 0; //turn off
@@ -79,11 +86,15 @@ void Get_PTC_Temperature_Voltage(uint32_t channel,uint8_t times)
         
         Buzzer_Ptc_Error_Sound();
 
+        if(wifi_link_net_state() ==1){
+
         Publish_Data_Warning(ptc_temp_warning,warning);
 	     osDelay(300);//HAL_Delay(350);
 
         MqttData_Publish_SetPtc(0);
 		 osDelay(300);//HAL_Delay(350);  
+
+        }
    	      
    }
 }
@@ -164,7 +175,7 @@ void Get_Fan_Adc_Fun(uint32_t channel,uint8_t times)
            wifi_t.set_wind_speed_value = 2;
           
        
-
+          if(wifi_link_net_state() ==1){
            Publish_Data_Warning(fan_warning,warning);
 	       osDelay(350);//HAL_Delay(350);
 
@@ -174,10 +185,13 @@ void Get_Fan_Adc_Fun(uint32_t channel,uint8_t times)
 
           LCD_Fault_Numbers_Code();
 
-		}
+            }
+
+          }
 		detect_error_times++;
 
-     }
+        
+   }
 }
 
     

@@ -143,6 +143,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         gkey_t.gTimer_set_temp_value++;
      
         gkey_t.gTimer_disp_set_timer++;
+        gpro_t.gTimer_ptc_detected++;
 
         //lcd timer
      
@@ -173,6 +174,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		wifi_t.gTimer_read_beijing_time ++;
 		wifi_t.gTimer_wifi_counter_link_beijing_times++;
         wifi_t.gTimer_counter_repeat_link_net++;
+
+        
 
        if(tm2 > 59){ //60s = 1 minutes
 			tm2 =0;
