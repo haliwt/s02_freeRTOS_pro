@@ -52,7 +52,7 @@ void power_long_short_key_fun(void)
               gctl_t.step_process=0;
 
            }
-           Buzzer_KeySound();
+          // Buzzer_KeySound();
        
       
 
@@ -61,7 +61,38 @@ void power_long_short_key_fun(void)
    
 }
 
+void power_onoff_init(void)
+{
 
+   if(gkey_t.key_power==power_off){
+    gkey_t.key_power=power_on;
+    gctl_t.step_process=0;
+    }
+    else{
+    gkey_t.key_power=power_off;
+    gctl_t.step_process=0;
+
+    }
+             
+}
+
+void power_on_long_key_init(void)
+{
+    //gkey_t.power_key_long_counter++;
+     
+           //  gkey_t.power_key_long_counter = 200;
+
+        gkey_t.wifi_led_fast_blink_flag=1;
+			 //WIFI CONNCETOR process
+			wifi_t.esp8266_login_cloud_success =0;
+			wifi_t.runCommand_order_lable=wifi_link_tencent_cloud;
+			wifi_t.wifi_config_net_lable= wifi_set_restor;
+			wifi_t.power_on_login_tencent_cloud_flag=0;
+			wifi_t.link_tencent_step_counter=0;
+			wifi_t.gTimer_linking_tencent_duration=0; //166s -2分7秒
+
+
+}
 
 /*********************************************************************************
 *
@@ -134,6 +165,59 @@ void mode_long_short_key_fun(void)
      }
 
  }
+
+void mode_key_long_init(void)
+{
+
+    gkey_t.key_mode = mode_set_timer;
+    gkey_t.key_add_dec_mode = mode_set_timer;
+    gctl_t.ai_flag = 0; //timer tiiming model
+    gkey_t.gTimer_disp_set_timer = 0;       //counter exit timing this "mode_set_timer"
+
+    Set_Timer_Timing_Lcd_Blink();
+           
+
+}
+
+void mode_key_short_init(void)
+{
+
+    
+     if(gkey_t.key_mode  == disp_works_timing){
+         gkey_t.key_mode  = disp_timer_timing;
+       
+           gctl_t.ai_flag = 0; // DON'T DISP AI ICON
+           //counter exit timing this "mode_set_timer"
+        gkey_t.key_mode_switch_flag = 1;
+        gkey_t.key_add_dec_mode = set_temp_value_item;
+        LCD_Disp_Timer_Timing_Init();
+         
+         buzzer_sound();
+    
+        if(wifi_link_net_state()==1){
+            MqttData_Publish_SetState(2); //timer model  = 2, works model = 1
+            HAL_Delay(200);
+        }
+    
+    }
+    else{
+        gkey_t.key_mode_switch_flag = 1;
+        gkey_t.key_mode  = disp_works_timing;
+        gkey_t.key_add_dec_mode = set_temp_value_item;
+        gctl_t.ai_flag = 1; // AI DISPLAY AI ICON
+        LCD_Disp_Works_Timing_Init();
+         buzzer_sound();
+        if(wifi_link_net_state()==1){
+            MqttData_Publish_SetState(1); //timer model  = 2, works model = 1
+            HAL_Delay(200);
+         }
+    
+     
+    
+        }
+
+}
+
 
 
 /***************************************************************************

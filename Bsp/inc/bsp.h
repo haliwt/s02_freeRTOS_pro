@@ -114,6 +114,7 @@ typedef struct {
    uint8_t gTimer_publish_tencent_dht11;
    uint8_t gTimer_compare_temp;
    uint8_t gTimer_ptc_detected;
+   uint8_t gTimer_exit_mode_long_key;
 
    
  

@@ -7,7 +7,7 @@ uint8_t receive_task_start;
 uint8_t key_long_counter;
 uint16_t power_key_long_counter ;
 uint8_t  dc_power_on;
-
+uint8_t key_mode_long_sound_flag,key_power_long_sound_flag;
 
 /*
 **********************************************************************************************************
@@ -19,8 +19,8 @@ uint8_t  dc_power_on;
 #define DEC_KEY_2           (1 << 2)
 #define ADD_KEY_3           (1 << 3)
 
-#define RUN_POWER_4         (1 << 4)
-#define RUN_MODE_5          (1 << 5)
+#define POWER_LONG_KEY_4         (1 << 4)
+#define MODE_LONG_KEY_5          (1 << 5)
 #define RUN_DEC_6           (1 << 6)
 #define RUN_ADD_7           (1 << 7)
 
@@ -45,6 +45,10 @@ static void AppTaskCreate (void);
 //static TaskHandle_t xHandleTaskLED = NULL;
 static TaskHandle_t xHandleTaskMsgPro = NULL;
 static TaskHandle_t xHandleTaskStart = NULL;
+
+uint32_t mode_key_long_conter;
+uint32_t power_key_long_conter;
+
 
 /**********************************************************************************************************
 *	函 数 名: main
@@ -88,22 +92,58 @@ static void vTaskMsgPro(void *pvParameters)
 		
 	   if(KEY_POWER_VALUE()==KEY_DOWN){
 
+
+        while(KEY_POWER_VALUE() == KEY_DOWN && power_key_long_conter < 2965500){
+
+               power_key_long_conter++;
+               if(power_key_long_conter > 2265000){
+                   power_key_long_conter = 2965900;
+
+                xTaskNotify(xHandleTaskStart, /* 目标任务 */
+                            POWER_LONG_KEY_4,            /* 设置目标任务事件标志位bit0  */
+                            eSetBits);          /* 将目标任务的事件标志位与BIT_0进行或操作，  将结果赋值给事件标志位。*/
+
+                       key_power_long_sound_flag =1;
+
+                }
+
+         }
+
      
+       if(power_key_long_conter < 2965000 ){
 
         xTaskNotify(xHandleTaskStart,  /* 目标任务 */
         POWER_KEY_0,      /* 设置目标任务事件标志位bit0  */
         eSetBits);  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志位 */
        
-
+        }
   
 
        }
        else if(KEY_MODE_VALUE() == KEY_DOWN){
+
+        while(KEY_MODE_VALUE() == KEY_DOWN && mode_key_long_conter < 2965500){
+
+               mode_key_long_conter++;
+               if(mode_key_long_conter > 2265000){
+                   mode_key_long_conter = 2965900;
+               
+//               xTaskNotify(xHandleTaskMsgPro, /* 目标任务 */
+//                         MODE_LONG_KEY_10,            /* 设置目标任务事件标志位bit0  */
+//                         eSetBits);          /* 将目标任务的事件标志位与BIT_0进行或操作，  将结果赋值给事件标志位。*/
+//
+                    key_mode_long_sound_flag =1;
+               }
+
+
+         }
+
+        if(mode_key_long_conter < 2965000 ){
           
-        xTaskNotify(xHandleTaskStart,  /* 目标任务 */
+               xTaskNotify(xHandleTaskStart,  /* 目标任务 */
                MODE_KEY_1,     /* 设置目标任务事件标志位bit0  */
                eSetBits) ; /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志位 */
-             
+          }  
 
         }
       else if(KEY_ADD_VALUE() == KEY_DOWN){
@@ -143,6 +183,8 @@ static void vTaskStart(void *pvParameters)
    static uint8_t sound_flag,power_on_first;
    uint32_t ulValue;
    static uint8_t add_flag,dec_flag,power_sound_flag,powr_on_short_key;
+   //static uint8_t key_mode_long_sound_flag,key_power_long_sound_flag;
+   static uint8_t mode_sound_flag;
 
     while(1)
     {
@@ -158,19 +200,26 @@ static void vTaskStart(void *pvParameters)
 			/* 接收到消息，检测那个位被按下 */
 			if((ulValue & POWER_KEY_0 ) != 0)
 			{
-				//printf("接收到K2按键按下消息, ulNotifiedValue = 0x%08x\r\n", ulValue);
-				//printf("receive notice key1_bit0 \n");
-				gkey_t.power_key_long_counter =1;
-				 powr_on_short_key = 1;
-                
+				
+                if(key_power_long_sound_flag !=2){
+			   	   powr_on_short_key =1;//gpro_t.key_power_be_pressed_flag =1;
+                }
+                power_key_long_conter =0;
             }
+//            else if((ulValue & POWER_LONG_KEY_4) != 0){
+//
+//                if(gpro_t.gPower_On==power_on){
+//                
+//                     key_power_long_sound_flag =1;
+//                
+//                    }
+//            }
             else if((ulValue &  MODE_KEY_1 ) != 0)   /* 接收到消息，检测那个位被按下 */
 			{
 
                  if(gkey_t.key_power == power_on ){
                 
-
-                  gkey_t.key_mode_long_counter=1;
+                   mode_sound_flag = 1;
 
                
               
@@ -217,17 +266,44 @@ static void vTaskStart(void *pvParameters)
 
           if(powr_on_short_key==1){
             powr_on_short_key++;
-            //Buzzer_KeySound();
-            power_long_short_key_fun();
+            power_onoff_init();
+            Buzzer_KeySound();
+            //power_long_short_key_fun();
 
          }
-        
-         // if(gkey_t.power_key_long_counter ==0 || gkey_t.power_key_long_counter==200){
+       
           if(gkey_t.key_power==power_on){
-                 bsp_Idle();
-                 mode_long_short_key_fun();
+                
+              //   mode_long_short_key_fun();
 
-                if(add_flag ==1){
+                if(mode_sound_flag ==1){
+                    mode_sound_flag++;
+                    mode_key_short_init();
+                    Buzzer_KeySound();
+
+
+
+                }
+                else if(key_mode_long_sound_flag == 1){
+                    key_mode_long_sound_flag++;
+                     //mode_long_short_key_fun();
+                     mode_key_long_init();
+
+                      Buzzer_KeySound();
+                      gpro_t.gTimer_exit_mode_long_key =0;
+
+                }
+                else if(key_power_long_sound_flag ==1){
+                    key_power_long_sound_flag++;
+                    
+                    power_on_long_key_init();
+                   Buzzer_KeySound();
+                   gpro_t.gTimer_exit_mode_long_key =0;
+
+
+
+                }
+                else if(add_flag ==1){
                      add_flag ++;
                      Buzzer_KeySound();
 
@@ -238,7 +314,7 @@ static void vTaskStart(void *pvParameters)
 
                  }
 
-                 
+                 //function 
                  if(add_flag ==2){
                     add_flag ++;
                     Add_Key_Fun(gkey_t.key_add_dec_mode);
@@ -248,9 +324,32 @@ static void vTaskStart(void *pvParameters)
 
                        dec_flag ++;
                        Dec_Key_Fun(gkey_t.key_add_dec_mode);
+
                  }
 
-           }
+                 
+                   if(gpro_t.gTimer_exit_mode_long_key > 1 && (key_power_long_sound_flag  == 2 ||  key_mode_long_sound_flag==2 )){
+           
+                            if(key_power_long_sound_flag ==2){
+                                power_key_long_conter =0; //clear power key loong flag .
+                               key_power_long_sound_flag  = 0;
+           
+           
+                            }
+                             
+                           if(key_mode_long_sound_flag==2){
+                                key_mode_long_sound_flag =0;
+                               mode_key_long_conter =0;
+           
+                             }
+           
+                            
+                          }
+
+
+                    bsp_Idle();
+
+              }
                 
        
             if(gkey_t.key_power==power_on){
