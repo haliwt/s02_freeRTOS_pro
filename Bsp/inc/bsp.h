@@ -114,7 +114,6 @@ typedef struct {
    uint8_t gTimer_publish_tencent_dht11;
    uint8_t gTimer_compare_temp;
    uint8_t gTimer_ptc_detected;
-   uint8_t gTimer_exit_mode_long_key;
 
    
  
@@ -139,7 +138,6 @@ void mainboard_active_handler(void);
 
 void Detected_Fan_Error(void);
 void Detected_Ptc_Error(void);
-void power_off_function(void);
 
 
 #endif 

@@ -299,10 +299,10 @@ static void RunWifi_Command_Handler(void)
 	   wifi_t.three_times_link_beijing++ ;
 	  
 
-	   if(wifi_t.three_times_link_beijing >0 && wifi_t.three_times_link_beijing <4){
+	   if(wifi_t.three_times_link_beijing >0 && wifi_t.three_times_link_beijing <4 ){
 		
 
-	    wifi_t.beijing_time_flag =1;
+	   
 	   	wifi_t.set_beijing_time_flag =1;
 		wifi_t.gTimer_auto_detected_net_state_times =0;
 	
@@ -311,8 +311,8 @@ static void RunWifi_Command_Handler(void)
 		wifi_t.runCommand_order_lable= wifi_get_beijing_time;
        }
 	   else{
-        if(wifi_t.three_times_link_beijing % 2 == 0){
-			wifi_t.beijing_time_flag =1;
+        if(wifi_t.three_times_link_beijing % 4 == 0 && gctl_t.beijing_time_flag == 1){
+			
 			wifi_t.set_beijing_time_flag =1;
 			wifi_t.gTimer_auto_detected_net_state_times =0;
 		
@@ -324,7 +324,7 @@ static void RunWifi_Command_Handler(void)
         }
 		else{
 			wifi_t.runCommand_order_lable= wifi_auto_repeat_link_cloud;
-             wifi_t.gTimer_auto_detected_net_state_times = 185;
+             
 
 
 		}
@@ -347,23 +347,19 @@ static void RunWifi_Command_Handler(void)
 	if(wifi_t.real_hours < 25 && wifi_t.real_minutes < 61 && beijing_step ==3){
 
 		beijing_step ++;
-		if(wifi_t.receive_beijing_time==0){
-
-			 wifi_t.receive_beijing_time++;
-
-	     }
-		else{
-			//gctl_t.disp_works_hours   = wifi_t.real_hours;
+		
+			
+           if(wifi_t.real_hours == 0x08 && wifi_t.real_minutes ==0x01){
+             
+                                 
+             }
+            else{
 
              gpro_t.disp_works_hours_value = wifi_t.real_hours;
 
-			//gctl_t.disp_works_minutes = wifi_t.real_minutes;
+		     gpro_t.disp_works_minutes_value = wifi_t.real_minutes;
 
-            gpro_t.disp_works_minutes_value = wifi_t.real_minutes;
-
-			//gctl_t.gTimer_ctl_disp_disp_works_timing_second= wifi_t.real_seconds;
-
-            gpro_t.gTimer_works_counter_sencods = wifi_t.real_seconds;
+		     gpro_t.gTimer_works_counter_sencods = wifi_t.real_seconds;
 
 			gctl_t.beijing_time_flag = 1; //WT.2024.04.25
             LCD_Disp_Works_Timing_Init();
@@ -477,7 +473,6 @@ static void RunWifi_Command_Handler(void)
 	//if(wifi_t.gTimer_read_beijing_time > 2 && wifi_t.gTimer_read_beijing_time < 4){
 	if(wifi_t.gTimer_read_beijing_time > 0 && beijing_step ==1){//
 		beijing_step =2;
-		wifi_t.beijing_time_flag =0;
 		Get_Beijing_Time();
 		HAL_Delay(100);
 		wifi_t.gTimer_read_beijing_time=0;
@@ -488,7 +483,7 @@ static void RunWifi_Command_Handler(void)
 	if(beijing_step ==2 && wifi_t.gTimer_read_beijing_time > 2){
 
 		
-		wifi_t.beijing_time_flag = 1;
+	
 
 		wifi_t.real_hours = (wifi_t.wifi_data[134]-0x30)*10 + wifi_t.wifi_data[135]-0x30;
 		wifi_t.real_minutes =(wifi_t.wifi_data[137]-0x30)*10 + wifi_t.wifi_data[138]-0x30;

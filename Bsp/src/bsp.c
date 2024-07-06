@@ -6,7 +6,7 @@ static uint8_t Works_Time_Out(void);
 static void Mainboard_Action_Fun(void);
 static void Mainboard_Fun_Stop(void);
 static void Process_Dynamical_Action(void);
-//static void power_off_function(void);
+static void power_off_function(void);
 static void power_on_init_function(void);
 
 static void interval_continuce_works_fun(void);
@@ -145,38 +145,38 @@ void power_on_run_handler(void)
 
 
 
-          gctl_t.step_process=3;
+          gctl_t.step_process=4;
 		  
           break;
 
-		  case 3: //mainboard of hardware function .
-
-          #if 0
-
-           if(gpro_t.gTimer_run_adc > 6 && gpro_t.gTimer_run_adc < 8){ //3 minutes 120s
-				
-			  Get_PTC_Temperature_Voltage(ADC_CHANNEL_1,20);
-			  
-					
-          }
-          #endif 
-
-         #if 0
-
-		  if(gpro_t.gTimer_run_adc > 13 && gctl_t.interval_stop_run_flag==0){ //2 minute 180s
-				gpro_t.gTimer_run_adc=0;
-
-                if( gctl_t.interval_stop_run_flag  ==0){
-				   Get_Fan_Adc_Fun(ADC_CHANNEL_0,20);
-                }
-				
-	               
-
-		 }
-         #endif 
-	
-         gctl_t.step_process=4;
-		break;
+//		  case 3: //mainboard of hardware function .
+//
+//          #if 0
+//
+//           if(gpro_t.gTimer_run_adc > 6 && gpro_t.gTimer_run_adc < 8){ //3 minutes 120s
+//				
+//			  Get_PTC_Temperature_Voltage(ADC_CHANNEL_1,20);
+//			  
+//					
+//          }
+//          #endif 
+//
+//         #if 0
+//
+//		  if(gpro_t.gTimer_run_adc > 13 && gctl_t.interval_stop_run_flag==0){ //2 minute 180s
+//				gpro_t.gTimer_run_adc=0;
+//
+//                if( gctl_t.interval_stop_run_flag  ==0){
+//				   Get_Fan_Adc_Fun(ADC_CHANNEL_0,20);
+//                }
+//				
+//	               
+//
+//		 }
+//         #endif 
+//	
+//         gctl_t.step_process=4;
+//		break;
 
 
 		 // handler of wifi 
@@ -539,7 +539,7 @@ static void interval_continuce_works_fun(void)
 *Return Ref:NO
 *
 ************************************************************************/
-void power_off_function(void)
+static void power_off_function(void)
 {
 
   if(gpro_t.power_off_flag == 1){

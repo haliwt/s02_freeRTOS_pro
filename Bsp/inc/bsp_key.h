@@ -91,14 +91,6 @@ void Dec_Key_Fun(uint8_t cmd);
 
 void Add_Key_Fun(uint8_t cmd);
 
-void power_onoff_init(void);
-
-void power_on_long_key_init(void);
-
-void mode_key_long_init(void);
-
-
-void mode_key_short_init(void);
 
 
 #endif 

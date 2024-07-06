@@ -94,7 +94,7 @@ void PowerOff_Off_Led(void)
 void Display_Works_Timing(void)
 {
 
-    if(gpro_t.gTimer_works_counter_sencods > 59 ){
+    if(gpro_t.gTimer_works_counter_sencods > 59){
 
 	  gpro_t.gTimer_works_counter_sencods=0;
 
@@ -142,8 +142,8 @@ void Display_Works_Timing(void)
 
 	    
     }
-	 
-    Display_LCD_Works_Timing();
+
+   
     
 
    }
