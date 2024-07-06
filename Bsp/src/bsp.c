@@ -106,7 +106,7 @@ void power_on_run_handler(void)
 		   gpro_t.set_timer_timing_hours=0;
 		   gpro_t.set_timer_timing_minutes=0;
 
-           gpro_t.gTimer_disp_timer_timing_statue = 10;
+        
            gpro_t.first_disp_work_time=0;
             
 		    gctl_t.step_process = 1;
@@ -114,19 +114,9 @@ void power_on_run_handler(void)
 
 		  break;
 
-		   case 1: // display works and timer and set timer timing proc
-          
-//	        if(gpro_t.gTimer_disp_timer_timing_statue > 4) {
-//                gpro_t.gTimer_disp_timer_timing_statue=0;
-//		       Display_WorksTimingr_Handler(gkey_t.key_mode);
-//
-//             }
-          
 
 
-			gctl_t.step_process=2;
-
-		  case 2:   //run dht11 display 
+		  case 1:   //run dht11 display 
 
              if(gpro_t.gTimer_run_dht11 > 12  || power_on_run_dht11_times < 10){
                 gpro_t.gTimer_run_dht11=0;
@@ -145,42 +135,11 @@ void power_on_run_handler(void)
 
 
 
-          gctl_t.step_process=4;
+          gctl_t.step_process=2;
 		  
           break;
 
-//		  case 3: //mainboard of hardware function .
-//
-//          #if 0
-//
-//           if(gpro_t.gTimer_run_adc > 6 && gpro_t.gTimer_run_adc < 8){ //3 minutes 120s
-//				
-//			  Get_PTC_Temperature_Voltage(ADC_CHANNEL_1,20);
-//			  
-//					
-//          }
-//          #endif 
-//
-//         #if 0
-//
-//		  if(gpro_t.gTimer_run_adc > 13 && gctl_t.interval_stop_run_flag==0){ //2 minute 180s
-//				gpro_t.gTimer_run_adc=0;
-//
-//                if( gctl_t.interval_stop_run_flag  ==0){
-//				   Get_Fan_Adc_Fun(ADC_CHANNEL_0,20);
-//                }
-//				
-//	               
-//
-//		 }
-//         #endif 
-//	
-//         gctl_t.step_process=4;
-//		break;
-
-
-		 // handler of wifi 
-	  case 4: //7
+	  case 2: //7
 
 	  
 	   if(wifi_link_net_state()==1 && wifi_t.smartphone_app_power_on_flag==0 && wifi_t.link_net_tencent_data_flag ==1){ //after send publish datat to tencent .){

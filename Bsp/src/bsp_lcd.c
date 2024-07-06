@@ -544,7 +544,7 @@ void LCD_Fault_Numbers_Code(void)
   //number '1' or '2'
  
   //"01" or "o2" blink
-  if(glcd_t.gTimer_error_times < 10){ //300ms
+  if(glcd_t.gTimer_error_times < 50){ //500ms
   	if(gctl_t.ptc_warning ==1 && gctl_t.fan_warning ==0){ //code is "02" ==1){ 
 
          //TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[1] + lcdNumber8_Low[1] +BUG_Symbol) & 0xffff); //numbers : '2' addr: 0xC
@@ -603,7 +603,7 @@ void LCD_Fault_Numbers_Code(void)
   
    }
    }
-  else if(glcd_t.gTimer_error_times > 9 && glcd_t.gTimer_error_times < 20){
+  else if(glcd_t.gTimer_error_times > 49 && glcd_t.gTimer_error_times < 100){
 
 
    if(gctl_t.ptc_warning ==1 && gctl_t.fan_warning ==0 ){ //code is "02" ==1){ 
@@ -664,7 +664,7 @@ void LCD_Fault_Numbers_Code(void)
       
    }
   }
-  else if(glcd_t.gTimer_error_times > 19){
+  else if(glcd_t.gTimer_error_times > 99){
       glcd_t.gTimer_error_times =0;
       if(gctl_t.ptc_warning ==1 && gctl_t.fan_warning ==0){ //code is "02" ==1){ 
     	//TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[1] + lcdNumber8_Low[1] +BUG_Symbol) & 0xffff); //numbers : '2' addr: 0xC

@@ -113,7 +113,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     	
     }
 	
-    if(tm3>99){ //10*10 = 100ms 
+    if(tm3>99){ //1*100 = 100ms 
        tm3=0;
      
             //key timer
@@ -133,23 +133,21 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
       
           //control timer
         gctl_t.gTimer_wifi_blink++;
-       gctl_t.gTimer_prcoess_iwdg++;
+    
   
-       gctl_t.gTimer_ctl_usart2_error++;
 	   
        //key timer
 	
         gkey_t.gTimer_power_off_run_times++;
         gkey_t.gTimer_set_temp_value++;
-     
         gkey_t.gTimer_disp_set_timer++;
-        gpro_t.gTimer_ptc_detected++;
+       
 
         //lcd timer
      
 
         //process gtimer
-        gpro_t.gTimer_disp_timer_timing_statue ++;
+        gpro_t.gTimer_ptc_detected++;
         gpro_t.gTimer_works_counter_sencods ++;
         gpro_t.gTimer_timer_Counter++;
 		gpro_t.gTimer_run_adc++ ;

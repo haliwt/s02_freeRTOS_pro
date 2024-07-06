@@ -708,7 +708,7 @@ void Json_Parse_Command_Fun(void)
             LCD_Disp_Timer_Timing_Init();
 
             
-            gpro_t.gTimer_disp_timer_timing_statue =8; //at once run this display timer timing 
+       
          
             MqttData_Publish_SetState(2); //timer model  = 2, works model = 1
 			HAL_Delay(200);
@@ -737,8 +737,7 @@ void Json_Parse_Command_Fun(void)
 
            
 
-            
-            gpro_t.gTimer_disp_timer_timing_statue =8; //at once run thi this display timer timing .
+           
             MqttData_Publish_SetState(1); //beijing timing = 1
 			HAL_Delay(200);
 			

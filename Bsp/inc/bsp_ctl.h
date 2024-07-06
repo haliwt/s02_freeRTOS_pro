@@ -45,10 +45,10 @@ typedef struct _bsp_ctl{
 	uint8_t ptc_warning;
 	uint8_t fan_warning;
 
-    uint8_t gTimer_prcoess_iwdg;
+
 	uint8_t gTimer_process_display;
     uint8_t gTimer_wifi_blink;
-    uint8_t gTimer_ctl_usart2_error;
+
     uint8_t gTimer_wifi_fast_blink;
 
     
