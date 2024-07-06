@@ -344,29 +344,29 @@ static void RunWifi_Command_Handler(void)
 
 	}
 
-	if(wifi_t.real_hours < 25 && wifi_t.real_minutes < 61 && beijing_step ==3){
-
-		beijing_step ++;
-		
-			
-           if(wifi_t.real_hours == 0x08 && wifi_t.real_minutes ==0x01){
-             
-                                 
-             }
-            else{
-
-             gpro_t.disp_works_hours_value = wifi_t.real_hours;
-
-		     gpro_t.disp_works_minutes_value = wifi_t.real_minutes;
-
-		     gpro_t.gTimer_works_counter_sencods = wifi_t.real_seconds;
-
-			gctl_t.beijing_time_flag = 1; //WT.2024.04.25
-            LCD_Disp_Works_Timing_Init();
-		
-
-		}
-	}
+//	if(wifi_t.real_hours < 25 && wifi_t.real_minutes < 61 && beijing_step ==3){
+//
+//		beijing_step ++;
+//		
+//			
+//           if(wifi_t.real_hours == 0x08 && wifi_t.real_minutes ==0x01){
+//             
+//                                 
+//             }
+//            else{
+//
+//             gpro_t.disp_works_hours_value = wifi_t.real_hours;
+//
+//		     gpro_t.disp_works_minutes_value = wifi_t.real_minutes;
+//
+//		     gpro_t.gTimer_works_counter_sencods = wifi_t.real_seconds;
+//
+//			gctl_t.beijing_time_flag = 1; //WT.2024.04.25
+//            LCD_Disp_Works_Timing_Init();
+//		
+//
+//		}
+//	}
 
 	
 
@@ -493,7 +493,34 @@ static void RunWifi_Command_Handler(void)
 
          wifi_t.get_beijing_timing_success = 1;
 
+         if(wifi_t.real_hours < 25 && wifi_t.real_minutes < 61 ){
+
+		     if(wifi_t.real_hours == 0x08 && wifi_t.real_minutes ==0x01){
+             
+                                 
+             }
+            else{
+
+             gpro_t.disp_works_hours_value = wifi_t.real_hours;
+
+		     gpro_t.disp_works_minutes_value = wifi_t.real_minutes;
+
+		     gpro_t.gTimer_works_counter_sencods = wifi_t.real_seconds;
+
+			gctl_t.beijing_time_flag = 1; //WT.2024.04.25
+            LCD_Disp_Works_Timing_Init();
+		
+
+		   }
+	     }
+
+
+
+
+         
+
 		wifi_t.runCommand_order_lable=wifi_publish_update_tencent_cloud_data;
+        
 		beijing_step =3;
 		
 	}
