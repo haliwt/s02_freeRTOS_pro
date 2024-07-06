@@ -47,6 +47,8 @@ void power_long_short_key_fun(void)
               gkey_t.key_power=power_on;
               gkey_t.key_mode = disp_timer_timing;
                gctl_t.ai_flag = 1;
+               gctl_t.ptc_warning =0;
+               gctl_t.fan_warning =0;
               
               gctl_t.step_process=0;
             }

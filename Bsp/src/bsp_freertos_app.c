@@ -244,12 +244,14 @@ static void vTaskStart(void *pvParameters)
               
         if(power_sound_flag==0){
           power_sound_flag++;
-
+       
+        
           buzzer_sound();
 
         }
 
           power_long_short_key_fun();
+        
         
           if(gkey_t.power_key_long_counter ==0 || gkey_t.power_key_long_counter==200){
           if(gkey_t.key_power==power_on){

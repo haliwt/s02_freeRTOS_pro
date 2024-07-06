@@ -527,7 +527,7 @@ static uint8_t Detecting_Fault_Code(void)
 void LCD_Fault_Numbers_Code(void)
 {
 
- static uint8_t switch_disp_flag;
+
  // display "E"
 
  TM1723_Write_Display_Data(0xC9,(lcdNumber5_Low_E[0]  + lcdNumber5_High_E[0] + DRY_Symbol ) & 0xffff); //numbers : '3' addr: 0xC2
@@ -544,7 +544,7 @@ void LCD_Fault_Numbers_Code(void)
   //number '1' or '2'
  
   //"01" or "o2" blink
-  if(glcd_t.gTimer_error_times < 50){ //500ms
+  if(glcd_t.gTimer_error_times < 2){ //500ms
   	if(gctl_t.ptc_warning ==1 && gctl_t.fan_warning ==0){ //code is "02" ==1){ 
 
          //TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[1] + lcdNumber8_Low[1] +BUG_Symbol) & 0xffff); //numbers : '2' addr: 0xC
@@ -574,8 +574,8 @@ void LCD_Fault_Numbers_Code(void)
      }
      else if(gctl_t.ptc_warning ==1 && gctl_t.fan_warning ==1){ //code is "02" ==1){ 
 
-       if(switch_disp_flag==0 ){
-          switch_disp_flag++;
+
+       
 
           if(ultrasonic_state()==1){
         
@@ -586,24 +586,10 @@ void LCD_Fault_Numbers_Code(void)
             TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[1] + lcdNumber8_Low[1]) & 0xffff);
 
           }
-       }
-       else{
 
-            switch_disp_flag=0;
-            if(ultrasonic_state()==1){
-                TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[2] + lcdNumber8_Low[2] +BUG_Symbol) & 0xffff); //numbers : '2' addr: 0xC
-            }
-            else{
-                 TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[2] + lcdNumber8_Low[2]) & 0xffff); 
-
-            }
-
-         }
-
-  
+      }
    }
-   }
-  else if(glcd_t.gTimer_error_times > 49 && glcd_t.gTimer_error_times < 100){
+  else if(glcd_t.gTimer_error_times > 1 && glcd_t.gTimer_error_times < 4){
 
 
    if(gctl_t.ptc_warning ==1 && gctl_t.fan_warning ==0 ){ //code is "02" ==1){ 
@@ -633,23 +619,21 @@ void LCD_Fault_Numbers_Code(void)
      }
      else if(gctl_t.ptc_warning==1 &&  gctl_t.fan_warning ==1 ){
 
-      if(switch_disp_flag==0){
-        switch_disp_flag++;
-  	    //TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[1] + lcdNumber8_Low[1]) & 0xffff); //numbers : '2' addr: 0xC
-        
-      if(ultrasonic_state()==1){
-             
-                   TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[1] + lcdNumber8_Low[1] +BUG_Symbol) & 0xffff);
-               }//numbers : '2' addr: 0xC
-               else{
-                 
-                 TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[1] + lcdNumber8_Low[1]) & 0xffff);
+        //err:01;
+//        if(ultrasonic_state()==1){
+//             
+//                   TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[1] + lcdNumber8_Low[1] +BUG_Symbol) & 0xffff);
+//               }//numbers : '2' addr: 0xC
+//               else{
+//                 
+//                 TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[1] + lcdNumber8_Low[1]) & 0xffff);
+//      
+//               }
+          
       
-               }
+   	 
 
-      }
-   	  else{
-       switch_disp_flag=0;
+        //error : 02
         if(ultrasonic_state()==1){
                 TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[2] + lcdNumber8_Low[2] +BUG_Symbol) & 0xffff); //numbers : '2' addr: 0xC
             }
@@ -657,14 +641,15 @@ void LCD_Fault_Numbers_Code(void)
                  TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[2] + lcdNumber8_Low[2]) & 0xffff); 
 
             }
+
+            
+       
          
    	   //TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[2] + lcdNumber8_Low[2]) & 0xffff); //numbers : '2' addr: 0xC
 
       }
-      
    }
-  }
-  else if(glcd_t.gTimer_error_times > 99){
+   else if(glcd_t.gTimer_error_times > 3){
       glcd_t.gTimer_error_times =0;
       if(gctl_t.ptc_warning ==1 && gctl_t.fan_warning ==0){ //code is "02" ==1){ 
     	//TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[1] + lcdNumber8_Low[1] +BUG_Symbol) & 0xffff); //numbers : '2' addr: 0xC
@@ -695,41 +680,43 @@ void LCD_Fault_Numbers_Code(void)
      }
      else if(gctl_t.ptc_warning ==1 && gctl_t.fan_warning ==1){ //code is "02" ==1){ 
 
-       if(switch_disp_flag==0){
-             switch_disp_flag++;
-          //TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[1] + lcdNumber8_Low[1] +BUG_Symbol) & 0xffff); //numbers : '2' addr: 0xC
-          if(ultrasonic_state()==1){
+      
+//         //err:01
+//          if(ultrasonic_state()==1){
+//        
+//              TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[1] + lcdNumber8_Low[1] +BUG_Symbol) & 0xffff);
+//          }//numbers : '2' addr: 0xC
+//          else{
+//            
+//            TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[1] + lcdNumber8_Low[1]) & 0xffff);
+//
+//            }
+
+
+           
         
-              TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[1] + lcdNumber8_Low[1] +BUG_Symbol) & 0xffff);
-          }//numbers : '2' addr: 0xC
-          else{
-            
-            TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[1] + lcdNumber8_Low[1]) & 0xffff);
+       
+      
+           
+//           //err:02
+//            if(ultrasonic_state()==1){
+//                TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[2] + lcdNumber8_Low[2] +BUG_Symbol) & 0xffff); //numbers : '2' addr: 0xC
+//            }
+//            else{
+//                 TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[2] + lcdNumber8_Low[2]) & 0xffff); 
+//
+//            }
+          
 
-          }
-
-       }
-        else{
-               switch_disp_flag=0;
-            //TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[2] + lcdNumber8_Low[2] +BUG_Symbol) & 0xffff); //numbers : '2' addr: 0xC
-            if(ultrasonic_state()==1){
-                TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[2] + lcdNumber8_Low[2] +BUG_Symbol) & 0xffff); //numbers : '2' addr: 0xC
-            }
-            else{
-                 TM1723_Write_Display_Data(0xCC,(lcdNumber8_High[2] + lcdNumber8_Low[2]) & 0xffff); 
-
-            }
+           
 
         }
 
   
    }
 
-  }
- 
-
-
 }
+ 
 /*****************************************************************************
  * 
  * Function Name:  void LCD_Wind_Icon(uint8_t wind_sppeed)

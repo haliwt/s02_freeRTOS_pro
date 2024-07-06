@@ -122,7 +122,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
        //lcd timer 
        glcd_t.gTimer_colon_blink++ ;
        
-       glcd_t.gTimer_error_times++;
+      
        
       
     }
@@ -133,6 +133,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
       
           //control timer
         gctl_t.gTimer_wifi_blink++;
+       glcd_t.gTimer_error_times++;
     
   
 	   

@@ -72,7 +72,7 @@ void Get_PTC_Temperature_Voltage(uint32_t channel,uint8_t times)
       printf("ptc= %d",run_t.ptc_temp_voltage);
 	#endif 
 
-   
+ 
 
     #endif 
 
@@ -142,6 +142,7 @@ void Get_Fan_Adc_Fun(uint32_t channel,uint8_t times)
 
     fan_detect_voltage  =(uint16_t)((adc_fan_hex * 3300)/4096); //amplification 1000 ,3.111V -> 3111
 	
+   
 
 
     #if BALL_FAN
