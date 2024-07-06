@@ -137,7 +137,7 @@ void Display_Works_Timing(void)
     
 
    
-    
+    Display_LCD_Works_Timing();
 
    }
 

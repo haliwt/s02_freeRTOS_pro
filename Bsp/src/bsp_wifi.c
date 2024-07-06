@@ -522,6 +522,7 @@ static void RunWifi_Command_Handler(void)
          
 
 		wifi_t.runCommand_order_lable=wifi_publish_update_tencent_cloud_data;
+       wifi_t.get_rx_beijing_time_enable=0; //enable beijing times
         
 		beijing_step =3;
 		
