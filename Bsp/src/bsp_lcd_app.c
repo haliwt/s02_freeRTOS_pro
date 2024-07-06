@@ -93,7 +93,7 @@ void PowerOff_Off_Led(void)
 */
 void Display_Works_Timing(void)
 {
-
+    static uint8_t minutes_change_flag = 0xff;
     if(gpro_t.gTimer_works_counter_sencods > 59){
 
 	  gpro_t.gTimer_works_counter_sencods=0;
@@ -106,12 +106,12 @@ void Display_Works_Timing(void)
 	     gpro_t.disp_works_hours_value++;
 
 
-		glcd_t.number7_low = gpro_t.disp_works_minutes_value / 10;
-		glcd_t.number7_high = gpro_t.disp_works_minutes_value / 10;
-
-
-		glcd_t.number8_low = gpro_t.disp_works_minutes_value  % 10;
-		glcd_t.number8_high = gpro_t.disp_works_minutes_value % 10;
+//		glcd_t.number7_low = gpro_t.disp_works_minutes_value / 10;
+//		glcd_t.number7_high = gpro_t.disp_works_minutes_value / 10;
+//
+//
+//		glcd_t.number8_low = gpro_t.disp_works_minutes_value  % 10;
+//		glcd_t.number8_high = gpro_t.disp_works_minutes_value % 10;
 
 		//display hours works
         if(gpro_t.disp_works_hours_value > 99){
@@ -123,12 +123,12 @@ void Display_Works_Timing(void)
 
        
 		
-		glcd_t.number5_low = gpro_t.disp_works_hours_value / 10;
-		glcd_t.number5_high = gpro_t.disp_works_hours_value / 10;
-
-
-		glcd_t.number6_low = gpro_t.disp_works_hours_value  % 10;
-		glcd_t.number6_high = gpro_t.disp_works_hours_value % 10;
+//		glcd_t.number5_low = gpro_t.disp_works_hours_value / 10;
+//		glcd_t.number5_high = gpro_t.disp_works_hours_value / 10;
+//
+//
+//		glcd_t.number6_low = gpro_t.disp_works_hours_value  % 10;
+//		glcd_t.number6_high = gpro_t.disp_works_hours_value % 10;
 
         
 		
@@ -137,7 +137,34 @@ void Display_Works_Timing(void)
     
 
    
-    Display_LCD_Works_Timing();
+    //Display_LCD_Works_Timing();
+
+   }
+
+    if(( minutes_change_flag != gpro_t.disp_works_minutes_value) || gpro_t.disp_timer_switch_time_flag >0){
+ 
+         if(minutes_change_flag != gpro_t.disp_works_minutes_value)minutes_change_flag = gpro_t.disp_works_minutes_value;
+
+         if(gpro_t.disp_timer_switch_time_flag >0) gpro_t.disp_timer_switch_time_flag=0;
+         
+        glcd_t.number5_low = gpro_t.disp_works_hours_value / 10;
+		glcd_t.number5_high = gpro_t.disp_works_hours_value / 10;
+
+
+		glcd_t.number6_low = gpro_t.disp_works_hours_value  % 10;
+		glcd_t.number6_high = gpro_t.disp_works_hours_value % 10;
+
+
+        glcd_t.number7_low = gpro_t.disp_works_minutes_value / 10;
+		glcd_t.number7_high = gpro_t.disp_works_minutes_value / 10;
+
+
+		glcd_t.number8_low = gpro_t.disp_works_minutes_value  % 10;
+		glcd_t.number8_high = gpro_t.disp_works_minutes_value % 10;
+        Display_LCD_Works_Timing();
+
+
+
 
    }
 
@@ -205,6 +232,7 @@ void LCD_Disp_Works_Timing_Init(void)
 void Display_Timer_Timing(void)
 {
 
+    // static uint8_t minutes_changed_flag = 0xff;
      if(gpro_t.gTimer_timer_Counter > 59){
 	    gpro_t.gTimer_timer_Counter =0;
 		
@@ -252,8 +280,14 @@ void Display_Timer_Timing(void)
          LCD_Disp_Timer_Timing();
 		    
      }
+
+//     if(minutes_changed_flag != gpro_t.set_timer_timing_minutes){
+//
+//
+//
+//     }
      
-    //LCD_Disp_Timer_Timing();
+ 
 
 }
 
@@ -318,11 +352,7 @@ void Display_WorksTimingr_Handler(uint8_t sel_item)
        if(gctl_t.fan_warning ==0 && gctl_t.ptc_warning==0 ){
 
            gctl_t.ai_flag = 1; // AI DISPLAY AI ICON
-           if(gpro_t.first_disp_work_time ==0){
-               gpro_t.first_disp_work_time ++; 
-             LCD_Disp_Works_Timing_Init();
-
-            }
+       
                
             if(switch_counter>0){
                switch_counter =0;
@@ -349,7 +379,7 @@ void Display_WorksTimingr_Handler(uint8_t sel_item)
             if(gkey_t.set_timer_timing_success ==1){
                gctl_t.ai_flag = 0; // don't  DISPLAY AI ICON
                Display_Timer_Timing();
-             //  Record_WorksTime_DonotDisp_Handler();
+             
 
             }
             else if(gkey_t.set_timer_timing_success == 0 ){ //&& gkey_t.gTimer_disp_switch_disp_mode > 3){
@@ -360,7 +390,9 @@ void Display_WorksTimingr_Handler(uint8_t sel_item)
 
                 switch_counter ++;
                 if( switch_counter> 20){
+                    gpro_t.disp_timer_switch_time_flag ++ ;
                  gkey_t.key_mode = disp_works_timing;
+                  
 
                }
                
