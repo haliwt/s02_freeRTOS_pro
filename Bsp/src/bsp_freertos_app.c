@@ -287,6 +287,7 @@ static void vTaskStart(void *pvParameters)
               Record_WorksOr_Timer_Timing_DonotDisp_Handler();
               Detected_Fan_Error();
               Detected_Ptc_Error();
+              disp_works_or_timer_timing_fun();
 
             }
             else{

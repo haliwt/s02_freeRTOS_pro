@@ -139,6 +139,8 @@ void mainboard_active_handler(void);
 void Detected_Fan_Error(void);
 void Detected_Ptc_Error(void);
 
+void disp_works_or_timer_timing_fun(void);
+
 
 #endif 
 

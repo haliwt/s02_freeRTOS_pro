@@ -45,6 +45,9 @@ void power_long_short_key_fun(void)
            sound_flag++;
            if(gkey_t.key_power==power_off){
               gkey_t.key_power=power_on;
+              gkey_t.key_mode = disp_timer_timing;
+               gctl_t.ai_flag = 1;
+              
               gctl_t.step_process=0;
             }
            else{

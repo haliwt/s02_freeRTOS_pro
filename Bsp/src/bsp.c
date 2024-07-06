@@ -116,11 +116,11 @@ void power_on_run_handler(void)
 
 		   case 1: // display works and timer and set timer timing proc
           
-	        if(gpro_t.gTimer_disp_timer_timing_statue > 4) {
-                gpro_t.gTimer_disp_timer_timing_statue=0;
-		       Display_WorksTimingr_Handler(gkey_t.key_mode);
-
-             }
+//	        if(gpro_t.gTimer_disp_timer_timing_statue > 4) {
+//                gpro_t.gTimer_disp_timer_timing_statue=0;
+//		       Display_WorksTimingr_Handler(gkey_t.key_mode);
+//
+//             }
           
 
 
@@ -278,6 +278,16 @@ void mainboard_active_handler(void)
                   }
                }
     
+
+}
+
+void disp_works_or_timer_timing_fun(void)
+{
+
+   Display_WorksTimingr_Handler(gkey_t.key_mode);
+
+       
+          
 
 }
 /*

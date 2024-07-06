@@ -421,7 +421,7 @@ void Display_WorksTimingr_Handler(uint8_t sel_item)
 
 void Record_WorksOr_Timer_Timing_DonotDisp_Handler(void)
 {
-    if(gkey_t.key_mode == disp_timer_timing){
+    if(gkey_t.key_mode == disp_timer_timing ){
     if(gpro_t.gTimer_works_counter_sencods > 59 ){
     
           gpro_t.gTimer_works_counter_sencods=0;
