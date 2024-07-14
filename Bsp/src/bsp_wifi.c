@@ -434,10 +434,10 @@ static void RunWifi_Command_Handler(void)
 	wifi_t.linking_tencent_cloud_doing =0;
     if(wifi_t.set_beijing_time_flag ==1){   //&& wifi_t.gTimer_beijing_time>1){
 		wifi_t.set_beijing_time_flag ++;
-		wifi_t.get_rx_beijing_time_enable=1; //enable beijing times
-		wifi_t.wifi_uart_counter=0;
+		//wifi_t.get_rx_beijing_time_enable=1; //enable beijing times
+		//wifi_t.wifi_uart_counter=0; //wifi receive beijing of counter must be is zero
 		Get_BeiJing_Time_Cmd();
-		osDelay(100);////WT.2024.07.14
+		osDelay(50);////WT.2024.07.14
 		wifi_t.gTimer_read_beijing_time=0;
 		beijing_step =1;
 		wifi_t.gTimer_wifi_counter_link_beijing_times = 0;
@@ -446,9 +446,13 @@ static void RunWifi_Command_Handler(void)
 
 	//if(wifi_t.gTimer_read_beijing_time > 2 && wifi_t.gTimer_read_beijing_time < 4){
 	if(wifi_t.gTimer_read_beijing_time > 0 && beijing_step ==1){//
+	   // wifi_t.get_rx_beijing_time_enable=1; //enable beijing times
+	   //wifi_t.wifi_uart_counter=0; //wifi receive beijing of counter must be is zero
 		
 		Get_Beijing_Time();
 		//HAL_Delay(100);
+		wifi_t.get_rx_beijing_time_enable=1; //enable beijing times
+		wifi_t.wifi_uart_counter=0; //wifi receive beijing of counter must be is zero
 		osDelay(100);//WT.2024.07.14
 		wifi_t.gTimer_read_beijing_time=0;
         beijing_step =2;
@@ -458,9 +462,9 @@ static void RunWifi_Command_Handler(void)
 
 	if(beijing_step ==2){
 
-		wifi_t.real_hours = (wifi_t.wifi_data[134]-0x30)*10 + wifi_t.wifi_data[135]-0x30;
-		wifi_t.real_minutes =(wifi_t.wifi_data[137]-0x30)*10 + wifi_t.wifi_data[138]-0x30;
-		wifi_t.real_seconds = (wifi_t.wifi_data[140]-0x30)*10 + wifi_t.wifi_data[141]-0x30;
+		wifi_t.real_hours = (wifi_t.wifi_data[41]-0x30)*10 + wifi_t.wifi_data[42]-0x30;
+		wifi_t.real_minutes =(wifi_t.wifi_data[44]-0x30)*10 + wifi_t.wifi_data[45]-0x30;
+		wifi_t.real_seconds = (wifi_t.wifi_data[47]-0x30)*10 + wifi_t.wifi_data[48]-0x30;
 
 		wifi_t.get_rx_beijing_time_enable=0; //enable beijing times
 
@@ -468,7 +472,7 @@ static void RunWifi_Command_Handler(void)
 
          if(wifi_t.real_hours < 25 && wifi_t.real_minutes < 61 ){
 
-		     if(wifi_t.real_hours == 0x08 && (wifi_t.real_minutes ==0x01 || wifi_t.real_minutes ==0x02)){
+		     if(wifi_t.real_hours == 0x08 && (wifi_t.real_minutes   < 0x06)){
              
                                  
              }
