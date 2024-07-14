@@ -149,22 +149,11 @@ static void vTaskMsgPro(void *pvParameters)
               
                     
             }
-
-      
-
-		
-		}
-      
-
-        
-        
-			
-		}
+        }
+    }
 }
 
-
-/*
-*********************************************************************************************************
+/**********************************************************************************************************
 *	函 数 名: vTaskStart
 *	功能说明: 启动任务，也就是最高优先级任务，这里用作按键扫描。
 *	形    参: pvParameters 是在创建该任务时传递的形参
@@ -189,55 +178,37 @@ static void vTaskStart(void *pvParameters)
 						           0xFFFFFFFF,      
 						          &ulValue,        /* 保存ulNotifiedValue到变量ulValue中 */
 						          xMaxBlockTime);  /* 最大允许延迟时间 */
-        if( xResult == pdPASS )
-		{
-			/* 接收到消息，检测那个位被按下 */
-			if((ulValue & RUN_POWER_4 ) != 0)
-			{
-				//printf("接收到K2按键按下消息, ulNotifiedValue = 0x%08x\r\n", ulValue);
-				//printf("receive notice key1_bit0 \n");
-				gkey_t.power_key_long_counter =1;
+        if( xResult == pdPASS ){
+		    
+            /* 接收到消息，检测那个位被按下 */
+            if((ulValue & RUN_POWER_4 ) != 0)
+            {
+            //printf("接收到K2按键按下消息, ulNotifiedValue = 0x%08x\r\n", ulValue);
+            //printf("receive notice key1_bit0 \n");
+            gkey_t.power_key_long_counter =1;
             }
-            else if((ulValue & RUN_MODE_5 ) != 0)   /* 接收到消息，检测那个位被按下 */
-			{
+            else if((ulValue & RUN_MODE_5 ) != 0){   /* 接收到消息，检测那个位被按下 */
+                if(gkey_t.key_power == power_on ){
+                gkey_t.key_mode_long_counter=1;
 
-                 if(gkey_t.key_power == power_on ){
-                
-
-                  gkey_t.key_mode_long_counter=1;
-
-               
-              
-                 }
-				
+                }
             }
-            else if((ulValue & RUN_DEC_6 ) != 0)   /* 接收到消息，检测那个位被按下 */
-			{
-
-               if(gkey_t.key_power==power_on){
+            else if((ulValue & RUN_DEC_6 ) != 0){   /* 接收到消息，检测那个位被按下 */
+                if(gkey_t.key_power==power_on){
                 dec_flag =1;
 
-               
-               }
-                 
-            }
-            else if((ulValue & RUN_ADD_7 ) != 0)   /* 接收到消息，检测那个位被按下 */
-			{
 
+                }
+
+            }
+            else if((ulValue & RUN_ADD_7 ) != 0){   /* 接收到消息，检测那个位被按下 */
                 if(gkey_t.key_power==power_on){
 
-                   add_flag =1;
-                 
-               
+                add_flag =1;
 
-                
+                }
 
-                 }
-				
             }
-            
-
-            
         }
         else {
             

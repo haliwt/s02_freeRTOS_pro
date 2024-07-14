@@ -245,9 +245,6 @@ void disp_works_or_timer_timing_fun(void)
 
    Display_WorksTimingr_Handler(gkey_t.key_mode);
 
-       
-          
-
 }
 /*
 *********************************************************************************************************

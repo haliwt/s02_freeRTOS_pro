@@ -483,9 +483,6 @@ static void RunWifi_Command_Handler(void)
 
 	if(beijing_step ==2){
 
-		
-	
-
 		wifi_t.real_hours = (wifi_t.wifi_data[134]-0x30)*10 + wifi_t.wifi_data[135]-0x30;
 		wifi_t.real_minutes =(wifi_t.wifi_data[137]-0x30)*10 + wifi_t.wifi_data[138]-0x30;
 		wifi_t.real_seconds = (wifi_t.wifi_data[140]-0x30)*10 + wifi_t.wifi_data[141]-0x30;
@@ -510,18 +507,16 @@ static void RunWifi_Command_Handler(void)
             
 
 			gctl_t.beijing_time_flag = 1; //WT.2024.04.25
-            LCD_Disp_Works_Timing_Init();
+			//display must is AI mode EDIT.WT.2024.07.14 for mass after edit.version:1.9 .
+			if(gkey_t.key_mode==disp_works_timing && gctl_t.fan_warning ==0 && gctl_t.ptc_warning==0){
+                 LCD_Disp_Works_Timing_Init();
+             }
 		
 
 		   }
 	     }
 
-
-
-
-         
-
-		wifi_t.runCommand_order_lable=wifi_publish_update_tencent_cloud_data;
+       wifi_t.runCommand_order_lable=wifi_publish_update_tencent_cloud_data;
        wifi_t.get_rx_beijing_time_enable=0; //enable beijing times
         
 		beijing_step =3;
