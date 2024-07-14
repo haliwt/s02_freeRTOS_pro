@@ -366,8 +366,6 @@ void Display_WorksTimingr_Handler(uint8_t sel_item)
             
           LCD_Fault_Numbers_Code();
 
-
-
         }
        
     break;
