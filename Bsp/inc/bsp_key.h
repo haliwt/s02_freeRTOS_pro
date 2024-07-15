@@ -51,12 +51,15 @@ typedef enum mode_key_t{
    uint8_t  key_power;
    uint8_t  key_mode;
    uint8_t  key_sound_flag;
+   uint8_t  key_mode_be_pressed;
 
  
    uint8_t  key_add_dec_mode;
    uint8_t  set_timer_timing_success;
    uint8_t  power_key_long_counter;
    uint8_t  key_mode_long_counter;
+
+   uint8_t set_temp_value_be_pressed;
   
 
 
@@ -92,6 +95,9 @@ void Dec_Key_Fun(uint8_t cmd);
 void Add_Key_Fun(uint8_t cmd);
 
 
+void key_add_dec_set_temp_value_fun(void);
+
+void  key_mode_be_pressed_send_data_wifi(void);
 
 #endif 
 

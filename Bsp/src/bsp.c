@@ -51,13 +51,10 @@ void bsp_Idle(void)
 
          Disip_Wifi_Icon_State();
 
-       // Lcd_Display_SensorTemp_Value();
+ 
 
     }
-	/* 例如 uIP 协议，可以插入uip轮询函数 */
-	//TOUCH_CapScan();
 	
-	//MODH_Poll();
 }
 /*
 *********************************************************************************************************

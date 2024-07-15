@@ -261,6 +261,8 @@ static void vTaskStart(void *pvParameters)
               Detected_Fan_Error();
               Detected_Ptc_Error();
               disp_works_or_timer_timing_fun();
+              key_add_dec_set_temp_value_fun();
+              key_mode_be_pressed_send_data_wifi();
 
             }
             else{
@@ -269,7 +271,7 @@ static void vTaskStart(void *pvParameters)
             }
             MainBoard_Self_Inspection_PowerOn_Fun();
         
-           WIFI_Process_Handler();
+            WIFI_Process_Handler();
             
 
             

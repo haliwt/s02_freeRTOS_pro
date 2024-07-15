@@ -57,6 +57,10 @@ lcd_ref glcd_t;
 #define seg_c              0x40
 #define seg_d              0x80
 
+#define  COLON_SYMBOL                    0x01
+#define  NO_COLON_SYMBOL                 0x00
+
+
 
 #define LUM_VALUE      0X94//0x94//0x92//0x93//0x95//0x94//0x97(max)
 
@@ -153,9 +157,7 @@ static uint8_t Detecting_Fault_Code(void);
 
 
 static uint8_t	ptc_error_flag ,fan_error_flag;
-uint8_t Colon_Symbol   ;
 
-uint8_t flag_counter_test;
 
 
 
@@ -736,7 +738,7 @@ void LCD_Wind_Run_Icon(uint8_t wind_speed)
 
     case 0: //max wind speed.
 
-        flag_counter_test ++;
+        
 
            if(glcd_t.gTimer_fan_blink < 15){ //open 
         		
@@ -827,15 +829,15 @@ void LCD_Timer_Colon_Flicker(void)
 {
    if(glcd_t.gTimer_colon_blink > 4 && glcd_t.gTimer_colon_blink < 7){
 
-        Colon_Symbol = 0x01;
+        
         if(gctl_t.ptc_warning ==0 && gctl_t.fan_warning ==0){
         if(gkey_t.key_mode != mode_set_timer){
-           TM1723_Write_Display_Data(0xCB,(Colon_Symbol+lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
+           TM1723_Write_Display_Data(0xCB,(COLON_SYMBOL + lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
           }
 
         }
         else{
-          TM1723_Write_Display_Data(0xCB,(lcdNumber7_High[0] + lcdNumber7_Low[0] + Colon_Symbol) & 0xffff); 
+          TM1723_Write_Display_Data(0xCB,(lcdNumber7_High[0] + lcdNumber7_Low[0] + COLON_SYMBOL) & 0xffff); 
 
         }
           
@@ -843,15 +845,15 @@ void LCD_Timer_Colon_Flicker(void)
    }
    else if(glcd_t.gTimer_colon_blink > 6  && glcd_t.gTimer_colon_blink < 9){
 
-      Colon_Symbol = 0x0;
+    
        if(gctl_t.ptc_warning ==0 && gctl_t.fan_warning ==0){
           if(gkey_t.key_mode != mode_set_timer){
-            TM1723_Write_Display_Data(0xCB,(Colon_Symbol+lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
+            TM1723_Write_Display_Data(0xCB,(NO_COLON_SYMBOL+lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low] ) & 0xffff);
 
           }
       }
       else{
-          TM1723_Write_Display_Data(0xCB,(lcdNumber7_High[0] + lcdNumber7_Low[0] + Colon_Symbol) & 0xffff); 
+          TM1723_Write_Display_Data(0xCB,(lcdNumber7_High[0] + lcdNumber7_Low[0] + COLON_SYMBOL) & 0xffff); 
 
       }
      

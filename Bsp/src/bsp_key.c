@@ -113,10 +113,9 @@ void mode_long_short_key_fun(void)
              
              buzzer_sound();
 
-            if(wifi_link_net_state()==1){
-                MqttData_Publish_SetState(2); //timer model  = 2, works model = 1
-                HAL_Delay(200);
-            }
+            gkey_t.key_mode_be_pressed = 2;
+
+           
 
         }
         else{
@@ -126,19 +125,35 @@ void mode_long_short_key_fun(void)
             gctl_t.ai_flag = 1; // AI DISPLAY AI ICON
             LCD_Disp_Works_Timing_Init();
              buzzer_sound();
-            if(wifi_link_net_state()==1){
-                MqttData_Publish_SetState(1); //timer model  = 2, works model = 1
-                HAL_Delay(200);
-             }
-
-         
-      
-            }
+            gkey_t.key_mode_be_pressed = 1;
+             
+         }
 
 
      }
 
  }
+
+
+void  key_mode_be_pressed_send_data_wifi(void)
+{
+   
+   if(gkey_t.key_mode_be_pressed == 1 && wifi_link_net_state()==1){
+
+         gkey_t.key_mode_be_pressed= 0xff;
+    
+        MqttData_Publish_SetState(1); //timer model  = 2, works model = 1
+        osDelay(20);
+     }
+     else if(gkey_t.key_mode_be_pressed == 2  && wifi_link_net_state()==1){
+            gkey_t.key_mode_be_pressed= 0xff;
+
+          MqttData_Publish_SetState(2); //timer model  = 2, works model = 1
+           osDelay(20);
+       }
+
+
+}
 
 
 /***************************************************************************
@@ -152,7 +167,7 @@ void mode_long_short_key_fun(void)
 void Dec_Key_Fun(uint8_t cmd)
 {
 
-   static uint8_t dec_key;
+ 
 
     switch(cmd){
 
@@ -176,8 +191,8 @@ void Dec_Key_Fun(uint8_t cmd)
           
             gctl_t.send_ptc_state_data_flag =0;  //send data to tencent to tell ptc on or off state .
          
-            dec_key = 1;
-            Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
+            gkey_t.set_temp_value_be_pressed =1;
+            Disp_SetTemp_Value(gctl_t.gSet_temperature_value);
             //compare with by read temperature of sensor value  
             if(gctl_t.gSet_temperature_value > gctl_t.dht11_temp_value){
 
@@ -189,9 +204,6 @@ void Dec_Key_Fun(uint8_t cmd)
                 Disp_Dry_Icon();
 
                gpro_t.gTimer_run_dht11=10;  //at once display sensor of temperature value 
-
-               
-                
 
             }
             else if(gctl_t.gSet_temperature_value <   gctl_t.dht11_temp_value || gctl_t.gSet_temperature_value ==   gctl_t.dht11_temp_value){
@@ -247,20 +259,6 @@ void Dec_Key_Fun(uint8_t cmd)
          break;
  
          }
-
-
-     if(dec_key == 1){
-        dec_key ++;
-         if(wifi_link_net_state()==1){
-            MqttData_Publis_SetTemp(gctl_t.gSet_temperature_value);
-            HAL_Delay(100);//osDelay(100);
-            MqttData_Publish_SetPtc(gctl_t.ptc_flag);
-            HAL_Delay(100);//osDelay(100);
-            
-    	  }
-
-     }
-
 }
 
 /***************************************************************************
@@ -300,7 +298,8 @@ void Add_Key_Fun(uint8_t cmd)
     
         Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
 
-        add_key = 1;
+        //add_key = 1;
+        gkey_t.set_temp_value_be_pressed = 1;
 
          //compare with by read temperature of sensor value  
          if(gctl_t.gSet_temperature_value > gctl_t.dht11_temp_value){
@@ -377,20 +376,26 @@ void Add_Key_Fun(uint8_t cmd)
         
     }
 
+}
 
-    if(add_key == 1){
-        add_key ++;
-     if(wifi_link_net_state()==1){
+
+void key_add_dec_set_temp_value_fun(void)
+{
+
+    if(gkey_t.set_temp_value_be_pressed == 1 && wifi_link_net_state()==1){
+       gkey_t.set_temp_value_be_pressed ++;
+   
         MqttData_Publis_SetTemp(gctl_t.gSet_temperature_value);
-        HAL_Delay(100);//osDelay(100);
+        osDelay(20);
 
         MqttData_Publish_SetPtc(gctl_t.ptc_flag);
-         HAL_Delay(100);//osDelay(100);
-	  }
+        osDelay(20);
+        
+   }
 
-     }
+}
     
- }
+ 
 
 
 
