@@ -28,6 +28,7 @@
 void freeRTOS_Handler(void);
 
 
+void smartphone_turn_on_handler(void);
 
 
 
