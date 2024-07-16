@@ -246,11 +246,13 @@ static void vTaskStart(void *pvParameters)
                 if(add_flag ==1){
                      add_flag ++;
                      Buzzer_KeySound();
+                     osDelay(10);
 
                  }
                  else if(dec_flag ==1){
                      dec_flag ++;
                      Buzzer_KeySound();
+                     osDelay(10);
 
                  }
 
@@ -258,6 +260,7 @@ static void vTaskStart(void *pvParameters)
                  if(add_flag ==2){
                     add_flag ++;
                     Add_Key_Fun(gkey_t.key_add_dec_mode);
+                 
 
                  }
                  else if(dec_flag ==2){

@@ -109,10 +109,11 @@ void mode_long_short_key_fun(void)
                //counter exit timing this "mode_set_timer"
             gkey_t.key_mode_switch_flag = 1;
             gkey_t.key_add_dec_mode = set_temp_value_item;
+             buzzer_sound();
             LCD_Disp_Timer_Timing_Init();
              
-             buzzer_sound();
-
+            
+            
             gkey_t.key_mode_be_pressed = 2;
 
            
@@ -123,8 +124,10 @@ void mode_long_short_key_fun(void)
             gkey_t.key_mode  = disp_works_timing;
             gkey_t.key_add_dec_mode = set_temp_value_item;
             gctl_t.ai_flag = 1; // AI DISPLAY AI ICON
-            LCD_Disp_Works_Timing_Init();
              buzzer_sound();
+            LCD_Disp_Works_Timing_Init();
+            
+           
             gkey_t.key_mode_be_pressed = 1;
              
          }
@@ -330,12 +333,6 @@ void Add_Key_Fun(uint8_t cmd)
 
             }
 
-
-            if(wifi_link_net_state()==1){
-                MqttData_Publis_SetTemp(gctl_t.gSet_temperature_value);
-	     
-
-              }
        
        gpro_t.app_ptc_flag = 0;
     break;
