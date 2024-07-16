@@ -226,8 +226,11 @@ static void vTaskStart(void *pvParameters)
               
         if(power_sound_flag==0){
           power_sound_flag++;
-       
-        
+          
+          LED_Mode_Off();
+          LED_POWER_OFF();
+          Backlight_Off();
+          
           buzzer_sound();
 
         }
@@ -237,7 +240,7 @@ static void vTaskStart(void *pvParameters)
         
           if(gkey_t.power_key_long_counter ==0 || gkey_t.power_key_long_counter==200){
           if(gkey_t.key_power==power_on){
-                 bsp_Idle();
+                
                  mode_long_short_key_fun();
 
                 if(add_flag ==1){
@@ -275,10 +278,14 @@ static void vTaskStart(void *pvParameters)
               key_mode_be_pressed_send_data_wifi();
               backlight_on_off_state();
               disp_works_or_timer_timing_fun();
+              bsp_Idle();
               LCD_Timer_Colon_Flicker();
 
             }
             else{
+              LED_Mode_Off();
+             // LED_POWER_OFF();
+             Backlight_Off();
              power_off_run_handler();
 
             }
@@ -287,11 +294,9 @@ static void vTaskStart(void *pvParameters)
             WIFI_Process_Handler();
             
 
-            
-         
-            }
-
            }
+
+          }
 
        }
   }

@@ -99,9 +99,12 @@ int main(void)
   delay_init(24); 
   bsp_ctl_init();
   
+   LED_Mode_Off();
+   LED_POWER_OFF();
+   
 
   
-    HAL_TIM_Base_Start_IT(&htim17);
+   HAL_TIM_Base_Start_IT(&htim17);
    UART_Start_Receive_IT(&huart2,wifi_t.usart1_dataBuf,1);
    
     freeRTOS_Handler();

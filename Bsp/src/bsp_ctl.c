@@ -416,7 +416,7 @@ void SetTemp_Compare_SensoTemp(void)
 *****************************************************************************/
 void local_read_latency_ten_minutes(void)
 {
-    if(gpro_t.gTimer_shut_off_backlight > 1 && gctl_t.ptc_warning ==0 && gctl_t.fan_warning == 0 && gkey_t.key_power==power_on){
+    if(gpro_t.gTimer_shut_off_backlight > 9 && gctl_t.ptc_warning ==0 && gctl_t.fan_warning == 0 && gkey_t.key_power==power_on){
 
          gpro_t.gTimer_shut_off_backlight =0;
          gpro_t.shut_Off_backlight_flag = turn_off;
