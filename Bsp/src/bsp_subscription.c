@@ -1108,7 +1108,7 @@ static void smartphone_app_timer_power_on_handler(void)
 		}
         
 		
-//		if(gctl_t.ptc_flag ==0)gpro_t.add_or_dec_is_cofirm_key_flag =1;
+		if(gctl_t.ptc_flag ==0)gpro_t.app_ptc_flag = 1;
 
         MqttData_Publis_App_PowerOn_Ref();
   

@@ -12,10 +12,13 @@ uint8_t (*ultrasonic_state)(void); //adjust of ultrasoic is open or close
 
 uint8_t (*ai_mode_state)(void);
 
-
-
 uint8_t (*ptc_error_state)(void);
 uint8_t (*fan_error_state)(void);
+
+void (*backlight_on_off_state)(void);
+void (*wake_up_backlight_on)(void);
+
+
 
 
 static uint8_t ai_mode_default(void);
@@ -24,6 +27,10 @@ static uint8_t ai_mode_default(void);
 //static uint8_t wifi_link_net_default(void);
 
 static uint8_t power_on_default(void);
+static void local_read_latency_ten_minutes(void);
+static void wake_up_backlight_on_fun(void);
+
+
 
 
 
@@ -47,6 +54,8 @@ void bsp_ctl_init(void)
    Ultrasonic_state_Handler(Ultrasonic_Default_Handler);
    Ptc_error_state_Handler(Ptc_Error_Default_Handler);
    Fan_error_state_Handler(Fan_Error_Default_Handler);
+   backlight_on_off_handler(local_read_latency_ten_minutes);
+   wake_up_backlight_on_handler(wake_up_backlight_on_fun);
 
 
 
@@ -363,7 +372,7 @@ void SetTemp_Compare_SensoTemp(void)
          }
          else if(gctl_t.dht11_temp_value < 39){ // gctl_t.dht11_temp_value
 
-
+              if(gpro_t.app_ptc_flag == 0){
                 ptc_counter_on ++;
 
                 gctl_t.ptc_flag = 1;
@@ -383,6 +392,8 @@ void SetTemp_Compare_SensoTemp(void)
 
                  }
 
+              }
+
 
          }
 
@@ -395,10 +406,59 @@ void SetTemp_Compare_SensoTemp(void)
       }
 }
 
+/*****************************************************************************
+ * 
+ * Function Name:  void local_read_latency_minutes(void)
+ * Function: after ten minute shut off the lcd of backlingh 
+ * Input Ref: 
+ * Return Ref
+ * 
+*****************************************************************************/
+void local_read_latency_ten_minutes(void)
+{
+    if(gpro_t.gTimer_shut_off_backlight > 1 && gctl_t.ptc_warning ==0 && gctl_t.fan_warning == 0 && gkey_t.key_power==power_on){
+
+         gpro_t.gTimer_shut_off_backlight =0;
+         gpro_t.shut_Off_backlight_flag = turn_off;
+         LCD_BACK_LIGHT_OFF();  
+    }
 
 
+}
 
 
+void  backlight_on_off_handler(void (*backlight_state_handler)(void))
+{
+       backlight_on_off_state = backlight_state_handler;
 
+}
+
+/*****************************************************************************
+ * 
+ * Function Name:  void wake_up_backlight_on(void)
+ * Function: after ten minute shut off the lcd of backlingh 
+ * Input Ref: 
+ * Return Ref
+ * 
+*****************************************************************************/
+void wake_up_backlight_on_fun(void)
+{
+
+   if(gkey_t.key_power==power_on && gpro_t.shut_Off_backlight_flag == turn_off){
+               
+           gpro_t.shut_Off_backlight_flag = turn_on;
+             Backlight_On();
+     }
+
+
+}
+
+
+void  wake_up_backlight_on_handler(void (*backlight_on_handler)(void))
+{
+    wake_up_backlight_on = backlight_on_handler;
+
+
+}
 
 

@@ -218,7 +218,8 @@ void Dec_Key_Fun(uint8_t cmd)
                   gpro_t.gTimer_run_dht11=10;  //at once display sensor of temperature value 
 
 
-            }     
+            }
+           gpro_t.app_ptc_flag = 0;
          break;
 
          case mode_set_timer: //set timer timing value 
@@ -336,7 +337,7 @@ void Add_Key_Fun(uint8_t cmd)
 
               }
        
-
+       gpro_t.app_ptc_flag = 0;
     break;
 
     case mode_set_timer: //set timer timing value 

@@ -76,6 +76,7 @@ typedef struct {
    uint8_t gPower_On ;
 
    uint8_t power_off_flag;
+   uint8_t shut_Off_backlight_flag;
   
     uint8_t gTimer_power_off_run_times;
    //WIFI
@@ -88,6 +89,8 @@ typedef struct {
    uint8_t set_temperature_value_success;
    uint8_t first_disp_work_time;
    uint8_t disp_timer_switch_time_flag;
+
+   uint8_t app_ptc_flag;
 
 
      
@@ -114,6 +117,7 @@ typedef struct {
    uint8_t gTimer_publish_tencent_dht11;
    uint8_t gTimer_compare_temp;
    uint8_t gTimer_ptc_detected;
+   uint8_t gTimer_shut_off_backlight;
 
    
  

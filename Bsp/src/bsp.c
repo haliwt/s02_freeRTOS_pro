@@ -45,7 +45,7 @@ void bsp_Idle(void)
 
     if(gkey_t.key_power == power_on){
 
-         LCD_Timer_Colon_Flicker();
+        
 
          LCD_Wind_Run_Icon(wifi_t.set_wind_speed_value);
 

@@ -158,6 +158,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         gpro_t.gTimer_run_main_fun++;
         gpro_t.gTimer_publish_tencent_dht11++;
         gpro_t.gTimer_compare_temp++;
+        
        
         //wifi
 		wifi_t.gTimer_wifi_pub_power_off++;
@@ -173,6 +174,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		wifi_t.gTimer_read_beijing_time ++;
 		wifi_t.gTimer_wifi_counter_link_beijing_times++;
         wifi_t.gTimer_counter_repeat_link_net++;
+        
 
         
 
@@ -180,6 +182,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			tm2 =0;
 			gpro_t.gTimer_run_total++;
 			gpro_t.gTimer_run_time_out ++ ;
+            gpro_t.gTimer_shut_off_backlight++;
 			
 
 		}

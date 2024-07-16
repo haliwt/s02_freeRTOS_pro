@@ -2,6 +2,14 @@
 #define __BSP_CTL_H
 #include "main.h"
 
+typedef enum{
+
+  turn_on,
+  turn_off
+
+}backlight_state;
+
+
 
 typedef enum{
 
@@ -72,6 +80,9 @@ extern uint8_t (*power_on_state)(void);
 extern uint8_t (*ptc_error_state)(void);
 extern uint8_t (*fan_error_state)(void);
 
+extern void (*backlight_on_off_state)(void);
+extern void (*wake_up_backlight_on)(void);
+
 
 void bsp_ctl_init(void);
 
@@ -88,6 +99,9 @@ void  Power_On_Handler(uint8_t(*power_handler)(void));
 
 void  Ptc_error_state_Handler(uint8_t(*error_handler)(void));
 void  Fan_error_state_Handler(uint8_t(*fan_error_handler)(void));
+void  backlight_on_off_handler(void (*backlight_state_handler)(void));
+
+void  wake_up_backlight_on_handler(void (*backlight_on_handler)(void));
 
 
 void main_fun_init(void);
@@ -106,6 +120,7 @@ uint8_t Fan_Error_Default_Handler(void);
 
 
 void SetTemp_Compare_SensoTemp(void);
+
 
 
 

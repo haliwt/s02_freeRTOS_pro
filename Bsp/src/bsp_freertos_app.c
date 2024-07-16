@@ -78,7 +78,7 @@ static void vTaskMsgPro(void *pvParameters)
 {
    // MSG_T *ptMsg;
     BaseType_t xResult;
-	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(100); /* 设置最大等待时间为500ms */
+	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(200); /* 设置最大等待时间为500ms */
 	uint32_t ulValue;
    
    
@@ -164,7 +164,7 @@ static void vTaskMsgPro(void *pvParameters)
 static void vTaskStart(void *pvParameters)
 {
    BaseType_t xResult;
-   const TickType_t xMaxBlockTime = pdMS_TO_TICKS(100); /* 设置最大等待时间为500ms */
+   const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置最大等待时间为500ms */
    static uint8_t sound_flag,power_on_first;
    uint32_t ulValue;
    static uint8_t add_flag,dec_flag,power_sound_flag;
@@ -186,12 +186,18 @@ static void vTaskStart(void *pvParameters)
             //printf("接收到K2按键按下消息, ulNotifiedValue = 0x%08x\r\n", ulValue);
             //printf("receive notice key1_bit0 \n");
             gkey_t.power_key_long_counter =1;
+            gpro_t.gTimer_shut_off_backlight =0;
+            wake_up_backlight_on();
+               
             }
             else if((ulValue & RUN_MODE_5 ) != 0){   /* 接收到消息，检测那个位被按下 */
                 if(gkey_t.key_power == power_on ){
                 gkey_t.key_mode_long_counter=1;
 
                 }
+                gpro_t.gTimer_shut_off_backlight =0;
+                wake_up_backlight_on();
+                
             }
             else if((ulValue & RUN_DEC_6 ) != 0){   /* 接收到消息，检测那个位被按下 */
                 if(gkey_t.key_power==power_on){
@@ -199,6 +205,8 @@ static void vTaskStart(void *pvParameters)
 
 
                 }
+                gpro_t.gTimer_shut_off_backlight =0;
+                wake_up_backlight_on();
 
             }
             else if((ulValue & RUN_ADD_7 ) != 0){   /* 接收到消息，检测那个位被按下 */
@@ -207,6 +215,9 @@ static void vTaskStart(void *pvParameters)
                 add_flag =1;
 
                 }
+                gpro_t.gTimer_shut_off_backlight =0;
+                wake_up_backlight_on();
+              
 
             }
         }
@@ -260,9 +271,11 @@ static void vTaskStart(void *pvParameters)
               Record_WorksOr_Timer_Timing_DonotDisp_Handler();
               Detected_Fan_Error();
               Detected_Ptc_Error();
-              disp_works_or_timer_timing_fun();
               key_add_dec_set_temp_value_fun();
               key_mode_be_pressed_send_data_wifi();
+              backlight_on_off_state();
+              disp_works_or_timer_timing_fun();
+              LCD_Timer_Colon_Flicker();
 
             }
             else{
