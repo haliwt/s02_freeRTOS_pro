@@ -78,7 +78,7 @@ void MX_GPIO_Init(void)
   HAL_GPIO_Init(POWER_LED_GPIO_Port, &GPIO_InitStruct);
 
 
-  /*Configure GPIO pin : PtPin */
+  /*Configure GPIO pin : PtPin  interrupt GPIO*/
   GPIO_InitStruct.Pin = KEY_POWER_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;//GPIO_NOPULL;

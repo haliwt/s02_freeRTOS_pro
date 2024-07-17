@@ -99,5 +99,8 @@ void key_add_dec_set_temp_value_fun(void);
 
 void  key_mode_be_pressed_send_data_wifi(void);
 
+void smartphone_power_on_handler(void);
+
+
 #endif 
 

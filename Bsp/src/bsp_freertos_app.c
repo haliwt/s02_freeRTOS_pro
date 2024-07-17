@@ -24,6 +24,8 @@ uint8_t  dc_power_on;
 #define RUN_DEC_6           (1 << 6)
 #define RUN_ADD_7           (1 << 7)
 
+#define PHONE_POWER_ON_RX_8       (1<<8)
+#define PHONE_POWER_ON_9         (1<<9)
 /*
 **********************************************************************************************************
 											函数声明
@@ -121,6 +123,13 @@ static void vTaskMsgPro(void *pvParameters)
 							eSetBits);          /* 将目标任务的事件标志位与BIT_0进行或操作，  将结果赋值给事件标志位。*/
 				                                    
 			}
+            else if((ulValue & PHONE_POWER_ON_RX_8 ) != 0)
+            {
+                         xTaskNotify(xHandleTaskStart, /* 目标任务 */
+							PHONE_POWER_ON_9 ,            /* 设置目标任务事件标志位bit0  */
+							eSetBits);          /* 将目标任务的事件标志位与BIT_0进行或操作，  将结果赋值给事件标志位。*/
+               
+            }
             else if((ulValue & MODE_KEY_1) != 0){
 
                //switch timer timing and works timing 
@@ -163,10 +172,10 @@ static void vTaskMsgPro(void *pvParameters)
 static void vTaskStart(void *pvParameters)
 {
    BaseType_t xResult;
-   const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置最大等待时间为500ms */
+   const TickType_t xMaxBlockTime = pdMS_TO_TICKS(30); /* 设置最大等待时间为50ms */
    static uint8_t sound_flag,power_on_first;
    uint32_t ulValue;
-   static uint8_t add_flag,dec_flag,power_sound_flag;
+   static uint8_t add_flag,dec_flag,power_sound_flag,smart_phone_sound;
 
     while(1)
     {
@@ -182,11 +191,10 @@ static void vTaskStart(void *pvParameters)
             /* 接收到消息，检测那个位被按下 */
             if((ulValue & RUN_POWER_4 ) != 0)
             {
-            //printf("接收到K2按键按下消息, ulNotifiedValue = 0x%08x\r\n", ulValue);
-            //printf("receive notice key1_bit0 \n");
-            gkey_t.power_key_long_counter =1;
-            gpro_t.gTimer_shut_off_backlight =0;
-            wake_up_backlight_on();
+  
+                gkey_t.power_key_long_counter =1;
+                gpro_t.gTimer_shut_off_backlight =0;
+                wake_up_backlight_on();
                
             }
             else if((ulValue & RUN_MODE_5 ) != 0){   /* 接收到消息，检测那个位被按下 */
@@ -197,6 +205,14 @@ static void vTaskStart(void *pvParameters)
                 gpro_t.gTimer_shut_off_backlight =0;
                 wake_up_backlight_on();
                 
+            }
+            else if((ulValue & PHONE_POWER_ON_9 ) != 0)
+            {
+         
+                smart_phone_sound = 1;
+                gpro_t.gTimer_shut_off_backlight =0;
+                wake_up_backlight_on();
+               
             }
             else if((ulValue & RUN_DEC_6 ) != 0){   /* 接收到消息，检测那个位被按下 */
                 if(gkey_t.key_power==power_on){
@@ -233,8 +249,12 @@ static void vTaskStart(void *pvParameters)
           buzzer_sound();
 
         }
-
-          power_long_short_key_fun();
+         if(smart_phone_sound == 1){
+            smart_phone_sound++;
+           smartphone_power_on_handler();
+          }
+          else
+            power_long_short_key_fun();
         
         
           if(gkey_t.power_key_long_counter ==0 || gkey_t.power_key_long_counter==200){
@@ -269,7 +289,7 @@ static void vTaskStart(void *pvParameters)
                  }
 
            }
-                
+            }   
 
             if(gkey_t.key_power==power_on){
               power_on_run_handler();
@@ -284,7 +304,7 @@ static void vTaskStart(void *pvParameters)
               LCD_Timer_Colon_Flicker();
 
             }
-            else{
+            else {
               LED_Mode_Off();
              // LED_POWER_OFF();
              Backlight_Off();
@@ -300,8 +320,8 @@ static void vTaskStart(void *pvParameters)
 
           }
 
-       }
-  }
+ }
+  
 
 /**********************************************************************************************************
 *	函 数 名: AppTaskCreate
@@ -419,7 +439,7 @@ void smartphone_turn_on_handler(void)
 {
    
     xTaskNotify(xHandleTaskMsgPro,  /* 目标任务 */
-    POWER_KEY_0,      /* 设置目标任务事件标志位bit0  */
+    PHONE_POWER_ON_RX_8,      /* 设置目标任务事件标志位bit0  */
     eSetBits);  /* 将目标任务的事件标志位与BIT_0进行或操作， 将结果赋值给事件标志位 */
 
 }

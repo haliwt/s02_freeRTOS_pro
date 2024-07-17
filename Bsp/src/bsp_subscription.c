@@ -547,13 +547,14 @@ void Json_Parse_Command_Fun(void)
 
        buzzer_sound();
         MqttData_Publish_SetOpen(0);  
-        HAL_Delay(350);//350
+        osDelay(200);//HAL_Delay(350);//350
 
         wifi_t.esp8266_login_cloud_success=1;
-       
+      
           gkey_t.power_key_long_counter=0;
          wifi_t.smartphone_app_power_on_flag=0;
         gkey_t.key_power = power_off; //WT.EDIT 2024.02.20
+         gpro_t.power_off_flag =1;
 
         wifi_t.gTimer_auto_detected_net_state_times=0; //don't need check wifi if has or not
         wifi_t.response_wifi_signal_label = 0xff;
@@ -567,9 +568,10 @@ void Json_Parse_Command_Fun(void)
 	   //  gkey_t.power_key_long_counter=1;
 		wifi_t.esp8266_login_cloud_success=1;
 		MqttData_Publish_SetOpen(1);  
-		HAL_Delay(350);//300
+		osDelay(200);//HAL_Delay(350);//300
 
-         gkey_t.key_power = power_on;
+        // gkey_t.key_power = power_on;
+        smartphone_turn_on_handler();
 
 		gctl_t.ptc_warning =0;
 		gctl_t.fan_warning =0;
@@ -587,7 +589,7 @@ void Json_Parse_Command_Fun(void)
              gctl_t.ptc_flag=1;
              Disp_Dry_Icon();
              MqttData_Publish_SetPtc(0x01);
-             HAL_Delay(350);//350ms
+             osDelay(200);//HAL_Delay(350);//350ms
              buzzer_sound()	;
 		
 	     }
@@ -760,10 +762,10 @@ void Json_Parse_Command_Fun(void)
             gctl_t.gSet_temperature_value = temp_decade*10 +  temp_unit;
             if(gctl_t.gSet_temperature_value > 40)   gctl_t.gSet_temperature_value=40;
             if(gctl_t.gSet_temperature_value <20 )   gctl_t.gSet_temperature_value=20;
-
-           
+            
+            
             MqttData_Publis_SetTemp(gctl_t.gSet_temperature_value);
-			HAL_Delay(200);//350
+			osDelay(20);//HAL_Delay(200);//350
 		
 
            
@@ -771,7 +773,7 @@ void Json_Parse_Command_Fun(void)
             gkey_t.gTimer_set_temp_value  = 0;
             gpro_t.set_temperature_value_success =1;
         
-           gpro_t.gTimer_run_dht11=10; 
+           gpro_t.gTimer_run_dht11=0; 
            
          
             Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
@@ -786,7 +788,7 @@ void Json_Parse_Command_Fun(void)
 				    Disp_Dry_Icon();
                     
                      MqttData_Publish_SetPtc(1);
-                       HAL_Delay(200);
+                     osDelay(20);//HAL_Delay(200);
 
                      gpro_t.gTimer_run_dht11=10;  //at once display sensor of temperature value 
 		    	
@@ -799,7 +801,7 @@ void Json_Parse_Command_Fun(void)
                     Disp_Dry_Icon();
                     
                      MqttData_Publish_SetPtc(0);
-                     HAL_Delay(200);
+                      osDelay(20);//HAL_Delay(200);
 
                      gpro_t.gTimer_run_dht11=10;  //at once display sensor of temperature value 
 			   		

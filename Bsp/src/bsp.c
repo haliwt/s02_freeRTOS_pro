@@ -112,8 +112,18 @@ void power_on_run_handler(void)
 		  break;
 
 
+          case 1:
 
-		  case 1:   //run dht11 display 
+
+                mainboard_active_handler();
+
+               gctl_t.step_process=1;
+
+          break;
+
+
+
+		  case 2:   //run dht11 display 
 
              if(gpro_t.gTimer_run_dht11 > 12  || power_on_run_dht11_times < 10){
                 gpro_t.gTimer_run_dht11=0;
@@ -132,11 +142,11 @@ void power_on_run_handler(void)
 
 
 
-          gctl_t.step_process=2;
+          gctl_t.step_process=3;
 		  
           break;
 
-	  case 2: //7
+	  case 3: //7
 
 	  
 	   if(wifi_link_net_state()==1 && wifi_t.smartphone_app_power_on_flag==0 && wifi_t.link_net_tencent_data_flag ==1){ //after send publish datat to tencent .){
@@ -350,9 +360,7 @@ static void Process_Dynamical_Action(void)
 {
 
 
-
-
-    if(ptc_state() ==1){
+   if(ptc_state() ==1){
 
 
        Ptc_On();
@@ -368,30 +376,29 @@ static void Process_Dynamical_Action(void)
     }
             
 
-    
-
-    
-
-	if(plasma_state() ==1){
+    if(plasma_state() ==1){
 		
        Plasma_On();
+       Disp_Kill_Icon();
 
     }
 	else{
 
 	   Plasma_Off();
+       Disp_Kill_Icon();
 
 	}
 
     if(ultrasonic_state() ==1){
 
          Ultrasonic_Pwm_Output();
-
+         Disp_Ultrsonic_Icon();
 
     }
     else{
 
     Ultrasonic_Pwm_Stop();
+    Disp_Ultrsonic_Icon();
 
 
     }
@@ -512,7 +519,9 @@ static void power_off_function(void)
 
            gkey_t.gTimer_power_off_run_times=0;
            gkey_t.wifi_led_fast_blink_flag=0;
-
+            gctl_t.ptc_flag =0;
+            gctl_t.plasma_flag =0;
+            
             gctl_t.fan_warning = 0;
             gctl_t.ptc_warning = 0;
             gkey_t.set_timer_timing_success =0;

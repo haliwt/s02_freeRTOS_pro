@@ -9,11 +9,18 @@
 
 key_fun_t gkey_t;
 
-
+/*********************************************************************************
+*
+*	函 数 名:static void mode_long_short_key_fun(void)
+*	功能说明: 
+*	形    参: 
+*	返 回 值: 无
+*   
+*********************************************************************************/
 void power_long_short_key_fun(void)
 {
 
-    static uint8_t sound_flag;
+  
     if(KEY_POWER_VALUE() == 1 && gkey_t.power_key_long_counter > 0 && gkey_t.power_key_long_counter < 60){
 
 
@@ -40,9 +47,8 @@ void power_long_short_key_fun(void)
     else if(KEY_POWER_VALUE() == 0 && gkey_t.power_key_long_counter >0 && gkey_t.power_key_long_counter<30){ //short key of function
 
         gkey_t.power_key_long_counter=0;
-        sound_flag=1;
-        if(sound_flag ==1){
-           sound_flag++;
+
+      
            if(gkey_t.key_power==power_off){
               gkey_t.key_power=power_on;
               gkey_t.key_mode = disp_timer_timing;
@@ -51,6 +57,7 @@ void power_long_short_key_fun(void)
                gctl_t.fan_warning =0;
               
               gctl_t.step_process=0;
+              gpro_t.power_off_flag =1;
             }
            else{
               gkey_t.key_power=power_off;
@@ -62,11 +69,37 @@ void power_long_short_key_fun(void)
       
 
         }
-    }
-   
 }
+/*********************************************************************************
+*
+*	函 数 名:void smartphone_power_on_handler(uint8_t phone_on)
+*	功能说明: 
+*	形    参: 
+*	返 回 值: 无
+*   
+*********************************************************************************/
+void smartphone_power_on_handler(void)
+{
 
+      
+      gkey_t.power_key_long_counter=0;
 
+      gkey_t.key_power=power_on;
+      gkey_t.key_mode = disp_timer_timing;
+       gctl_t.ai_flag = 1;
+       gctl_t.ptc_warning =0;
+       gctl_t.fan_warning =0;
+      
+        gctl_t.step_process=0;
+        gpro_t.power_off_flag =1;
+            
+          
+    //   Buzzer_KeySound();
+
+      
+       
+      
+}
 
 /*********************************************************************************
 *
