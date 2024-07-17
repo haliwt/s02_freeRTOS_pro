@@ -112,18 +112,8 @@ void power_on_run_handler(void)
 		  break;
 
 
-          case 1:
-
-
-                mainboard_active_handler();
-
-               gctl_t.step_process=1;
-
-          break;
-
-
-
-		  case 2:   //run dht11 display 
+       
+          case 1:   //run dht11 display 
 
              if(gpro_t.gTimer_run_dht11 > 12  || power_on_run_dht11_times < 10){
                 gpro_t.gTimer_run_dht11=0;
@@ -145,6 +135,8 @@ void power_on_run_handler(void)
           gctl_t.step_process=3;
 		  
           break;
+
+        
 
 	  case 3: //7
 

@@ -143,6 +143,7 @@ void mode_long_short_key_fun(void)
             gkey_t.key_mode_switch_flag = 1;
             gkey_t.key_add_dec_mode = set_temp_value_item;
              buzzer_sound();
+             HAL_Delay(10);
             LCD_Disp_Timer_Timing_Init();
              
             
@@ -158,6 +159,7 @@ void mode_long_short_key_fun(void)
             gkey_t.key_add_dec_mode = set_temp_value_item;
             gctl_t.ai_flag = 1; // AI DISPLAY AI ICON
              buzzer_sound();
+             HAL_Delay(10);
             LCD_Disp_Works_Timing_Init();
             
            
@@ -228,18 +230,19 @@ void Dec_Key_Fun(uint8_t cmd)
             gctl_t.send_ptc_state_data_flag =0;  //send data to tencent to tell ptc on or off state .
          
             gkey_t.set_temp_value_be_pressed =1;
-            Disp_SetTemp_Value(gctl_t.gSet_temperature_value);
+      //      Disp_SetTemp_Value(gctl_t.gSet_temperature_value);
             //compare with by read temperature of sensor value  
             if(gctl_t.gSet_temperature_value > gctl_t.dht11_temp_value){
 
                 gkey_t.gTimer_set_temp_value  =0;
                 gpro_t.set_temperature_value_success=1;
                 gctl_t.ptc_flag = 1;
-                Ptc_On();
+               // Ptc_On();
 
-                Disp_Dry_Icon();
+               // Disp_Dry_Icon();
+                 gpro_t.gTimer_run_main_fun=2;
 
-               gpro_t.gTimer_run_dht11=10;  //at once display sensor of temperature value 
+               gpro_t.gTimer_run_dht11=0;  //at once display sensor of temperature value 
 
             }
             else if(gctl_t.gSet_temperature_value <   gctl_t.dht11_temp_value || gctl_t.gSet_temperature_value ==   gctl_t.dht11_temp_value){
@@ -248,10 +251,11 @@ void Dec_Key_Fun(uint8_t cmd)
                  gkey_t.gTimer_set_temp_value  =0;
                  gpro_t.set_temperature_value_success=1;
                  gctl_t.ptc_flag = 0;
-                 Ptc_Off();
-                 Disp_Dry_Icon();
+                // Ptc_Off();
+                // Disp_Dry_Icon();
+                gpro_t.gTimer_run_main_fun=2;
 
-                  gpro_t.gTimer_run_dht11=10;  //at once display sensor of temperature value 
+                  gpro_t.gTimer_run_dht11=0;  //at once display sensor of temperature value 
 
 
             }
@@ -333,7 +337,7 @@ void Add_Key_Fun(uint8_t cmd)
       
         gctl_t.send_ptc_state_data_flag =0; //send data to tencent to tell ptc on or off state .
     
-        Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
+     //   Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
 
         //add_key = 1;
         gkey_t.set_temp_value_be_pressed = 1;
@@ -344,11 +348,12 @@ void Add_Key_Fun(uint8_t cmd)
                 gkey_t.gTimer_set_temp_value  =0;
                 gpro_t.set_temperature_value_success=1;
                 gctl_t.ptc_flag = 1;
-                Ptc_On();
+               // Ptc_On();
 
-                Disp_Dry_Icon();
+              //  Disp_Dry_Icon();
+                gpro_t.gTimer_run_main_fun=2;
 
-                 gpro_t.gTimer_run_dht11=10;  //at once display sensor of temperature value 
+                 gpro_t.gTimer_run_dht11=0;  //at once display sensor of temperature value 
                 
 
             }
@@ -358,10 +363,11 @@ void Add_Key_Fun(uint8_t cmd)
                 gpro_t.set_temperature_value_success=1;
 
                  gctl_t.ptc_flag = 0;
-                 Ptc_Off();
-                 Disp_Dry_Icon();
+               ///  Ptc_Off();
+               //  Disp_Dry_Icon();
+                 gpro_t.gTimer_run_main_fun=2;
 
-                 gpro_t.gTimer_run_dht11=10;  //at once display sensor of temperature value 
+                 gpro_t.gTimer_run_dht11=0;  //at once display sensor of temperature value 
 
 
             }
@@ -413,9 +419,13 @@ void Add_Key_Fun(uint8_t cmd)
 void key_add_dec_set_temp_value_fun(void)
 {
 
-    if(gkey_t.set_temp_value_be_pressed == 1 && wifi_link_net_state()==1){
+    if(gkey_t.set_temp_value_be_pressed == 1){
        gkey_t.set_temp_value_be_pressed ++;
-   
+
+      Disp_SetTemp_Value(gctl_t.gSet_temperature_value );
+
+      if(wifi_link_net_state()==1){
+        
         MqttData_Publis_SetTemp(gctl_t.gSet_temperature_value);
         osDelay(20);
 
@@ -424,6 +434,7 @@ void key_add_dec_set_temp_value_fun(void)
         
    }
 
+}
 }
     
  

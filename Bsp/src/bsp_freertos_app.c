@@ -265,13 +265,13 @@ static void vTaskStart(void *pvParameters)
                 if(add_flag ==1){
                      add_flag ++;
                      Buzzer_KeySound();
-                     osDelay(10);
+                     osDelay(20);
 
                  }
                  else if(dec_flag ==1){
                      dec_flag ++;
                      Buzzer_KeySound();
-                     osDelay(10);
+                     osDelay(20);
 
                  }
 
@@ -301,13 +301,12 @@ static void vTaskStart(void *pvParameters)
               backlight_on_off_state();
               disp_works_or_timer_timing_fun();
               bsp_Idle();
+              mainboard_active_handler();
               LCD_Timer_Colon_Flicker();
 
             }
             else {
-              LED_Mode_Off();
-             // LED_POWER_OFF();
-             Backlight_Off();
+            
              power_off_run_handler();
 
             }
