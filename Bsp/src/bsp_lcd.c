@@ -931,33 +931,41 @@ void Disp_SetTemp_Value(uint8_t temp_value)
 
 }
 
-
 /*************************************************************************************
 	*
-	*Function Name: void Lcd_Display_SensorTemp_Value(void)
-	*Function : digital '3' '4' blink 3 times 
-	*Input Ref: temperature of value 
+	*Function Name: void Lcd_Display_Dry_Icon(void)
+	*Function : display dry of symbol
+	*Input Ref:
 	*Return Ref:NO
 	*
 *************************************************************************************/
-void Lcd_Display_SensorTemp_Value(void)
+void disp_ai_iocn(void)
 {
-   
-    
-//    if(gkey_t.gTimer_set_temp_value  > 1 &&   gpro_t.set_temperature_value_success== 1){
-//
-//       gkey_t.gTimer_set_temp_value=0;
-//
-//       gpro_t.set_temperature_value_success=0;
-//
-//       
-//        Disp_HumidityTemp_Value();
-//     
-//
-//	 }
-    
+
+if(ai_mode_state()== 1){ //AI state 
+ //number '1'
+    TM1723_Write_Display_Data(0xC4,(0x01+lcdNumber1_High[glcd_t.number1_high] + lcdNumber1_Low[glcd_t.number1_low]) & 0xffff); //numbers : '1' addr: 0xC4
+ }
+ else{
+       //number '1'
+    TM1723_Write_Display_Data(0xC4,(0x00+lcdNumber1_High[glcd_t.number1_high] + lcdNumber1_Low[glcd_t.number1_low]) & 0xffff); //numbers : '1' addr: 0xC4
+
+ }
+
 }
 
+void disp_ai_symbol(void)
+{
+   TM1723_Write_Display_Data(0xC4,(0x01+lcdNumber1_High[glcd_t.number1_high] + lcdNumber1_Low[glcd_t.number1_low]) & 0xffff); //numbers : '1' addr: 0xC4
+
+}
+
+void donot_disp_ai_symbol(void)
+{
+
+   TM1723_Write_Display_Data(0xC4,(0x00+lcdNumber1_High[glcd_t.number1_high] + lcdNumber1_Low[glcd_t.number1_low]) & 0xffff); //numbers : '1' addr: 0xC4
+
+ }
 /*************************************************************************************
 	*
 	*Function Name: void Lcd_Display_Dry_Icon(void)

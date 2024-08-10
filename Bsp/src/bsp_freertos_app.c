@@ -80,7 +80,7 @@ static void vTaskMsgPro(void *pvParameters)
 {
    // MSG_T *ptMsg;
     BaseType_t xResult;
-	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(200); /* 设置最大等待时间为500ms */
+	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(200); /* 设置最大等待时间为200ms */
 	uint32_t ulValue;
    
    
@@ -172,7 +172,7 @@ static void vTaskMsgPro(void *pvParameters)
 static void vTaskStart(void *pvParameters)
 {
    BaseType_t xResult;
-   const TickType_t xMaxBlockTime = pdMS_TO_TICKS(30); /* 设置最大等待时间为50ms */
+   const TickType_t xMaxBlockTime = pdMS_TO_TICKS(20); /* 设置最大等待时间为30ms */
    static uint8_t sound_flag,power_on_first;
    uint32_t ulValue;
    static uint8_t add_flag,dec_flag,power_sound_flag,smart_phone_sound;
@@ -191,50 +191,98 @@ static void vTaskStart(void *pvParameters)
             /* 接收到消息，检测那个位被按下 */
             if((ulValue & RUN_POWER_4 ) != 0)
             {
-  
-                gkey_t.power_key_long_counter =1;
-                gpro_t.gTimer_shut_off_backlight =0;
-                wake_up_backlight_on();
+                if(gpro_t.shut_Off_backlight_flag == turn_off){
+
+                     gpro_t.gTimer_shut_off_backlight =0;
+                     wake_up_backlight_on();
+                     buzzer_sound();
+
+                }
+                else{
+                    gkey_t.power_key_long_counter =1;
+                    gpro_t.gTimer_shut_off_backlight =0;
+                }
                
             }
             else if((ulValue & RUN_MODE_5 ) != 0){   /* 接收到消息，检测那个位被按下 */
-                if(gkey_t.key_power == power_on ){
-                gkey_t.key_mode_long_counter=1;
+               if(gkey_t.key_power == power_on ){
+
+                  if(gpro_t.shut_Off_backlight_flag == turn_off){
+
+                     gpro_t.gTimer_shut_off_backlight =0;
+                     wake_up_backlight_on();
+                     buzzer_sound();
+
+                  }
+                  else{
+                     gkey_t.key_mode_long_counter=1;
+                     gpro_t.gTimer_shut_off_backlight =0;
+
+                    }
 
                 }
-                gpro_t.gTimer_shut_off_backlight =0;
-                wake_up_backlight_on();
+               
+              
                 
             }
-            else if((ulValue & PHONE_POWER_ON_9 ) != 0)
-            {
-         
-                smart_phone_sound = 1;
-                gpro_t.gTimer_shut_off_backlight =0;
-                wake_up_backlight_on();
+            else if((ulValue & PHONE_POWER_ON_9 ) != 0){
+               if(gpro_t.shut_Off_backlight_flag == turn_off){
+
+                     gpro_t.gTimer_shut_off_backlight =0;
+                     wake_up_backlight_on();
+                     buzzer_sound();
+
+                  }
+                 else{
+                    smart_phone_sound = 1;
+                    gpro_t.gTimer_shut_off_backlight =0;
+                
+
+                }
                
             }
             else if((ulValue & RUN_DEC_6 ) != 0){   /* 接收到消息，检测那个位被按下 */
                 if(gkey_t.key_power==power_on){
-                dec_flag =1;
+
+                   if(gpro_t.shut_Off_backlight_flag == turn_off){
+
+                     gpro_t.gTimer_shut_off_backlight =0;
+                     wake_up_backlight_on();
+                     buzzer_sound();
+
+                  }
+                  else{
+                    dec_flag =1;
+                    gpro_t.gTimer_shut_off_backlight =0;
 
 
-                }
-                gpro_t.gTimer_shut_off_backlight =0;
-                wake_up_backlight_on();
+                   }
+                  }
+              
 
             }
             else if((ulValue & RUN_ADD_7 ) != 0){   /* 接收到消息，检测那个位被按下 */
                 if(gkey_t.key_power==power_on){
 
-                add_flag =1;
+                 if(gpro_t.shut_Off_backlight_flag == turn_off){
+
+                     gpro_t.gTimer_shut_off_backlight =0;
+                     wake_up_backlight_on();
+                     buzzer_sound();
+
+                  }
+                  else{
+
+                   add_flag =1;
+                   gpro_t.gTimer_shut_off_backlight =0;
 
                 }
-                gpro_t.gTimer_shut_off_backlight =0;
-                wake_up_backlight_on();
+                
+                
               
 
             }
+        }
         }
         else {
             
@@ -243,7 +291,6 @@ static void vTaskStart(void *pvParameters)
           power_sound_flag++;
           
           LED_Mode_Off();
-          LED_POWER_OFF();
           Backlight_Off();
           
           buzzer_sound();

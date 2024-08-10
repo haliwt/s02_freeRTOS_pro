@@ -161,6 +161,11 @@ void OnlyDisp_Wind_Icon_Handler(void);
 
 void LCD_Fault_Numbers_Code(void);
 
+void disp_ai_iocn(void);
+
+void disp_ai_symbol(void);
+
+void donot_disp_ai_symbol(void);
 
 
 #endif 

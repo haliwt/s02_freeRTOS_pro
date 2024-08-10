@@ -4,12 +4,14 @@
 BSP_process_t gpro_t;
 static uint8_t Works_Time_Out(void);
 static void Mainboard_Action_Fun(void);
-static void Mainboard_Fun_Stop(void);
+
 static void Process_Dynamical_Action(void);
 static void power_off_function(void);
 static void power_on_init_function(void);
 
 static void interval_continuce_works_fun(void);
+
+static void interval_two_hours_stop_action(void);
 
 
 
@@ -219,7 +221,15 @@ void power_on_run_handler(void)
  }      
 
 
-
+/**********************************************************************************************************
+*
+*	函 数 名: void mainboard_active_handler(void)
+*	功能说明: 
+*			 
+*	形    参: 无
+*	返 回 值: 无
+*
+**********************************************************************************************************/
 void mainboard_active_handler(void)
 {
 
@@ -230,7 +240,7 @@ void mainboard_active_handler(void)
                        Process_Dynamical_Action();
                   }
                   else{
-                      Mainboard_Fun_Stop();
+                      interval_two_hours_stop_action();
                    
     
                   }
@@ -239,26 +249,33 @@ void mainboard_active_handler(void)
 
 }
 
+/**********************************************************************************************************
+*
+*	函 数 名: void disp_works_or_timer_timing_fun(void)
+*	功能说明: 
+*			 
+*	形    参: 无
+*	返 回 值: 无
+*
+**********************************************************************************************************/
 void disp_works_or_timer_timing_fun(void)
 {
 
    Display_WorksTimingr_Handler(gkey_t.key_mode);
 
 }
-/*
-*********************************************************************************************************
+/**********************************************************************************************************
 *	函 数 名: static uint8_t Works_Time_Out(void)
 *	功能说明: 主板工作2小时，停止工作10分钟
 *			 
 *	形    参: 无
 *	返 回 值: 无
-*********************************************************************************************************
-*/
+**********************************************************************************************************/
 static uint8_t Works_Time_Out(void)
 {
 	if(gpro_t.gTimer_run_time_out < 11){
 		
-		Mainboard_Fun_Stop();
+		interval_two_hours_stop_action();//Mainboard_Fun_Stop();
 		 
     }
 
@@ -319,14 +336,14 @@ static void Mainboard_Action_Fun(void)
 /*
 *********************************************************************************************************
 *
-*	函 数 名: static void Mainboard_Fun_Stop(void)
+*	函 数 名: static void interval_two_hours_stop_action(void)
 *	功能说明: 主板工作：功能动作输出			 
 *	形    参: 无
 *	返 回 值: 无
 *
 *********************************************************************************************************
 */
-static void Mainboard_Fun_Stop(void)
+static void interval_two_hours_stop_action(void)
 {
    Ptc_Off();
 
@@ -334,23 +351,75 @@ static void Mainboard_Fun_Stop(void)
   // Fan_Stop();
    Plasma_Off();
 
+   if(ptc_state() ==1){
 
-}
+
+      
+       Disp_Dry_Icon();
 
 
-/*
-*********************************************************************************************************
+     }
+    else{
+
+           
+ 
+     Disp_Dry_Icon();
+    }
+            
+
+    if(plasma_state() ==1){
+		
+ 
+       Disp_Kill_Icon();
+
+    }
+	else{
+
+	 
+       Disp_Kill_Icon();
+
+	}
+
+    if(ultrasonic_state() ==1){
+
+
+         Disp_Ultrsonic_Icon();
+
+    }
+    else{
+
+ 
+    Disp_Ultrsonic_Icon();
+
+
+    }
+
+  
+ 
+ }
+
+
+/**********************************************************************************************************
 *
 *	函 数 名: void Process_Dynamical_Action(void)
 *	功能说明: 主板工作：功能动作输出			 
 *	形    参: 无
 *	返 回 值: 无
 *
-*********************************************************************************************************
-*/
+**********************************************************************************************************/
 static void Process_Dynamical_Action(void)
 {
 
+
+    if(gctl_t.ai_flag == 1){
+
+            disp_ai_symbol();
+
+     }
+     else{
+       donot_disp_ai_symbol();
+
+     }
 
    if(ptc_state() ==1){
 
@@ -654,7 +723,7 @@ static void power_on_init_function(void)
 
     if(wifi_link_net_state()==1){
     MqttData_Publish_SetOpen(1);  
-    HAL_Delay(350);//300
+    osDelay(100);//300
 
     Publish_Data_Warning(fan_warning,no_warning);
 

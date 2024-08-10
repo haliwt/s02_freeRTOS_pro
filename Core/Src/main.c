@@ -9,7 +9,7 @@
   * version :1.0     data:2024.05.31  
   * modify update buzzer of sound .DATA:2024.07.04
   * version : 1.3
-  *
+  * version: 1.4  Data.2024.08.02
   ******************************************************************************
   */
 /* USER CODE END Header */
@@ -100,10 +100,10 @@ int main(void)
   bsp_ctl_init();
   
 
-    HAL_TIM_Base_Start_IT(&htim17);
+   HAL_TIM_Base_Start_IT(&htim17);
    UART_Start_Receive_IT(&huart2,wifi_t.usart1_dataBuf,1);
    
-    freeRTOS_Handler();
+   freeRTOS_Handler();
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in cmsis_os2.c) */

@@ -142,9 +142,12 @@ void mode_long_short_key_fun(void)
                //counter exit timing this "mode_set_timer"
             gkey_t.key_mode_switch_flag = 1;
             gkey_t.key_add_dec_mode = set_temp_value_item;
-             buzzer_sound();
-             HAL_Delay(10);
+            
             LCD_Disp_Timer_Timing_Init();
+             disp_ai_iocn();
+             buzzer_sound();
+          
+             HAL_Delay(10);
              
             
             
@@ -158,9 +161,12 @@ void mode_long_short_key_fun(void)
             gkey_t.key_mode  = disp_works_timing;
             gkey_t.key_add_dec_mode = set_temp_value_item;
             gctl_t.ai_flag = 1; // AI DISPLAY AI ICON
-             buzzer_sound();
-             HAL_Delay(10);
+           
             LCD_Disp_Works_Timing_Init();
+             disp_ai_iocn();
+             buzzer_sound();
+           
+             HAL_Delay(10);
             
            
             gkey_t.key_mode_be_pressed = 1;
@@ -211,7 +217,7 @@ void Dec_Key_Fun(uint8_t cmd)
 
          case set_temp_value_item: //set temperature 
 
-            // gkey_t.key_sound_flag = key_sound;
+             gpro_t.gTimer_run_main_fun =0;
              gpro_t.gTimer_run_dht11=0; //不显示，实际的温度值，显示设置的温度
          
              gctl_t.gSet_temperature_value  --;
@@ -237,9 +243,7 @@ void Dec_Key_Fun(uint8_t cmd)
                 gkey_t.gTimer_set_temp_value  =0;
                 gpro_t.set_temperature_value_success=1;
                 gctl_t.ptc_flag = 1;
-               // Ptc_On();
-
-               // Disp_Dry_Icon();
+              
                  gpro_t.gTimer_run_main_fun=2;
 
                gpro_t.gTimer_run_dht11=0;  //at once display sensor of temperature value 
@@ -251,8 +255,7 @@ void Dec_Key_Fun(uint8_t cmd)
                  gkey_t.gTimer_set_temp_value  =0;
                  gpro_t.set_temperature_value_success=1;
                  gctl_t.ptc_flag = 0;
-                // Ptc_Off();
-                // Disp_Dry_Icon();
+             
                 gpro_t.gTimer_run_main_fun=2;
 
                   gpro_t.gTimer_run_dht11=0;  //at once display sensor of temperature value 
@@ -318,7 +321,7 @@ void Add_Key_Fun(uint8_t cmd)
         
     case set_temp_value_item:  //set temperature value 
 
-         //gkey_t.key_sound_flag = key_sound;
+         gpro_t.gTimer_run_main_fun=0;
          gpro_t.gTimer_run_dht11=0;
         gctl_t.gSet_temperature_value   ++;
         if(gctl_t.gSet_temperature_value   < 20){
@@ -348,9 +351,7 @@ void Add_Key_Fun(uint8_t cmd)
                 gkey_t.gTimer_set_temp_value  =0;
                 gpro_t.set_temperature_value_success=1;
                 gctl_t.ptc_flag = 1;
-               // Ptc_On();
-
-              //  Disp_Dry_Icon();
+        
                 gpro_t.gTimer_run_main_fun=2;
 
                  gpro_t.gTimer_run_dht11=0;  //at once display sensor of temperature value 
@@ -363,8 +364,7 @@ void Add_Key_Fun(uint8_t cmd)
                 gpro_t.set_temperature_value_success=1;
 
                  gctl_t.ptc_flag = 0;
-               ///  Ptc_Off();
-               //  Disp_Dry_Icon();
+  
                  gpro_t.gTimer_run_main_fun=2;
 
                  gpro_t.gTimer_run_dht11=0;  //at once display sensor of temperature value 
