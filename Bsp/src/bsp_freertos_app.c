@@ -360,11 +360,11 @@ static void vTaskStart(void *pvParameters)
             MainBoard_Self_Inspection_PowerOn_Fun();
         
             WIFI_Process_Handler();
-            
+            iwdg_feed();
 
            }
 
-          }
+    }
 
  }
   
@@ -406,7 +406,7 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
    switch(GPIO_Pin){
 
    case KEY_POWER_Pin:
-        DISABLE_INT();
+       // DISABLE_INT(); //WT.EDIT 2024.08.15 modify.
         if(KEY_POWER_VALUE()==KEY_DOWN){
 
      
@@ -422,11 +422,11 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 
         }
             
-       ENABLE_INT();
+     //  ENABLE_INT();
    break;
 
    case KEY_MODE_Pin:
-      DISABLE_INT();
+     // DISABLE_INT();
       if(KEY_MODE_VALUE() == KEY_DOWN){
         xTaskNotifyFromISR(xHandleTaskMsgPro,  /* 目标任务 */
                MODE_KEY_1,     /* 设置目标任务事件标志位bit0  */
@@ -438,13 +438,13 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 
 
        }
-      ENABLE_INT();
+     // ENABLE_INT();
    
    break;
 
 
    case KEY_UP_Pin:
-       DISABLE_INT();
+      // DISABLE_INT();
        if(KEY_ADD_VALUE() == KEY_DOWN){
          xTaskNotifyFromISR(xHandleTaskMsgPro,  /* 目标任务 */
                 ADD_KEY_3,     /* 设置目标任务事件标志位bit0  */
@@ -454,11 +454,11 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
          /* 如果xHigherPriorityTaskWoken = pdTRUE，那么退出中断后切到当前最高优先级任务执行 */
          portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
         }
-       ENABLE_INT();
+     ///  ENABLE_INT();
    break;
 
    case KEY_DOWN_Pin:
-         DISABLE_INT();
+      ///   DISABLE_INT();
         if(KEY_DEC_VALUE() == KEY_DOWN){
         xTaskNotifyFromISR(xHandleTaskMsgPro,  /* 目标任务 */
                 DEC_KEY_2,     /* 设置目标任务事件标志位bit0  */
@@ -468,7 +468,7 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
          /* 如果xHigherPriorityTaskWoken = pdTRUE，那么退出中断后切到当前最高优先级任务执行 */
          portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
             }
-        ENABLE_INT();
+    ///    ENABLE_INT();
    break;
     }
 }
