@@ -54,6 +54,7 @@ void MX_IWDG_Init(void)
 }
 
 /* USER CODE BEGIN 1 */
+#if 0
 void iwdg_feed(void)
 {
    if(gctl_t.gTimer_feed_dog_times > 6){
@@ -63,5 +64,7 @@ void iwdg_feed(void)
 
     }
 }
+
+#endif 
 
 /* USER CODE END 1 */

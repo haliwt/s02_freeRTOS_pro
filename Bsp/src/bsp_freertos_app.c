@@ -360,7 +360,7 @@ static void vTaskStart(void *pvParameters)
             MainBoard_Self_Inspection_PowerOn_Fun();
         
             WIFI_Process_Handler();
-            iwdg_feed();
+            //iwdg_feed();
 
            }
 
