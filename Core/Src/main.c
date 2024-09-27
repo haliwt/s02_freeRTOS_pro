@@ -10,6 +10,8 @@
   * modify update buzzer of sound .DATA:2024.07.04
   * version : 1.3
   * version: 1.4  Data.2024.08.02
+  * version: 2.3  Data:2024.09.27
+    ref: modify display time less pen.
   ******************************************************************************
   */
 /* USER CODE END Header */
