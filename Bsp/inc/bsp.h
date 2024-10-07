@@ -35,7 +35,7 @@
 #include "bsp_lcd.h"
 #include "bsp_buzzer.h"
 #include "bsp_key.h"
-#include "bsp_sensor.h"
+//#include "bsp_sensor.h"
 #include "bsp_ultrasonic.h"
 #include "bsp_delay.h"
 #include "bsp_ctl.h"

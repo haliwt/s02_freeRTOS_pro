@@ -9,7 +9,7 @@
 static void dht11_reset(void)
 {
     DHT11_DQ_OUT(0);    /* 拉低DQ */
-    delay_ms(20);       /* 拉低至少18ms */
+    HAL_Delay(20);//delay_ms(20);       /* 拉低至少18ms */
     DHT11_DQ_OUT(1);    /* DQ=1 */
     delay_us(30);       /* 主机拉高10~35us */
 }
@@ -145,9 +145,11 @@ uint8_t dht11_read_data(uint8_t *temp, uint8_t *humi)
  */
 uint8_t dht11_init(void)
 {
+
+#if 0
     GPIO_InitTypeDef gpio_init_struct;
 
-    DHT11_DQ_GPIO_CLK_ENABLE();     /* 开启DQ引脚时钟 */
+   // DHT11_DQ_GPIO_CLK_ENABLE();     /* 开启DQ引脚时钟 */
 
     gpio_init_struct.Pin = DHT11_DQ_GPIO_PIN;
     gpio_init_struct.Mode = GPIO_MODE_OUTPUT_OD;            /* 开漏输出 */
@@ -155,9 +157,9 @@ uint8_t dht11_init(void)
     gpio_init_struct.Speed = GPIO_SPEED_FREQ_HIGH;          /* 高速 */
     HAL_GPIO_Init(DHT11_DQ_GPIO_PORT, &gpio_init_struct);   /* 初始化DHT11_DQ引脚 */
     /* DHT11_DQ引脚模式设置,开漏输出,上拉, 这样就不用再设置IO方向了, 开漏输出的时候(=1), 也可以读取外部信号的高低电平 */
-
+#endif 
     dht11_reset();
-    return dht11_check();
+    //dht11_check();
 }
 
 
@@ -165,7 +167,23 @@ uint8_t dht11_init(void)
 void Update_DHT11_Value(void)
 {
     //Dht11_Read_TempHumidity_Handler(&DHT11);
+
+         
     dht11_read_data(&gctl_t.dht11_temp_value, &gctl_t.dht11_humidity_value);
+
+
+      //humidity data
+		   glcd_t.number1_high = gctl_t.dht11_humidity_value /10;
+		   glcd_t.number1_low  = glcd_t.number1_high ;
+
+		   glcd_t.number2_low = gctl_t.dht11_humidity_value%10;
+		   glcd_t.number2_high =   glcd_t.number2_low ;
+        //temperature data
+           glcd_t.number3_low = gctl_t.dht11_temp_value /10;
+           glcd_t.number3_high =  glcd_t.number3_low;
+
+           glcd_t.number4_low =  gctl_t.dht11_temp_value % 10;
+           glcd_t.number4_high =  glcd_t.number4_low;
 
 }
 

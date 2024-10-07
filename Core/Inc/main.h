@@ -80,9 +80,9 @@ void Error_Handler(void);
 #define BEEP_PWM_GPIO_Port 					GPIOB
 
 //sensor temperature detected GPIO
-#define TEMP_Pin 							    GPIO_PIN_13
+#define TEMP_Pin 							GPIO_PIN_13
 #define TEMP_GPIO_Port 						GPIOB
-
+//ultrasoic GPIO
 #define ULTRA_PWM_Pin 						GPIO_PIN_8
 #define ULTRA_PWM_GPIO_Port 				GPIOA
 

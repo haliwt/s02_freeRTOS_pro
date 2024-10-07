@@ -12,7 +12,7 @@
 
 #define DHT11_DQ_GPIO_PORT                  GPIOB
 #define DHT11_DQ_GPIO_PIN                   GPIO_PIN_13
-#define DHT11_DQ_GPIO_CLK_ENABLE()          do{ __HAL_RCC_GPIOB_CLK_ENABLE(); }while(0)   /* GPIOA口时钟使能 */
+//#define DHT11_DQ_GPIO_CLK_ENABLE()          do{ __HAL_RCC_GPIOB_CLK_ENABLE(); }while(0)   /* GPIOA口时钟使能 */
 
 /******************************************************************************************/
 
