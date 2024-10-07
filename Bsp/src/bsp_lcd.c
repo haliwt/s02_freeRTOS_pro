@@ -280,14 +280,14 @@ void Lcd_Display_Detials(void)
 
 }
 
-/*****************************************************
+/************************************************************************
  * 
  * Function Name:  void LCD_Number_Ai_OneTwo_Humidity(void)
  * Function:
  * Input Ref:
  * Return Ref:
  * 
-******************************************************/
+***************************************************************************/
 void LCD_Number_Ai_OneTwo_Humidity(void)
 {
 
@@ -313,8 +313,15 @@ void LCD_Number_Ai_OneTwo_Humidity(void)
   //  }
 }
 
-
-void Disip_Wifi_Icon_State(void)
+/************************************************************************
+ * 
+ * Function Name:void disp_wifi_icon_state(void)
+ * Function:
+ * Input Ref:
+ * Return Ref:
+ * 
+***************************************************************************/
+void disp_wifi_icon_state(void)
 {
 
    if(gkey_t.wifi_led_fast_blink_flag==0){
@@ -341,7 +348,11 @@ void Disip_Wifi_Icon_State(void)
 
       }
   }
-  else{
+}
+
+void link_net_led_fast_blink_fun(void)
+{
+  if(gkey_t.wifi_led_fast_blink_flag==1){
     if(wifi_link_net_state() ==0){
     
           if(gctl_t.gTimer_wifi_fast_blink < 19  ){ //9 * 10ms

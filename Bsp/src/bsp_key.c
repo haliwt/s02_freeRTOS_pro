@@ -316,7 +316,7 @@ void Dec_Key_Fun(uint8_t cmd)
 void Add_Key_Fun(uint8_t cmd)
 {
 
-  static uint8_t add_key;
+ 
    switch(cmd){
         
     case set_temp_value_item:  //set temperature value 

@@ -31,33 +31,33 @@ uint8_t  fan_continue_flag;
 *	返 回 值: 无
 *********************************************************************************************************
 */
-void bsp_Idle(void)
-{
-//	/* --- 喂狗 8s input reset */
-//    if(gctl_t.gTimer_prcoess_iwdg > 5){
-//		gctl_t.gTimer_prcoess_iwdg =0;
-//    	iwdg_feed();
+//void bsp_Idle(void)
+//{
+////	/* --- 喂狗 8s input reset */
+////    if(gctl_t.gTimer_prcoess_iwdg > 5){
+////		gctl_t.gTimer_prcoess_iwdg =0;
+////    	iwdg_feed();
+////
+////    }
+//
+//	/* --- 让CPU进入休眠，由Systick定时中断唤醒或者其他中断唤醒 */
+//
+//	/* 例如 emWin 图形库，可以插入图形库需要的轮询函数 */
+//	//GUI_Exec();
+//
+//    if(gkey_t.key_power == power_on){
+//
+//        
+//
+//         LCD_Wind_Run_Icon(wifi_t.set_wind_speed_value);
+//
+//         disp_wifi_icon_state();
+//
+// 
 //
 //    }
-
-	/* --- 让CPU进入休眠，由Systick定时中断唤醒或者其他中断唤醒 */
-
-	/* 例如 emWin 图形库，可以插入图形库需要的轮询函数 */
-	//GUI_Exec();
-
-    if(gkey_t.key_power == power_on){
-
-        
-
-         LCD_Wind_Run_Icon(wifi_t.set_wind_speed_value);
-
-         Disip_Wifi_Icon_State();
-
- 
-
-    }
-	
-}
+//	
+//}
 /*
 *********************************************************************************************************
 *	函 数 名: void mainboard_process_handler(void)
@@ -768,4 +768,26 @@ void Detected_Ptc_Error(void)
 
 
 }
+/*****************************************************************************
+*
+*Function Name:
+*
+*
+*
+*******************************************************************************/
+void link_wifi_net_state(uint8_t cmd)
+{
+   if(cmd ==1){
+      
+        link_net_led_fast_blink_fun();
+         //disp_wifi_icon_state();
+    }
+   else{
+       Detected_Fan_Error();
+       Detected_Ptc_Error();
+       disp_wifi_icon_state();
+   }
+
+}
+
 

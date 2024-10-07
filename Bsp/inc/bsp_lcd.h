@@ -147,7 +147,7 @@ void LCD_Wind_Run_Icon(uint8_t speed_valu);
 
 void Display_Wind_Icon_Inint(void);
 
-void Disip_Wifi_Icon_State(void  );
+void disp_wifi_icon_state(void  );
 
 void LCD_Numbers1234_Init(void);
 
@@ -166,6 +166,9 @@ void disp_ai_iocn(void);
 void disp_ai_symbol(void);
 
 void donot_disp_ai_symbol(void);
+
+void link_net_led_fast_blink_fun(void);
+
 
 
 #endif 

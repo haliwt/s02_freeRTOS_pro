@@ -173,7 +173,7 @@ static void vTaskStart(void *pvParameters)
 {
    BaseType_t xResult;
    const TickType_t xMaxBlockTime = pdMS_TO_TICKS(20); /* 设置最大等待时间为30ms */
-   static uint8_t sound_flag,power_on_first;
+//   static uint8_t power_on_first;
    uint32_t ulValue;
    static uint8_t add_flag,dec_flag,power_sound_flag,smart_phone_sound;
 
@@ -341,15 +341,15 @@ static void vTaskStart(void *pvParameters)
             if(gkey_t.key_power==power_on){
               power_on_run_handler();
               Record_WorksOr_Timer_Timing_DonotDisp_Handler();
-              Detected_Fan_Error();
-              Detected_Ptc_Error();
+              
               key_add_dec_set_temp_value_fun();
               key_mode_be_pressed_send_data_wifi();
               backlight_on_off_state();
               disp_works_or_timer_timing_fun();
-              bsp_Idle();
+              link_wifi_net_state(gkey_t.wifi_led_fast_blink_flag);//bsp_Idle();
               mainboard_active_handler();
               LCD_Timer_Colon_Flicker();
+              LCD_Wind_Run_Icon(wifi_t.set_wind_speed_value);
 
             }
             else {

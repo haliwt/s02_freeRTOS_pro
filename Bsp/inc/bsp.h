@@ -44,6 +44,7 @@
 #include "bsp_ptc.h"
 #include "bsp_usart.h"
 #include "bsp_lcd_app.h"
+#include "bsp_dht11.h"
 #include "bsp_freertos_app.h"
 
 //wifi
@@ -128,7 +129,7 @@ typedef struct {
 
 extern BSP_process_t gpro_t;
 
-void bsp_Idle(void);
+//void bsp_Idle(void);
 
 
 
@@ -145,6 +146,7 @@ void Detected_Fan_Error(void);
 void Detected_Ptc_Error(void);
 
 void disp_works_or_timer_timing_fun(void);
+void link_wifi_net_state(uint8_t cmd);
 
 
 #endif 
