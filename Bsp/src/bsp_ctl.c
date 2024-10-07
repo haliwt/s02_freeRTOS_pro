@@ -63,7 +63,7 @@ void bsp_ctl_init(void)
 
     Power_On_Handler(power_on_default);
 
-   dht11_init();   /* 初始化DHT11 */
+ //  dht11_init();   /* 初始化DHT11 */
 
   
 }
