@@ -838,7 +838,7 @@ void Display_Wind_Icon_Inint(void)
 *****************************************************************************/
 void LCD_Timer_Colon_Flicker(void)
 {
-   if(glcd_t.gTimer_colon_blink > 4 && glcd_t.gTimer_colon_blink < 7){
+   if( glcd_t.gTimer_colon_blink < 2){
 
         
         if(gctl_t.ptc_warning ==0 && gctl_t.fan_warning ==0){
@@ -854,7 +854,7 @@ void LCD_Timer_Colon_Flicker(void)
           
         
    }
-   else if(glcd_t.gTimer_colon_blink > 6  && glcd_t.gTimer_colon_blink < 9){
+   else if(glcd_t.gTimer_colon_blink > 1  && glcd_t.gTimer_colon_blink < 6){
 
     
        if(gctl_t.ptc_warning ==0 && gctl_t.fan_warning ==0){
@@ -869,7 +869,7 @@ void LCD_Timer_Colon_Flicker(void)
       }
      
    }
-   else if(glcd_t.gTimer_colon_blink > 8){
+   else if(glcd_t.gTimer_colon_blink > 5){
 
       glcd_t.gTimer_colon_blink =0;
 
