@@ -345,7 +345,7 @@ static void vTaskStart(void *pvParameters)
               key_add_dec_set_temp_value_fun();
               key_mode_be_pressed_send_data_wifi();
               backlight_on_off_state();
-              disp_works_or_timer_timing_fun();
+              Display_WorksTimingr_Handler(gkey_t.key_mode);//disp_works_or_timer_timing_fun();
               link_wifi_net_state(gkey_t.wifi_led_fast_blink_flag);//bsp_Idle();
               mainboard_active_handler();
               LCD_Timer_Colon_Flicker();

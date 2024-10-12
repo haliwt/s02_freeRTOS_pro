@@ -169,6 +169,7 @@ void donot_disp_ai_symbol(void);
 
 void link_net_led_fast_blink_fun(void);
 
+void display_works_times_handler(void);
 
 
 #endif 

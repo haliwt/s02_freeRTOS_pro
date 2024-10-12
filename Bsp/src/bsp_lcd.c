@@ -489,7 +489,105 @@ void LCD_Number_SevenEight_Minutes(void)
 
       }
 }
+/********************************************************************************************************
+*
+*	函 数 名: void display_works_beijing_times_handler(void)
+*	功能说明: 
+*	形    参: 无
+*	返 回 值: 无
+*
+*********************************************************************************************************/
+void display_works_times_handler(void)
+{
+   if(ptc_state()== 1){
 
+        //number '5' and 'ptc' icon
+        TM1723_Write_Display_Data(0xC9,(0x01+lcdNumber5_High[glcd_t.number5_high] + lcdNumber5_Low[glcd_t.number5_low]  ) & 0xffff); 
+        if(plasma_state() ==1){
+
+           //number '6' 
+            TM1723_Write_Display_Data(0xCA,(0x01+lcdNumber6_High[glcd_t.number6_high] + lcdNumber6_Low[glcd_t.number6_low] ) & 0xffff); 
+
+         }
+         else{
+              //number '6' 
+            TM1723_Write_Display_Data(0xCA,(lcdNumber6_High[glcd_t.number6_high] + lcdNumber6_Low[glcd_t.number6_low] ) & 0xffff); 
+
+          }
+
+       if(ultrasonic_state() == 1){
+
+            if(gkey_t.key_mode == mode_set_timer || gkey_t.key_mode_switch_flag == 1){
+
+            gkey_t.key_mode_switch_flag = 0;
+
+            //timing ":" blank
+            TM1723_Write_Display_Data(0xCB,(0x01+lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low]) & 0xffff); //numbers : '1' addr: 0xC4
+            }
+            //number '8'
+            TM1723_Write_Display_Data(0xCC,(0x01+lcdNumber8_High[glcd_t.number8_high] + lcdNumber8_Low[glcd_t.number8_low] ) & 0xffff); //numbers : '2' addr: 0xC
+
+        }
+        else{
+
+         if(gkey_t.key_mode == mode_set_timer || gkey_t.key_mode_switch_flag == 1){
+
+          gkey_t.key_mode_switch_flag = 0;
+
+           //timing ":" blank
+          TM1723_Write_Display_Data(0xCB,(0x01+lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low]) & 0xffff); //numbers : '1' addr: 0xC4
+          }
+
+         TM1723_Write_Display_Data(0xCC,(0x00+lcdNumber8_High[glcd_t.number8_high] + lcdNumber8_Low[glcd_t.number8_low] ) & 0xffff); //numbers
+
+      }
+   }
+   else{
+       //number '5' and 'ptc' icon
+        TM1723_Write_Display_Data(0xC9,(lcdNumber5_High[glcd_t.number5_high] + lcdNumber5_Low[glcd_t.number5_low]  ) & 0xffff); 
+       if(plasma_state() ==1){
+
+           //number '6' 
+            TM1723_Write_Display_Data(0xCA,(0x01+lcdNumber6_High[glcd_t.number6_high] + lcdNumber6_Low[glcd_t.number6_low] ) & 0xffff); 
+
+         }
+         else{
+              //number '6' 
+            TM1723_Write_Display_Data(0xCA,(lcdNumber6_High[glcd_t.number6_high] + lcdNumber6_Low[glcd_t.number6_low] ) & 0xffff); 
+
+          }
+
+       if(ultrasonic_state() == 1){
+
+            if(gkey_t.key_mode == mode_set_timer || gkey_t.key_mode_switch_flag == 1){
+
+            gkey_t.key_mode_switch_flag = 0;
+
+            //timing ":" blank
+            TM1723_Write_Display_Data(0xCB,(0x01+lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low]) & 0xffff); //numbers : '1' addr: 0xC4
+            }
+            //number '8'
+            TM1723_Write_Display_Data(0xCC,(0x01+lcdNumber8_High[glcd_t.number8_high] + lcdNumber8_Low[glcd_t.number8_low] ) & 0xffff); //numbers : '2' addr: 0xC
+
+        }
+        else{
+
+         if(gkey_t.key_mode == mode_set_timer || gkey_t.key_mode_switch_flag == 1){
+
+          gkey_t.key_mode_switch_flag = 0;
+
+           //timing ":" blank
+          TM1723_Write_Display_Data(0xCB,(0x01+lcdNumber7_High[glcd_t.number7_high] + lcdNumber7_Low[glcd_t.number7_low]) & 0xffff); //numbers : '1' addr: 0xC4
+          }
+
+         TM1723_Write_Display_Data(0xCC,(0x00+lcdNumber8_High[glcd_t.number8_high] + lcdNumber8_Low[glcd_t.number8_low] ) & 0xffff); //numbers
+
+      }
+
+   }
+
+
+}
 /*****************************************************************************
  * 
  * Function Name: static LCD_Fault_Numbers_Code(void)

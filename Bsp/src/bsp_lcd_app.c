@@ -130,7 +130,8 @@ void Display_Works_Timing(void)
 
     
           
-        Display_LCD_Works_Timing();
+        //Display_LCD_Works_Timing();
+        display_works_times_handler();
 
         
 		
@@ -167,9 +168,9 @@ void Display_Works_Timing(void)
 
 		glcd_t.number8_low = gpro_t.disp_works_minutes_value  % 10;
 		glcd_t.number8_high =glcd_t.number8_low;// gpro_t.disp_works_minutes_value % 10;
-        Display_LCD_Works_Timing();
+        //Display_LCD_Works_Timing();
 
-
+       display_works_times_handler();
 
 
    }
@@ -283,7 +284,8 @@ void Display_Timer_Timing(void)
 		 glcd_t.number8_low = gpro_t.set_timer_timing_minutes   % 10;
 		 glcd_t.number8_high = gpro_t.set_timer_timing_minutes % 10;
 
-         LCD_Disp_Timer_Timing();
+         //LCD_Disp_Timer_Timing();
+         display_works_times_handler();
 		    
      }
 
@@ -329,10 +331,11 @@ void LCD_Disp_Timer_Timing_Init(void)
     glcd_t.number8_low = gpro_t.set_timer_timing_minutes   % 10;
     glcd_t.number8_high = gpro_t.set_timer_timing_minutes % 10;
 
-    LCD_Disp_Timer_Timing();
+    //LCD_Disp_Timer_Timing();
+
+    display_works_times_handler();
 
 }
-
 
 
 
@@ -577,7 +580,7 @@ void Set_Timer_Timing_Lcd_Blink(void)
       
     }
 
-  	LCD_Disp_Timer_Timing();
+  	//LCD_Disp_Timer_Timing();
     #else
 
      glcd_t.number5_low =  0x0A ;
@@ -592,7 +595,8 @@ void Set_Timer_Timing_Lcd_Blink(void)
 
       glcd_t.number8_low =   0x0A;
       glcd_t.number8_high =   0x0A;
-      LCD_Disp_Timer_Timing();
+      //LCD_Disp_Timer_Timing();
+      display_works_times_handler();
       HAL_Delay(100);
 
       glcd_t.number5_low =  gpro_t.set_timer_timing_hours  / 10 ;
@@ -607,7 +611,8 @@ void Set_Timer_Timing_Lcd_Blink(void)
 
       glcd_t.number8_low = 0;
       glcd_t.number8_high =   0;
-      LCD_Disp_Timer_Timing();
+      //LCD_Disp_Timer_Timing();
+      display_works_times_handler();
       HAL_Delay(100);
     
 

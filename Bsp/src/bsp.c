@@ -235,16 +235,16 @@ void mainboard_active_handler(void)
 
    
     if(gpro_t.gTimer_run_main_fun > 0){
-                    gpro_t.gTimer_run_main_fun =0;
-                  if(gctl_t.interval_stop_run_flag  ==0){
-                       Process_Dynamical_Action();
-                  }
-                  else{
-                      interval_two_hours_stop_action();
-                   
-    
-                  }
-               }
+      gpro_t.gTimer_run_main_fun =0;
+      if(gctl_t.interval_stop_run_flag  ==0){
+           Process_Dynamical_Action();
+      }
+      else{
+          interval_two_hours_stop_action();
+       
+
+      }
+   }
     
 
 }

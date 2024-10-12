@@ -11,7 +11,9 @@
   * version : 1.3
   * version: 1.4  Data.2024.08.02
   * version: 2.3  Data:2024.09.27
-    ref: modify display time less pen.
+  * ref: modify display time less pen.
+  * version: 2.31  Data:2024.10.12 optimize codes lcd display less pen .
+  *  
   ******************************************************************************
   */
 /* USER CODE END Header */
